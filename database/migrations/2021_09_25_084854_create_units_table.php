@@ -20,7 +20,7 @@ class CreateUnitsTable extends Migration
             $table->unsignedBigInteger('ID_Admin');
             $table->foreign('ID_Admin')->references('ID_Admin')->on('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->string('privateKey');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);;
             $table->timestamps();
         });
     }

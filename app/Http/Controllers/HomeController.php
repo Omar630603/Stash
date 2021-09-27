@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Admin;
 
 class HomeController extends Controller
 {
@@ -21,8 +21,24 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function checkAdmin()
+    {
+        $admin = Admin::all();
+        $isAdmin = False;
+        for ($i = 0; $i < count($admin); $i++) {
+            if (auth()->user()->ID_User == $admin[$i]->ID_User) {
+                $isAdmin = True;
+                break;
+            }
+        }
+        return $isAdmin;
+    }
     public function index()
     {
-        return view('home');
+        if ($this->checkAdmin()) {
+            return redirect()->route('admin.home');
+        }else {
+            return redirect()->route('user.home');
+        }
     }
 }

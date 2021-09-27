@@ -19,7 +19,7 @@ class CreateDeliverySchedulesTable extends Migration
             $table->foreign('ID_Order')->references('ID_Order')->on('orders')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('ID_DeliveryVehicle');
             $table->foreign('ID_DeliveryVehicle')->references('ID_DeliveryVehicle')->on('delivery_vehicles')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('status');
+            $table->integer('status')->default(0);;
             $table->dateTime('pickedUp');
             $table->dateTime('delivered');
             $table->string('location');

@@ -19,10 +19,10 @@ class CreateOrdersTable extends Migration
             $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('ID_Unit');
             $table->foreign('ID_Unit')->references('ID_Unit')->on('units')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('status');
+            $table->integer('status')->default(0);;
             $table->dateTime('startsFrom');
             $table->dateTime('endsAt');
-            $table->boolean('delivery');
+            $table->boolean('delivery')->default(0);;
             $table->integer('totalPrice');
             $table->timestamps();
         });

@@ -18,7 +18,7 @@ class CreateMessagesTable extends Migration
             $table->unsignedBigInteger('ID_User');
             $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('message');
-            $table->string('img');
+            $table->string('img')->default('');;
             $table->timestamps();
         });
     }

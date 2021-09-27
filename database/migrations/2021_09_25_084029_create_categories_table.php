@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('description');
             $table->string('dimensions');
             $table->integer('pricePerDay');
-            $table->string('img');
+            $table->string('img')->default('Category_images/categoryDefault.png');;
             $table->timestamps();
         });
     }
