@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\DeliveryVehicle;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -132,5 +133,10 @@ class AdminController extends Controller
         $unit->privateKey = $this->generatePrivateKey($categoryName->name, $unit->ID_Admin);
         $unit->save();
         return redirect()->back();
+    }
+    public function adminDelivery(){
+        $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $deliveryVehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        return view('admin.delivery', ['deliveryVehicles' => $deliveryVehicles]);
     }
 }

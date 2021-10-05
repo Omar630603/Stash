@@ -53,7 +53,7 @@
                                 <li><a href="{{route('home')}}">Home</a></li>
                                 <li><a href="{{route('admin.category')}}">Categories</a></li>
                                 <li><a href="">Orders</a></li>
-                                <li><a href="">Delivery</a></li>
+                                <li><a href="{{route('admin.delivery')}}">Delivery</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -108,9 +108,9 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-                                    <li><a style="color: #fff8e6" href="">Categories</a></li>
+                                    <li><a style="color: #fff8e6" href="{{route('admin.category')}}">Categories</a></li>
                                     <li><a style="color: #fff8e6" href="">Orders</a></li>
-                                    <li><a style="color: #fff8e6" href="">Delivery</a></li>
+                                    <li><a style="color: #fff8e6" href="{{route('admin.delivery')}}">Delivery</a></li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>

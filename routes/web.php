@@ -37,5 +37,7 @@ Route::post('/admin/categories/addUnit', [AdminController::class, 'addUnit'])->n
 Route::delete('/admin/categories/DeleteUnit/{unit}', [AdminController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('AdminAccess');
 Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('AdminAccess');
 
+Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
+
 Auth::routes();
 
