@@ -20,5 +20,6 @@ class Unit extends Model
         'ID_Admin',
         'privateKey',
         'status',
+        'IdName'
     ];
 }

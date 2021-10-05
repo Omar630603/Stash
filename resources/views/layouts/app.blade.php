@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Stash') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -15,16 +15,21 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ asset('storage/images/logo.png') }}">
 </head>
-<body>
+<body style="background-color: #fff8e6">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="padding: 0">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand" style="padding-top: 0; font-size: 0" href="{{ url('/') }}">
+                    <img align="center" width="90" src="{{ asset('storage/images/Logo with Name H.png') }}" alt="">
+                    {{-- {{ config('app.name', 'Laravel') }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -35,7 +40,8 @@
                     <ul class="navbar-nav mr-auto">
 
                     </ul>
-
+                    
+                    
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -54,7 +60,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->username }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -75,9 +81,39 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4" style="background: rgb(63,22,82);
+        background: linear-gradient(0deg, rgba(63,22,82,1) 10%, rgba(157,52,136,1) 40%, rgba(248,159,91,1) 80%);">
             @yield('content')
+            <footer class="footer-16371" >
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-9 text-center">
+                            <div class="footer-site-logo mb-4">
+                                <a href="#"><img align="center" width="200" src="{{ asset('storage/images/Logo with Name H.png') }}" alt=""></a>
+                            </div>
+                            <ul class="list-unstyled nav-links mb-4">
+                                <li><a style="color: #fff8e6" href="/">Home</a></li>
+                            </ul>
+                            <div class="social mb-2">
+                                <h3 style="color: #fff8e6">Stay in touch</h3>
+                                <ul class="list-unstyled nav-links">
+                                    <li class="in"><a href="#"><span class="icon-instagram"></span></a></li>
+                                    <li class="fb"><a href="#"><span class="icon-facebook"></span></a></li>
+                                    <li class="tw"><a href="#"><span class="icon-twitter"></span></a></li>
+                                    <li class="pin"><a href="#"><span class="icon-pinterest"></span></a></li>
+                                    <li class="dr"><a href="#"><span class="icon-dribbble"></span></a></li>
+                                </ul>
+                            </div>
+                            <div class="copyright">
+                                <p class="font-italic text-muted mb-0">&copy; Copyrights STASH.com All rights reserved.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </main>
     </div>
+    @yield('scripts') 
 </body>
+
 </html>

@@ -1,0 +1,99 @@
+table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+table * {
+    position: relative;
+}
+table th {
+    padding: 10px;
+    color: #fff;
+    line-height: 1.2;
+    font-weight: unset;
+}
+table thead tr {
+    height: auto;
+    background: #3f1652;
+}
+table tbody td {
+    padding: 5px 10px;
+}
+table tbody tr:last-child {
+    border: 0;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #e7e7e7;
+}
+
+tbody tr:hover {
+    color: #3f1652;
+    background-color: #ffbf8e;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+    table {
+        display: block;
+    }
+    table > *,
+    table tr,
+    table td,
+    table th {
+        display: block;
+    }
+    table thead {
+        display: none;
+    }
+    table tbody tr {
+        padding: 5px 10px;
+    }
+    table tbody tr td {
+        padding-left: 40% !important;
+    }
+    table tbody tr td:last-child {
+        margin-bottom: 0;
+    }
+    table tbody tr td:before {
+        color: #3f1652;
+        position: absolute;
+        left: 30px;
+        top: 5px;
+    }
+    table tbody tr td::before {
+        content: attr(data-label);
+    }
+}
+.delete-hover:hover {
+    color: rgb(209, 68, 68);
+}
+.use-hover:hover {
+    color: rgb(37, 131, 73);
+}
+.noUse-hover:hover {
+    color: rgb(230, 40, 88);
+}
+.refresh-hover:hover {
+    color: rgb(13, 144, 219);
+}
+.delete-hover:hover,
+.use-hover:hover,
+.noUse-hover:hover,
+.refresh-hover:hover {
+    font-size: 20px;
+}
+.delete-hover,
+.use-hover,
+.noUse-hover,
+.refresh-hover {
+    -webkit-transition: 0.2s all ease;
+    -o-transition: 0.2s all ease;
+    transition: 0.2s all ease;
+    font-size: 15px;
+}

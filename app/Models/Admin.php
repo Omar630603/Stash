@@ -21,6 +21,8 @@ class Admin extends Model
         'branch',
         'city',
         'location',
+        'address_latitude',
+        'address_longitude',
     ];
 
 }

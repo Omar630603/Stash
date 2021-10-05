@@ -28,5 +28,14 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
 //AdminAccess//
 Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home')->middleware('AdminAccess');
+Route::post('/admin/editBioData/{admin}', [AdminController::class, 'editAdmin'])->name('admin.editBioData')->middleware('AdminAccess');
+Route::put('/admin/editImage/{admin}', [AdminController::class, 'editAdminImage'])->name('admin.editImage')->middleware('AdminAccess');
+Route::post('/admin/defaultImage/{admin}', [AdminController::class, 'editUserImageDefult'])->name('admin.defaultImage')->middleware('AdminAccess');
+Route::post('/admin/editBranch/{branch}', [AdminController::class, 'editBranch'])->name('admin.editBranch')->middleware('AdminAccess');
+Route::get('/admin/categories', [AdminController::class, 'showCategories'])->name('admin.category')->middleware('AdminAccess');
+Route::post('/admin/categories/addUnit', [AdminController::class, 'addUnit'])->name('admin.addUnit')->middleware('AdminAccess');
+Route::delete('/admin/categories/DeleteUnit/{unit}', [AdminController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('AdminAccess');
+Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('AdminAccess');
+
 Auth::routes();
 
