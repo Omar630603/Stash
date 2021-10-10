@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Category;
 use App\Models\DeliveryVehicle;
+use App\Models\Order;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -138,5 +139,27 @@ class AdminController extends Controller
         $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
         $deliveryVehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
         return view('admin.delivery', ['deliveryVehicles' => $deliveryVehicles]);
+    }
+    public function adminOrders(){
+        $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $orders = Order::Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+        ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+        ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $admins = Admin::pluck('ID_user')->all();
+        $users = User::whereNotIn('ID_user', $admins)->get();
+        return view('admin.orders', ['orders' => $orders, 'branch' => $branch, 'users' => $users]);
+    }
+    public function adminMakeOrder(){
+        $admins = Admin::pluck('ID_user')->all();
+        $users = User::whereNotIn('ID_user', $admins)->get();
+        $categories = Category::all();
+        $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $units = Unit::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->where('status', 'like', '%' . 0 . '%')->orderBy('IdName', 'desc')->get();
+        return view('admin.handleOrders.makeOrder', ['users' => $users, 'categories' => $categories,
+        'branch' => $branch, 'units' => $units]);
+    }
+    public function adminMakeRent(Request $request)
+    {
+        dd($request);
     }
 }

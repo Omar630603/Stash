@@ -39,5 +39,9 @@ Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::c
 
 Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
 
+Route::get('/admin/orders', [AdminController::class, 'adminOrders'])->name('admin.orders')->middleware('AdminAccess');
+Route::get('/admin/make/order', [AdminController::class, 'adminMakeOrder'])->name('admin.makeOrder')->middleware('AdminAccess');
+Route::post('/admin/make/order/rent', [AdminController::class, 'adminMakeRent'])->name('admin.makeRent')->middleware('AdminAccess');
+
 Auth::routes();
 

@@ -22,7 +22,7 @@
                             <img src="{{ asset('storage/' . Auth::user()->img) }}"
                                 alt="user{{ Auth::user()->username }}" class="rounded-circle" width="160"
                                 style="border: white 5px solid;">
-                            <div style="margin-top: 25px">
+                            <div style="margin-top: 40px">
                                 <h4 style="color: white;text-transform: uppercase">
                                     <strong>{{ Auth::user()->username }}</strong></h4>
                                 <p style="color: white"><strong>Admin</strong></p>
@@ -37,10 +37,10 @@
                     <div class="card-body">
                         <div class="float-right" style="cursor: pointer;">
                             <a style="text-decoration: none;cursor: pointer"
-                                onclick="$('#edit').toggle('fast'); $('#info').toggle('fast'); return false;">Edit <i
-                                    class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                onclick="$('#edit').toggle('fast'); $('#info').toggle('fast'); return false;"><i
+                                    class="fa fa-pencil-square-o icons " aria-hidden="true"></i></a>
                         </div>
-                        <div class="row" style="margin-top: 25px">
+                        <div class="row" style="margin-top: 35px">
                             <div class="col-sm-3">
                                 <h6 class="mb-0"><strong>Full Name</strong></h6>
                             </div>
@@ -133,10 +133,10 @@
                             <div class="card-body">
                                 <div class="float-right" style="cursor: pointer;">
                                     <a style="text-decoration: none ;cursor: pointer"
-                                        onclick="$('#info').toggle('fast'); $('#edit').toggle('fast'); return false;">Close
-                                        <i class="fa fa-times" aria-hidden="true"></i></a>
+                                        onclick="$('#info').toggle('fast'); $('#edit').toggle('fast'); return false;">
+                                        <i class="fa fa-times icons" aria-hidden="true"></i></a>
                                 </div>
-                                <div class="row" style="margin-top: 25px">
+                                <div class="row" style="margin-top: 30px">
                                     <div class="col-sm-12">
                                         <label for="name"><strong>Full Name</strong></label>
                                         <input name="name" type="text" class="form-control"
@@ -194,12 +194,12 @@
                                 $('#branch-city-text').toggle('fast'); $('#branch-city').toggle('fast');
                                 $('#branch-location-text').toggle('fast'); $('#branch-location').toggle('fast');
                                 $('#btn-edit-branch').toggle('fast');
-                                 return false;">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                 return false;"><i class="fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
                             </div>
                             <form method="post" action="{{ route('admin.editBranch', $branch) }}"
                                 enctype="multipart/form-data">
                                 @csrf
-                                <div class="row" style="margin-top: 25px">
+                                <div class="row" style="margin-top: 35px">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0"><strong>Branch name</strong></h6>
                                     </div>
@@ -246,13 +246,14 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card mb-3" style="border-radius:20px; padding: 5px;">
-                        <div class="form-group" id="edit_loction" style="display: none">
-                            <label for="address_address"><strong>Address</strong></label>
+                        <div class="form-group" id="edit_loction"
+                            style="display: none; text-align: center; padding: 5px">
+                            <label for="address_address" style=""><strong>Address</strong></label>
                             <input type="text" id="address-input" name="address_address" class="form-control map-input">
                             <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
                             <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
                         </div>
-                        <div id="address-map-container" style="width:100%;height:270px;border-radius:20px;">
+                        <div id="address-map-container" style="width:100%;height:275px;border-radius:20px;">
                             <div style="width: 100%; height: 100%; border-radius:20px;" id="address-map"></div>
                         </div>
                     </div>

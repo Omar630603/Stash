@@ -6,8 +6,8 @@
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Categories & Units in {{$branch->branch}} Branch
-                :Total of {{count($units)}} Units</li>
+            <li class="breadcrumb-item active" aria-current="page">Categories & Units in {{$branch->branch}} Branch:
+                Total of {{count($units)}} Units</li>
         </ol>
     </nav>
     @if (count($categories)>0)
@@ -32,7 +32,7 @@
             style="padding: 10px; background-image: url({{ asset('storage/' . $category->img) }}); border-radius:20px; background-repeat: no-repeat, repeat; background-position: left; background-size: contain;">
             <div style="display: flex; justify-content: flex-end; ">
                 <div style="flex: 1; text-align: center; margin-left: 20px">
-                    <p style="margin: 0"><strong>{{$category->name}}</strong></p>
+                    <h5 style="margin: 0">{{$category->name}}</h5>
                 </div>
                 <div class="float-right" style="cursor: pointer;">
                     <form method="POST" action="{{route('admin.addUnit')}}" enctype="multipart/form-data"
@@ -79,7 +79,8 @@
             </div>
         </div>
         <div class="mb-2" style="padding: 10px; margin: 0; ">
-            <div class="mb-2" style="display: flex; justify-content: space-between;">
+            <div class="alert-success mb-2"
+                style="display: flex; justify-content: space-between; border-radius: 20px; padding: 10px; width: 100%">
                 <div>
                     <p style="margin: 0"><strong>Description : </strong>{{$category->description}}</p>
                     <p style="margin: 0"><strong>Dimensions : </strong>{{$category->dimensions}}</p>
@@ -94,7 +95,11 @@
             </div>
         </div>
         <div class="card-body" style="padding: 10px;">
-            <div style="display: flex; justify-content: flex-end; gap: 20px">
+            <div class="categories" style="display: flex; justify-content: flex-end; gap: 20px">
+                <div>
+                    <img class="img-fluid" style="border-radius: 10px;" src="{{ asset('storage/' . $category->img) }}"
+                        alt="">
+                </div>
                 <div style="flex: 1">
                     <div class="table100">
                         @if ( $ind > 0)
@@ -126,10 +131,10 @@
                                             <input disabled style="width: 50%" type="password"
                                                 value="{{$unit->privateKey}}" class="form-control"
                                                 id="privateKey{{$unit->ID_Unit}}">
-                                            <div style="display: flex;gap: 5px; margin-top: 10px">
-                                                <input style="margin-top: 5px" type="checkbox"
+                                            <div style="display: flex;gap: 5px; margin-top: 5px">
+                                                <input class="form-check-input" style="margin-top: 5px" type="checkbox"
                                                     onclick="showPrivateKey({{$unit->ID_Unit}})">
-                                                <p>Show Key</p>
+                                                <p class="form-check-label">Show Key</p>
                                             </div>
                                         </div>
                                     </td>
@@ -138,7 +143,7 @@
                                             <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
                                                 data-placement="top" title="Change Private Key"
                                                 style="text-decoration: none;cursor: pointer"><i
-                                                    class="refresh-hover fas fa-sync"></i></a>
+                                                    class="refresh-hover fas fa-sync icons"></i></a>
 
                                             <!-- Modal -->
                                             <div class="modal fade" id="changePrivateKeyUnit{{$unit->ID_Unit}}"
@@ -197,16 +202,16 @@
                                             @if ($unit->status)
                                             <a data-placement="top" title="Cancel Subscription"
                                                 style="text-decoration: none;cursor: pointer"><i
-                                                    class="noUse-hover fas fa-user-slash"></i></a>
+                                                    class="noUse-hover fas fa-user-slash icons"></i></a>
                                             @else
                                             <a data-placement="top" title="Make Rent"
                                                 style="text-decoration: none;cursor: pointer"><i
-                                                    class="use-hover fas fa-user-plus"></i></a>
+                                                    class="use-hover fas fa-user-plus icons"></i></a>
                                             @endif
                                             <a data-placement="top" title="Delete Unit" data-toggle="modal"
                                                 data-target="#deleteUnit{{$unit->ID_Unit}}"
                                                 style="text-decoration: none;cursor: pointer">
-                                                <i class="delete-hover far fa-trash-alt"></i></a>
+                                                <i class="delete-hover far fa-trash-alt icons"></i></a>
                                             <!-- Modal -->
                                             <div class="modal fade" id="deleteUnit{{$unit->ID_Unit}}" tabindex="-1"
                                                 role="dialog" aria-labelledby="deleteUnit{{$unit->ID_Unit}}"
@@ -275,9 +280,7 @@
                         @endif
                     </div>
                 </div>
-                <div>
-                    <img style="border-radius: 10px;" src="{{ asset('storage/' . $category->img) }}" alt="">
-                </div>
+
             </div>
         </div>
     </div>

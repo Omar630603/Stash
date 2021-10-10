@@ -20,8 +20,16 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.1.1/dist/select2-bootstrap-5-theme.min.css" />
 
         <!-- Styles -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/appAdmin.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
@@ -52,7 +60,7 @@
                             <ul class="navbar-nav m-auto">
                                 <li><a href="{{route('home')}}">Home</a></li>
                                 <li><a href="{{route('admin.category')}}">Categories</a></li>
-                                <li><a href="">Orders</a></li>
+                                <li><a href="{{route('admin.orders')}}">Orders</a></li>
                                 <li><a href="{{route('admin.delivery')}}">Delivery</a></li>
                             </ul>
                         </nav>
@@ -109,7 +117,7 @@
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
                                     <li><a style="color: #fff8e6" href="{{route('admin.category')}}">Categories</a></li>
-                                    <li><a style="color: #fff8e6" href="">Orders</a></li>
+                                    <li><a style="color: #fff8e6" href="{{route('admin.orders')}}">Orders</a></li>
                                     <li><a style="color: #fff8e6" href="{{route('admin.delivery')}}">Delivery</a></li>
                                 </ul>
                                 <div class="social mb-2">
