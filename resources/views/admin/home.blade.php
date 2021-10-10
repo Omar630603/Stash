@@ -253,7 +253,7 @@
                             <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
                             <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
                         </div>
-                        <div id="address-map-container" style="width:100%;height:275px;border-radius:20px;">
+                        <div id="address-map-container" style="width:100%;height:280px;border-radius:20px;">
                             <div style="width: 100%; height: 100%; border-radius:20px;" id="address-map"></div>
                         </div>
                     </div>

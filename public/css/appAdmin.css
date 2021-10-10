@@ -118,12 +118,101 @@ tbody tr:hover {
     padding: 10px;
     margin-bottom: 10px;
 }
-
+.containerV {
+    width: 40%;
+}
+#deliveryContainer {
+    display: flex;
+    justify-content: space-around;
+    background-color: #66377f;
+    padding: 10px;
+    border-radius: 20px;
+}
 @media screen and (max-width: 992px) {
-    #orderOptionAndStatusOption {
+    #orderOptionAndStatusOption,
+    #deliveryContainer {
         flex-direction: column;
+        gap: 20px;
     }
     #newCustomerData {
         margin-right: 0;
     }
+    .containerV {
+        width: 100%;
+    }
+    .containerS {
+        padding: 0;
+    }
+}
+img {
+    max-width: 100%;
+}
+.inbox_people {
+    background: #f8f8f8 none repeat scroll 0 0;
+    float: left;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.srch_bar {
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+}
+.headind_srch {
+    padding: 10px 29px 10px 20px;
+    overflow: hidden;
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.srch_bar input {
+    border: 1px solid #cdcdcd;
+    border-width: 0 0 1px 0;
+    width: 100%;
+    padding: 2px 0 4px 6px;
+    background: none;
+}
+.srch_bar .input-group-addon button {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    padding: 0;
+    color: #707070;
+    font-size: 18px;
+}
+.srch_bar .input-group-addon {
+    margin: 0 0 0 -27px;
+}
+
+.chat_ib h5 {
+    font-size: 15px;
+    color: #464646;
+    margin: 0 0 8px 0;
+}
+.chat_ib h5 span {
+    font-size: 10px;
+    float: right;
+}
+.chat_ib p {
+    font-size: 10px;
+    color: #989898;
+    margin: auto;
+}
+.chat_img {
+    float: left;
+    width: 10%;
+}
+.chat_ib {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 90%;
+}
+
+.chat_people {
+    overflow: hidden;
+    clear: both;
+}
+.chat_list {
+    border-bottom: 1px solid #c4c4c4;
+    margin: 0;
+    padding: 18px 16px 10px;
 }
