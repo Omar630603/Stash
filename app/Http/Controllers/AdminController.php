@@ -137,7 +137,7 @@ class AdminController extends Controller
         return redirect()->back();
     }
     public function adminDelivery(Request $request){
-        // dd($request);
+        
         $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
         $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
         if($request->get('driver')){
@@ -146,7 +146,21 @@ class AdminController extends Controller
         ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
         ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
         ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-        ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')->get();
+        ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+        ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
+        ->get();
+        }elseif($request->get('search')){
+            $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+            ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+            ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+            ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')            
+            ->Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
+            ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
+            ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+            ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+            ->get();
         }else{
         
         $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
