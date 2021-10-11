@@ -30,7 +30,7 @@
                     @foreach ($vehicles as $vehicle)
                     <div class="chat_list ">
                         {{-- active_chat --}}
-                        <a href="{{route('admin.delivery', ['driver' => $vehicle->name])}}">
+                        <a href="{{route('admin.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
                                     <img src="{{ asset('storage/' . $vehicle->img) }}" alt="{{$vehicle->name}}">
@@ -55,6 +55,7 @@
                         <tr>
                             <th class="column">Trip & Period</th>
                             <th class="column">Status</th>
+                            <th class="column">Vehicle</th>
                             <th class="column">Total Price</th>
                             <th class="column">Unit</th>
                             <th class="column">Customer</th>
@@ -159,6 +160,9 @@
                             </td>
                             <td data-label="Status" class="column">
                                 <p>{{$schedule->status}}</p>
+                            </td>
+                            <td data-label="Vehicle" class="column">
+                                <p>{{$schedule->name}}</p>
                             </td>
                             <td data-label="Total Price" class="column">
                                 <p>{{$schedule->totalPrice}}</p>

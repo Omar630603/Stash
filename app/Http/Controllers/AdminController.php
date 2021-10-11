@@ -137,14 +137,25 @@ class AdminController extends Controller
         return redirect()->back();
     }
     public function adminDelivery(Request $request){
+        // dd($request);
         $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
         $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
-        $schedules = DeliverySchedule::select('*', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+        if($request->get('driver')){
+            $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+        ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+        ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+        ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+        ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+        ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')->get();
+        }else{
+        
+        $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
         ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
         ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
         ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
         ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
         ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        }
         return view('admin.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules]);
     }
     public function adminOrders(){

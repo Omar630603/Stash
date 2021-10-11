@@ -124,7 +124,7 @@ tbody tr:hover {
 #deliveryContainer {
     display: flex;
     justify-content: space-around;
-    background-color: #66377f;
+    background-color: #fceabe;
     padding: 10px;
     border-radius: 20px;
 }

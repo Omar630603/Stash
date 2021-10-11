@@ -21,7 +21,8 @@ class DeliverySchedule extends Model
         'status',
         'pickedUp',
         'delivered',
-        'location',
+        'pickedUpFrom',
+        'deliveredTo',
         'totalPrice',
     ];
 }
