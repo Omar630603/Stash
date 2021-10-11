@@ -128,6 +128,20 @@ tbody tr:hover {
     padding: 10px;
     border-radius: 20px;
 }
+.line {
+    background: rgb(63, 22, 82);
+    background: linear-gradient(
+        0deg,
+        rgba(63, 22, 82, 1) 10%,
+        rgba(157, 52, 136, 1) 40%,
+        rgba(248, 159, 91, 1) 80%
+    );
+    color: rgba(248, 159, 91, 1);
+    margin-left: 10px;
+}
+.active_chat {
+    background: #dbdbdb;
+}
 @media screen and (max-width: 992px) {
     #orderOptionAndStatusOption,
     #deliveryContainer {
@@ -142,6 +156,9 @@ tbody tr:hover {
     }
     .containerS {
         padding: 0;
+    }
+    .line {
+        display: none;
     }
 }
 img {
@@ -215,4 +232,37 @@ img {
     border-bottom: 1px solid #c4c4c4;
     margin: 0;
     padding: 18px 16px 10px;
+}
+.headerVehiclesSchedules {
+    background-color: #ffbf8e;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+.headerVehiclesSchedules h1 {
+    color: #66377f;
+    font-size: 20px;
+    vertical-align: middle;
+}
+.headerS {
+    text-align: left;
+    background-color: #66377f;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+.headerS h3 {
+    color: #d6d6d6;
+    font-size: 15px;
+    margin-left: 10px;
+}
+.headerAddS {
+    color: #3f1652;
+    font-size: 15px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    width: 90%;
+    margin: 15px;
+    border-radius: 20px;
 }

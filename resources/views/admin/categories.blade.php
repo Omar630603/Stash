@@ -141,8 +141,8 @@
                                     <td data-label="Action" class="column">
                                         <div style="display: flex;gap: 10px">
                                             <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
-                                                data-placement="top" title="Change Private Key"
-                                                style="text-decoration: none;cursor: pointer"><i
+                                                data-placement="top" style="text-decoration: none;cursor: pointer"><i
+                                                    data-toggle="tooltip" title="Change Private Key"
                                                     class="refresh-hover fas fa-sync icons"></i></a>
 
                                             <!-- Modal -->
@@ -200,18 +200,19 @@
                                                 </div>
                                             </div>
                                             @if ($unit->status)
-                                            <a data-placement="top" title="Cancel Subscription"
-                                                style="text-decoration: none;cursor: pointer"><i
+                                            <a style="text-decoration: none;cursor: pointer"><i data-placement="top"
+                                                    title="Cancel Subscription" data-toggle="tooltip"
                                                     class="noUse-hover fas fa-user-slash icons"></i></a>
                                             @else
                                             <a data-placement="top" title="Make Rent"
-                                                style="text-decoration: none;cursor: pointer"><i
+                                                style="text-decoration: none;cursor: pointer"><i data-toggle="tooltip"
+                                                    data-placement="top" title="Make Rent"
                                                     class="use-hover fas fa-user-plus icons"></i></a>
                                             @endif
-                                            <a data-placement="top" title="Delete Unit" data-toggle="modal"
-                                                data-target="#deleteUnit{{$unit->ID_Unit}}"
+                                            <a data-toggle="modal" data-target="#deleteUnit{{$unit->ID_Unit}}"
                                                 style="text-decoration: none;cursor: pointer">
-                                                <i class="delete-hover far fa-trash-alt icons"></i></a>
+                                                <i data-placement="top" title="Delete Unit" data-toggle="tooltip"
+                                                    class="delete-hover far fa-trash-alt icons"></i></a>
                                             <!-- Modal -->
                                             <div class="modal fade" id="deleteUnit{{$unit->ID_Unit}}" tabindex="-1"
                                                 role="dialog" aria-labelledby="deleteUnit{{$unit->ID_Unit}}"

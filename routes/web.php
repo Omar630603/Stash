@@ -38,6 +38,16 @@ Route::delete('/admin/categories/DeleteUnit/{unit}', [AdminController::class, 'd
 Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('AdminAccess');
 
 Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
+Route::post('/admin/editBioData/driver/{driver}', [AdminController::class, 'editDriver'])->name('admin.editBioDataDriver')->middleware('AdminAccess');
+Route::put('/admin/editImage/driver/{driver}', [AdminController::class, 'editDriverImage'])->name('admin.editImageDriver')->middleware('AdminAccess');
+Route::post('/admin/defaultImage/driver/{driver}', [AdminController::class, 'editDriverImageDefult'])->name('admin.defaultImageDriver')->middleware('AdminAccess');
+Route::post('/admin/driver/addDriver', [AdminController::class, 'addDriver'])->name('admin.addDriver')->middleware('AdminAccess');
+Route::delete('/admin/driver/deleteDriver/{driver}', [AdminController::class, 'deleteDriver'])->name('admin.deleteDriver')->middleware('AdminAccess');
+Route::post('/admin/driver/addSchedule', [AdminController::class, 'addSchedule'])->name('admin.addSchedule')->middleware('AdminAccess');
+Route::post('/admin/driver/changeScheduleStatus/{schedule}', [AdminController::class, 'changeScheduleStatus'])->name('admin.changeScheduleStatus')->middleware('AdminAccess');
+Route::delete('/admin/driver/deleteSchedule/{schedule}', [AdminController::class, 'deleteSchedule'])->name('admin.deleteSchedule')->middleware('AdminAccess');
+
+
 
 Route::get('/admin/orders', [AdminController::class, 'adminOrders'])->name('admin.orders')->middleware('AdminAccess');
 Route::get('/admin/make/order', [AdminController::class, 'adminMakeOrder'])->name('admin.makeOrder')->middleware('AdminAccess');

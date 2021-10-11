@@ -12,6 +12,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use phpDocumentor\Reflection\PseudoTypes\False_;
+
+use function PHPUnit\Framework\isEmpty;
 
 class AdminController extends Controller
 {
@@ -140,6 +143,14 @@ class AdminController extends Controller
         
         $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
         $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $orders = Order::Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+        ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+        ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $active = false;
+        $noDriver = false;
+        $activeV = 0;
+        $vehicleDriver = 0;
+        $searchName = '';
         if($request->get('driver')){
             $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
         ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
@@ -149,6 +160,11 @@ class AdminController extends Controller
         ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
         ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
         ->get();
+        $active = true;
+        $activeV = $request->get('driver');
+        $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
+
+
         }elseif($request->get('search')){
             $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
             ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
@@ -161,6 +177,19 @@ class AdminController extends Controller
             ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
             ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
             ->get();
+        $active = true;
+        $activeV = DeliveryVehicle::Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
+        ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
+        ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+        ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+        ->first();
+            if (!isEmpty($activeV)) {
+                $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)->first();
+                $activeV = $activeV->ID_DeliveryVehicle;
+            }else{
+                $noDriver = true;
+                $searchName =$request->get('search');
+            }
         }else{
         
         $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
@@ -170,7 +199,9 @@ class AdminController extends Controller
         ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
         ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
         }
-        return view('admin.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules]);
+        return view('admin.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules,
+         'active' => $active, 'activeV' => $activeV, 'branch' => $branch, 'vehicleDriver' => $vehicleDriver
+         , 'noDriver' => $noDriver, 'searchName' => $searchName, 'orders' => $orders]);
     }
     public function adminOrders(){
         $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
@@ -193,5 +224,132 @@ class AdminController extends Controller
     public function adminMakeRent(Request $request)
     {
         dd($request);
+    }
+    public function editDriver(Request $request, DeliveryVehicle $driver)
+    {
+        $request->validate([
+            'name' => 'required',
+            'model' => 'required',
+            'plateNumber' => 'required',
+            'phone' => 'required',
+            'pricePerK' => 'required',
+        ]);
+        $driver->name = $request->get('name');
+        $driver->model = $request->get('model');
+        $driver->plateNumber = $request->get('plateNumber');
+        $driver->phone = $request->get('phone');
+        $driver->pricePerK = $request->get('pricePerK');
+        $driver->save();
+        return redirect()->back();
+    }
+    public function editDriverImage(Request $request, DeliveryVehicle $driver)
+    {
+        if ($driver->img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
+            }
+            $driver->img = $image_name;
+        } else {
+            Storage::delete('public/' . $driver->img);
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
+            }
+            $driver->img = $image_name;
+        }
+        $driver->save();
+        return redirect()->back();
+    }
+    public function editDriverImageDefult(DeliveryVehicle $driver)
+    {
+        if ($driver->img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+            $driver->img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+        } else {
+            Storage::delete('public/' . $driver->img);
+            $driver->img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+        }
+        $driver->save();
+        return redirect()->back();
+    }
+    public function addDriver(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'model' => 'required',
+            'plateNumber' => 'required',
+            'phone' => 'required',
+            'pricePerK' => 'required',
+        ]);
+        $driver = new DeliveryVehicle;
+        $driver->ID_Admin = $request->get('ID_Admin');
+        $driver->name = $request->get('name');
+        $driver->model = $request->get('model');
+        $driver->plateNumber = $request->get('plateNumber');
+        $driver->phone = $request->get('phone');
+        $driver->pricePerK = $request->get('pricePerK');
+        $driver->save();
+        return redirect()->back();
+    }
+    public function deleteDriver(DeliveryVehicle $driver)
+    {
+       $schedules = DeliverySchedule::where('ID_DeliveryVehicle', $driver->ID_DeliveryVehicle)->get();
+       foreach ($schedules as $key) {
+        $key->delete();
+       }
+       if ($driver->img != "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+        Storage::delete('public/' . $driver->img);
+        } 
+       $driver->delete();
+       return redirect()->route('admin.delivery');
+    }
+
+    public function changeScheduleStatus(DeliverySchedule $schedule)
+    {
+        if ($schedule->status) {
+            $schedule->status = false;
+        }else{
+            $schedule->status = true;
+        }
+       $schedule->save();
+       
+       return redirect()->back();
+    }
+    public function deleteSchedule(DeliverySchedule $schedule)
+    {
+       $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
+       $driver->deliver--;
+       $driver->save();
+       $schedule->delete();
+       return redirect()->back();
+    }
+    public function addSchedule(Request $request)
+    {
+        $request->validate([
+            'ID_Order' => 'required',
+            'ID_DeliveryVehicle' => 'required',
+            'pickedUpFrom' => 'required',
+            'deliveredTo' => 'required',
+            'pickedUp' => 'required',
+            'delivered' => 'required',
+            'totalPrice' => 'required',
+        ]);
+        $schedule = new DeliverySchedule();
+        $schedule->ID_Order = $request->get('ID_Order');
+        $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+        $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+        $schedule->deliveredTo = $request->get('deliveredTo');
+        $schedule->pickedUp = $request->get('pickedUp');
+        $schedule->delivered = $request->get('delivered');
+        $schedule->totalPrice = $request->get('totalPrice');
+
+        if ($request->get('status') == "on") {
+            $schedule->status = true;
+        }else{
+            $schedule->status = false;
+        }
+        $schedule->save();
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+        $driver->deliver++;
+        $driver->save();
+        return redirect()->back();
     }
 }
