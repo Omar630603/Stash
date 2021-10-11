@@ -5,7 +5,7 @@
 @endforeach
 {{-- {{$vehicles}}
 {{$schedules}} --}}
-<div class="container">
+<div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
@@ -14,7 +14,7 @@
         </ol>
     </nav>
 
-    <div class="container" id="deliveryContainer">
+    <div class="container-fluid" id="deliveryContainer">
         <div class="containerV container" style="padding: 0">
             <div class="inbox_people">
                 <div class="headind_srch">
