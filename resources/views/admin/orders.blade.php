@@ -547,7 +547,7 @@
                 <div class="headerS">
                     <h3>
                         This Is All Orders in {{$branch->branch}} Branch<br>
-                        <small>Here you can see all the orders and thier information.</small>
+                        <small>Here you can see all the orders and their information.</small>
                     </h3>
                 </div>
                 @else
@@ -730,7 +730,7 @@
                     <div class="headerS">
                         <h3>
                             This Is All Orders for {{ $userProfile->name}} Customer<br>
-                            <small>Here you can see all the schedules and thier information.</small>
+                            <small>Here you can see all the schedules and their information.</small>
                         </h3>
                     </div>
                 </div>

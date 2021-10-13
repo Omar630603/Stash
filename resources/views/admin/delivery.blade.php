@@ -242,7 +242,7 @@
                 <div class="headerS">
                     <h3>
                         This Is All Delivery Schedules in {{$branch->branch}} Branch<br>
-                        <small>Here you can see all the schedules and thier information.</small>
+                        <small>Here you can see all the schedules and their information.</small>
                     </h3>
                 </div>
                 @else
@@ -428,7 +428,7 @@
                     <div class="headerS">
                         <h3>
                             This Is All Delivery Schedules by {{ $vehicleDriver->name}} Driver<br>
-                            <small>Here you can see all the schedules and thier information.</small>
+                            <small>Here you can see all the schedules and their information.</small>
                         </h3>
                     </div>
                 </div>
