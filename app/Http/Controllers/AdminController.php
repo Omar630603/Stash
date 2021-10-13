@@ -310,7 +310,9 @@ class AdminController extends Controller
         $schedule->pickedUp = $request->get('pickedUp');
         $schedule->delivered = $request->get('delivered');
         $schedule->totalPrice = $request->get('totalPrice');
-
+        $order = Order::where('ID_Order', $request->get('ID_Order'))->first();
+        $order->totalPrice += $request->get('totalPrice');
+        $order->save();
         if ($request->get('status') == "on") {
             $schedule->status = true;
         }else{
