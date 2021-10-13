@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div>
         @if ($message = Session::get('fail'))
-        <div class="alert alert-warning" style="text-align: center; border-radius: 20px">
+        <div class="alert alert-danger" style="text-align: center; border-radius: 20px">
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
             </strong>

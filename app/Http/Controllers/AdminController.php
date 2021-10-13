@@ -487,7 +487,22 @@ class AdminController extends Controller
     {
        if ($user->img != "User_images/userDefault.png") {
         Storage::delete('public/' . $user->img);
-        } 
+        }
+        $orders = Order::where('ID_User', $user->ID_User)->get();
+        foreach ($orders as $order) {
+            $schedules = DeliverySchedule::where('ID_Order', $order->ID_Order)->get();
+            foreach ($schedules as $key) {
+                    $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $key->ID_DeliveryVehicle)->first();
+                    $driver->deliver--;
+                    $driver->save();
+                    $key->delete();
+            }
+            $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+            $unit->status = false;
+            $unit->save();
+            $this->changePrivateKeyUnit($unit);
+            $order->delete();
+            }
        $user->delete();
        return redirect()->route('admin.orders');
     }
