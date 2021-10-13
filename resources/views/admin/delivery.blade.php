@@ -1,10 +1,6 @@
 @extends('layouts.appAdmin')
 
 @section('content')
-@foreach ($vehicles as $vehicle)
-@endforeach
-{{-- {{$vehicles}}
-{{$schedules}} --}}
 <div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
