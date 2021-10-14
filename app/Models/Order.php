@@ -23,6 +23,7 @@ class Order extends Model
         'endsAt',
         'delivery',
         'totalPrice',
+        'expandPrice',
         'madeByAdmin',
     ];
 

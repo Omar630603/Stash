@@ -6,6 +6,7 @@
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.delivery') }}">Delivery</a></li>
             <li class="breadcrumb-item active" aria-current="page">Delivery Vehicles & Schedules</li>
         </ol>
     </nav>
@@ -553,7 +554,10 @@
                                 @endif
                             </td>
                             <td data-label="Vehicle" class="column">
-                                <p>{{$schedule->name}}</p>
+                                <a href="{{route('admin.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
+                                    <p>{{$schedule->name}}</p>
+                                </a>
+
                             </td>
                             <td data-label="Total Price" class="column">
                                 <p>{{$schedule->totalPrice}}</p>
@@ -562,12 +566,14 @@
                                 <p>{{$schedule->IdName}}</p>
                             </td>
                             <td data-label="Customer" class="column">
-                                <p>{{$schedule->username}}</p>
+                                <a href="{{route('admin.orders', ['user' => $schedule->ID_User])}}">
+                                    <p>{{$schedule->username}}</p>
+                                </a>
                             </td>
                             <td data-label="Action" class="column">
                                 <div style="display: flex; justify-content:space-around">
-                                    <a data-toggle="tooltip" title="Detials"
-                                        style="text-decoration: none;cursor: pointer">
+                                    <a href="{{ route('admin.orderDetails', ['order'=>$schedule->ID_Order]) }} data-toggle="
+                                        tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
                                         <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                     </a>
                                     <a onclick="$('#changeScheduleStatus{{$schedule->ID_DeliverySchedule}}').submit();"

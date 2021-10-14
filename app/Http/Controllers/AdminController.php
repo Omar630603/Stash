@@ -13,6 +13,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
@@ -383,7 +384,7 @@ class AdminController extends Controller
             $orders = Order::select('*', 'orders.status')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-                ->where('users.name', 'like', '%' . $request->get('search') . '%')
+                ->where('users.username', 'like', '%' . $request->get('search') . '%')
                 ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
                 ->get();
             $active = true;
@@ -630,5 +631,14 @@ class AdminController extends Controller
             $message ='Order has been made successfuly';
             return redirect()->back()->with('success', $message);
         }
+    }
+    public function adminOrderDetailsU(Unit $unit)
+    {
+        $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
+        return redirect()->route('admin.orderDetails', ['order' => $order]);
+    }
+    public function adminOrderDetails(Order $order)
+    {
+        echo $order;
     }
 }

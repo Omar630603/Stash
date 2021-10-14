@@ -58,6 +58,8 @@ Route::post('/admin/defaultImage/user/{user}', [AdminController::class, 'editUse
 Route::post('/admin/user/addUser', [AdminController::class, 'addUser'])->name('admin.addUser')->middleware('AdminAccess');
 Route::delete('/admin/user/deleteUser/{user}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser')->middleware('AdminAccess');
 Route::post('/admin/user/addOrder', [AdminController::class, 'addOrder'])->name('admin.addOrder')->middleware('AdminAccess');
+Route::get('/admin/order/detailsU/{unit}', [AdminController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('AdminAccess');
+Route::get('/admin/order/details/{order}', [AdminController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('AdminAccess');
 
 Auth::routes();
 

@@ -23,6 +23,7 @@
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.orders') }}">Orders</a></li>
             <li class="breadcrumb-item active" aria-current="page">Orders for {{$branch->branch}} Branch :Total of
                 {{count($orders)}} Orders
             </li>
@@ -854,7 +855,9 @@
                                     <p>{{$order->IdName}}</p>
                                 </td>
                                 <td data-label="Customer" class="column">
-                                    <p>{{$order->username}}</p>
+                                    <a href="{{route('admin.orders', ['user' => $order->ID_User])}}">
+                                        <p>{{$order->username}}</p>
+                                    </a>
                                 </td>
                                 <td data-label="Status" class="column">
                                     @if ($order->madeByAdmin)
@@ -866,8 +869,8 @@
                                 </td>
                                 <td data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
-                                        <a data-toggle="tooltip" title="Detials"
-                                            style="text-decoration: none;cursor: pointer">
+                                        <a href="{{ route('admin.orderDetails', ['order'=>$order]) }} data-toggle="
+                                            tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
                                             <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                         </a>
                                         <a onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"

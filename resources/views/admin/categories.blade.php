@@ -6,6 +6,7 @@
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.category') }}">Categories</a></li>
             <li class="breadcrumb-item active" aria-current="page">Categories & Units in {{$branch->branch}} Branch:
                 Total of {{count($units)}} Units</li>
         </ol>
@@ -119,7 +120,10 @@
                                 <tr>
                                     <td data-label="Status" class="column">
                                         @if ($unit->status)
-                                        <p class="btn-sm btn-warning">Occupied</p>
+
+                                        <a href="{{ route('admin.orderDetailsU', ['unit'=>$unit]) }}">
+                                            <p class="btn-sm btn-warning">Occupied</p>
+                                        </a>
                                         @else
                                         <p class="btn-sm btn-secondary">Unoccupied</p>
                                         @endif
@@ -201,11 +205,13 @@
                                                 </div>
                                             </div>
                                             @if ($unit->status)
-                                            <a style="text-decoration: none;cursor: pointer"><i data-placement="top"
+
+                                            <a href="{{ route('admin.orderDetailsU', ['unit'=>$unit]) }}"
+                                                style="text-decoration: none;cursor: pointer"><i data-placement="top"
                                                     title="Cancel Subscription" data-toggle="tooltip"
                                                     class="noUse-hover fas fa-user-slash icons"></i></a>
                                             @else
-                                            <a data-placement="top" title="Make Rent"
+                                            <a href="{{ route('admin.orders') }}" data-placement="top" title="Make Rent"
                                                 style="text-decoration: none;cursor: pointer"><i data-toggle="tooltip"
                                                     data-placement="top" title="Make Rent"
                                                     class="use-hover fas fa-user-plus icons"></i></a>
