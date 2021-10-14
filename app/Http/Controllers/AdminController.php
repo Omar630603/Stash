@@ -706,4 +706,10 @@ class AdminController extends Controller
         $order->save();
         return redirect()->back();
     }
+    public function changeOrderStatus(Request $request, Order $order)
+    {
+       $order->status = $request->get('status');
+       $order->save();
+       return redirect()->back();
+    }
 }

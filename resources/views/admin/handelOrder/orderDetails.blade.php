@@ -39,37 +39,68 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Status</strong></h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary"
+                                style="display: flex; gap: 5px; justify-content: space-between">
                                 @if ($order->status == 0)
-                                <p class="btn-sm btn-primary">Waiting</p>
+                                <p id="staticStatusOrder" style="width: 70%" class="btn-sm btn-primary">Waiting</p>
                                 @elseif($order->status == 1)
-                                <p class="btn-sm btn-warning">In Delivery</p>
+                                <p id="staticStatusOrder" style="width: 70%" class="btn-sm btn-warning">In Delivery</p>
                                 @elseif($order->status == 2)
-                                <p class="btn-sm btn-secondary">In STASH</p>
+                                <p id="staticStatusOrder" style="width: 70%" class="btn-sm btn-secondary">In STASH</p>
                                 @endif
+
+                                <form action="{{ route('admin.changeOrderStatus', $order) }}" id="changeOrderStatusForm"
+                                    enctype="multipart/form-data" method="POST" style="display: none">
+                                    @csrf
+                                    <p style="margin: 0">
+                                        <small>Old Status:
+                                            @if ($order->status == 0)
+                                            Waiting
+                                            @elseif($order->status == 1)
+                                            In Delivery
+                                            @elseif($order->status == 2)
+                                            In STASH
+                                            @endif
+                                        </small>
+                                    <div style="display: flex; gap: 5px">
+                                        <select class="form-select form-select-sm" name="status" id="editStatusOrder">
+                                            <option class="btn-sm btn-primary" value="0">Waiting</option>
+                                            <option class="btn-sm btn-warning" value="1">In Delivery</option>
+                                            <option class="btn-sm btn-secondary" value="2">In STASH</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change</button>
+                                    </div>
+                                    <small>When you choose a status, it will change immediately</small>
+                                    </p>
+                                </form>
+                                <a onclick="$('#staticStatusOrder').toggle(''); $('#changeOrderStatusForm').toggle('slow');"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i data-toggle="tooltip" title="Change Status"
+                                        class="refresh-hover fa fa-magic icons"></i>
+                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Delivery</strong></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 @if ($order->delivery)
-                                <p class="btn-sm btn-success">Yes</p>
+                                <p style="width: 70%" class="btn-sm btn-success">Yes</p>
                                 @else
-                                <p class="btn-sm btn-secondary">No</p>
+                                <p style="width: 70%" class="btn-sm btn-secondary">No</p>
                                 @endif
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Order Price</strong></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <p class="btn-sm btn-success">{{ $order->totalPrice }}</p>
+                                <p style="width: 70%" class="btn-sm btn-success">{{ $order->totalPrice }}</p>
                             </div>
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Extend Time Price</strong></h6>
                             </div>
                             <div class="col-sm-9 text-secondary"
                                 style="display: flex; gap: 5px; justify-content: space-between">
-                                @if ($order->expandPrice <= 0) <p style="width: 60%" class="btn-sm btn-secondary">No
+                                @if ($order->expandPrice <= 0) <p style="width: 70%" class="btn-sm btn-secondary">No
                                     extension yet</p>
                                     @else
                                     <p style="width: 70%" class="btn-sm btn-success">{{ $order->expandPrice }}</p>

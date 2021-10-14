@@ -63,6 +63,7 @@ Route::delete('/admin/user/deleteUser/{user}', [AdminController::class, 'deleteU
 Route::post('/admin/user/addOrder', [AdminController::class, 'addOrder'])->name('admin.addOrder')->middleware('AdminAccess');
 Route::get('/admin/order/detailsU/{unit}', [AdminController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('AdminAccess');
 Route::get('/admin/order/details/{order}', [AdminController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('AdminAccess');
+Route::post('/admin/driver/changeOrderStatus/{order}', [AdminController::class, 'changeOrderStatus'])->name('admin.changeOrderStatus')->middleware('AdminAccess');
 
 Auth::routes();
 
