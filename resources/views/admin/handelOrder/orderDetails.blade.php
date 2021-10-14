@@ -273,7 +273,7 @@
     </div>
     <div class="container-fluid" id="deliveryContainer" style="margin-top: 20px">
         <div style="text-align: center">
-            <h4>Delivery History</h4>
+            <h4>Deliver History</h4>
         </div>
         <div>
             <a data-toggle="modal" data-target="#addDelivery" class="btn btn-sm btn-success float-right"
