@@ -49,9 +49,12 @@ Route::delete('/admin/driver/deleteDriver/{driver}', [AdminController::class, 'd
 Route::post('/admin/driver/addSchedule', [AdminController::class, 'addSchedule'])->name('admin.addSchedule')->middleware('AdminAccess');
 Route::post('/admin/driver/changeScheduleStatus/{schedule}', [AdminController::class, 'changeScheduleStatus'])->name('admin.changeScheduleStatus')->middleware('AdminAccess');
 Route::delete('/admin/driver/deleteSchedule/{schedule}', [AdminController::class, 'deleteSchedule'])->name('admin.deleteSchedule')->middleware('AdminAccess');
+Route::post('/admin/driver/editSchedule/{schedule}', [AdminController::class, 'editSchedule'])->name('admin.editSchedule')->middleware('AdminAccess');
+
 //AdminAccess//Orders&Users
 Route::get('/admin/orders', [AdminController::class, 'adminOrders'])->name('admin.orders')->middleware('AdminAccess');
 Route::delete('/admin/driver/deleteOrder/{order}', [AdminController::class, 'deleteOrder'])->name('admin.deleteOrder')->middleware('AdminAccess');
+Route::post('/admin/driver/extendOrder/{order}', [AdminController::class, 'extendOrder'])->name('admin.extendOrder')->middleware('AdminAccess');
 Route::post('/admin/editBioData/user/{user}', [AdminController::class, 'editUser'])->name('admin.editBioDataUser')->middleware('AdminAccess');
 Route::put('/admin/editImage/user/{user}', [AdminController::class, 'editUserImage'])->name('admin.editImageUser')->middleware('AdminAccess');
 Route::post('/admin/defaultImage/user/{user}', [AdminController::class, 'editUserImageDefultCustomer'])->name('admin.defaultImageUser')->middleware('AdminAccess');

@@ -99,8 +99,8 @@
         <div class="card-body" style="padding: 10px;">
             <div class="categories" style="display: flex; justify-content: flex-end; gap: 20px">
                 <div>
-                    <img class="img-fluid" style="border-radius: 10px;" src="{{ asset('storage/' . $category->img) }}"
-                        alt="">
+                    <img width="200px" class="img-fluid" style="border-radius: 10px;"
+                        src="{{ asset('storage/' . $category->img) }}" alt="">
                 </div>
                 <div style="flex: 1">
                     <div class="table100">
@@ -171,7 +171,9 @@
                                                                 <p>
                                                                     <center><strong>!! This Unit is Occupied !!</strong>
                                                                     </center><br>
-                                                                    <a href="">Click Here</a> to See Order Details<br>
+                                                                    <a
+                                                                        href="{{ route('admin.orderDetailsU', ['unit'=>$unit]) }}">Click
+                                                                        Here</a> to See Order Details<br>
                                                                     Click Change to Continue the Process
                                                                 </p>
                                                             </div>
@@ -240,7 +242,9 @@
                                                                 <p>
                                                                     <center><strong>!! This Unit is Occupied !!</strong>
                                                                     </center><br>
-                                                                    <a href="">Click Here</a> to See Order Details<br>
+                                                                    <a
+                                                                        href="{{ route('admin.orderDetailsU', ['unit'=>$unit]) }}">Click
+                                                                        Here</a> to See Order Details<br>
                                                                     Click Delete to Continue the Process
                                                                 </p>
                                                             </div>

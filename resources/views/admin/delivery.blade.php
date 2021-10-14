@@ -572,8 +572,9 @@
                             </td>
                             <td data-label="Action" class="column">
                                 <div style="display: flex; justify-content:space-around">
-                                    <a href="{{ route('admin.orderDetails', ['order'=>$schedule->ID_Order]) }} data-toggle="
-                                        tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
+                                    <a href="{{ route('admin.orderDetails', ['order'=>$schedule->ID_Order]) }}"
+                                        data-toggle="tooltip" title="Detials"
+                                        style="text-decoration: none;cursor: pointer">
                                         <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                     </a>
                                     <a onclick="$('#changeScheduleStatus{{$schedule->ID_DeliverySchedule}}').submit();"

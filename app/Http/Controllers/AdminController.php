@@ -13,7 +13,6 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
@@ -325,6 +324,40 @@ class AdminController extends Controller
         $driver->save();
         return redirect()->back();
     }
+    public function editSchedule(Request $request, DeliverySchedule $schedule)
+    {
+        $request->validate([
+            'ID_DeliveryVehicle' => 'required',
+            'pickedUpFrom' => 'required',
+            'deliveredTo' => 'required',
+            'pickedUp' => 'required',
+            'delivered' => 'required',
+            'totalPrice' => 'required',
+        ]);
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
+        $driver->deliver--;
+        $driver->save();
+
+        $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+        $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+        $schedule->deliveredTo = $request->get('deliveredTo');
+        $schedule->pickedUp = $request->get('pickedUp');
+        $schedule->delivered = $request->get('delivered');
+
+        $order = Order::where('ID_Order', $schedule->ID_Order)->first();
+        echo $order;
+        $order->totalPrice -= $schedule->totalPrice;
+        $order->totalPrice += $request->get('totalPrice');
+        $order->save();
+        
+        $schedule->totalPrice = $request->get('totalPrice');
+        $schedule->save();
+
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+        $driver->deliver++;
+        $driver->save();
+        return redirect()->back();
+    }
     public function changeScheduleStatus(DeliverySchedule $schedule)
     {
         if ($schedule->status) {
@@ -527,7 +560,7 @@ class AdminController extends Controller
        $unit->save();
        $this->changePrivateKeyUnit($unit);
        $order->delete();
-       return redirect()->back();
+       return redirect()->route('admin.orders');
     }
     public function addOrder(Request $request)
     {
@@ -587,10 +620,10 @@ class AdminController extends Controller
             $unit->status = 1;
             $unit->save();
             $category = Category::find($unit->ID_Category)->first();
-                if ($interval->d >= 0) {
+                if ($interval->d = 0 && $interval->m = 0 && $interval->y = 0) {
                     $order->totalPrice = $category->pricePerDay;
                 }else{
-                $order->totalPrice = $category->pricePerDay * $interval->d;
+                $order->totalPrice = $category->pricePerDay * $interval->days;
                 }
             $order->save();
             $userOrder = User::where('ID_User', $ID_User)->first();;
@@ -639,6 +672,38 @@ class AdminController extends Controller
     }
     public function adminOrderDetails(Order $order)
     {
-        echo $order;
+        $customer = User::where('ID_User', $order->ID_User)->first();
+        $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->where('delivery_schedules.ID_Order', 'like', '%' . $order->ID_Order . '%')
+                ->get();
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $category = Category::where('ID_Category', $unit->ID_Category)->first();
+        return view('admin.handelOrder.orderDetails', ['order' => $order, 'unit' => $unit,
+         'category' => $category, 'customer' => $customer, 'branch' => $branch, 'schedules' => $schedules, 'vehicles' => $vehicles]);
+    }
+    public function extendOrder(Request $request, Order $order)
+    {
+        $date1 = new DateTime($order->endsAt);
+        $date2 = new DateTime($request->get('extendEndsAt'));
+        $interval = $date1->diff($date2);
+
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $category = Category::find($unit->ID_Category)->first();
+        
+        $extentionPrice = 0;
+        if ($interval->d <= 0 && $interval->m <= 0 && $interval->y <= 0 && $interval->h > 0) {
+            $order->totalPrice += $category->pricePerDay;
+            $extentionPrice= $category->pricePerDay;
+        }else{
+            $order->totalPrice += $category->pricePerDay * $interval->days;
+            $extentionPrice= $category->pricePerDay * $interval->days;;
+        }
+        $order->endsAt= $request->get('extendEndsAt');
+        $order->expandPrice = $extentionPrice;
+        $order->save();
+        return redirect()->back();
     }
 }

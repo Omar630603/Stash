@@ -873,7 +873,7 @@
                                 </td>
                                 <td data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
-                                        <a href="{{ route('admin.orderDetails', ['order'=>$order]) }} data-toggle="
+                                        <a href="{{ route('admin.orderDetails', ['order'=>$order]) }}" data-toggle="
                                             tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
                                             <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                         </a>
