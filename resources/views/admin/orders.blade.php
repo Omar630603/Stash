@@ -730,7 +730,11 @@
                 <div class="container">
                     <div class="headerS">
                         <h3>
-                            This Is All Orders for {{ $userProfile->name}} Customer<br>
+                            This Is All Orders for {{ $userProfile->name}} Customer
+                            <a href="{{route('admin.orders', ['user' => $userProfile->ID_User])}}"
+                                style="text-decoration: none;cursor: pointer"><i data-toggle="tooltip"
+                                    title="Refresh Orders" class="refresh-hover fas fa-sync icons"></i></a>
+                            <br>
                             <small>Here you can see all the schedules and their information.</small>
                         </h3>
                     </div>
