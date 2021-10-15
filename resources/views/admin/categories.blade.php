@@ -278,16 +278,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <a onclick="$('#changeUnitStatus{{$unit->ID_Unit}}').submit();"
-                                                data-toggle="tooltip" title="Change Status"
-                                                style="text-decoration: none;cursor: pointer">
-                                                <i class="refresh-hover fa fa-magic icons"></i>
-                                            </a>
-                                            <form hidden action="{{ route('admin.changeUnitStatus', $unit) }}"
-                                                id="changeUnitStatus{{$unit->ID_Unit}}" enctype="multipart/form-data"
-                                                method="POST">
-                                                @csrf
-                                            </form>
                                         </div>
                                     </td>
                                 </tr>

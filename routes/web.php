@@ -38,7 +38,6 @@ Route::get('/admin/categories', [AdminController::class, 'showCategories'])->nam
 Route::post('/admin/categories/addUnit', [AdminController::class, 'addUnit'])->name('admin.addUnit')->middleware('AdminAccess');
 Route::delete('/admin/categories/DeleteUnit/{unit}', [AdminController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('AdminAccess');
 Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('AdminAccess');
-Route::post('/admin/categories/changeUnitStatus/{unit}', [AdminController::class, 'changeUnitStatus'])->name('admin.changeUnitStatus')->middleware('AdminAccess');
 //AdminAccess//Delivery&drivers
 Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
 Route::post('/admin/editBioData/driver/{driver}', [AdminController::class, 'editDriver'])->name('admin.editBioDataDriver')->middleware('AdminAccess');
