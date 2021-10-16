@@ -141,17 +141,6 @@ class AdminController extends Controller
         $unit->save();
         return redirect()->back();
     }
-    public function changeUnitStatus(Unit $unit)
-    {
-        if ($unit->status) {
-            $unit->status = false;
-        }else{
-            $unit->status = true;
-        }
-       $unit->save();
-       $this->changePrivateKeyUnit($unit);
-       return redirect()->back();
-    }
 
     //admin Delivery Page
     public function adminDelivery(Request $request){
