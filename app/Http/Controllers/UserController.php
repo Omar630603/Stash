@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Order;
+use App\Models\Category;
 use App\Models\User;
+use App\Models\Unit;
+use App\Models\DeliverySchedule;
+use App\Models\DeliveryVehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -66,24 +70,24 @@ class UserController extends Controller
 
     //User Orders Page
     public function userOrders(Request $request){
-        $branch = User::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $branch = User::where('ID_Admin', 'like', '%' . Auth::user()->ID_Admin . '%')->first();
         $users = User::pluck('ID_user')->all();
         $users = User::whereNotIn('ID_user', $users)->get();
         $categories = Category::all();
-        $vehicles = DeliveryVehicle::where('ID_User', 'like', '%' . $branch->ID_User . '%')->get();
+        $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
         $active = false;
         $noUser = false;
         $activeU = 0;
         $userProfile = 0;
         $searchName = '';
-        $units = Unit::where('ID_User', 'like', '%' . $branch->ID_User . '%')->where('status', 'like', '%' . 0 . '%')->orderBy('IdName', 'desc')->get();
+        $units = Unit::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->where('status', 'like', '%' . 0 . '%')->orderBy('IdName', 'desc')->get();
         $categories = Category::all();
 
         if($request->get('user')){
             $orders = Order::select('*', 'orders.status')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-                ->where('units.ID_User', 'like', '%' . $branch->ID_User . '%')
+                ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
                 ->where('orders.ID_User', 'like', '%' . $request->get('user') . '%')
                 ->get();
             $active = true;
@@ -103,7 +107,7 @@ class UserController extends Controller
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('users.username', 'like', '%' . $request->get('search') . '%')
-                ->where('units.ID_User', 'like', '%' . $branch->ID_User . '%')
+                ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
                 ->get();
             $active = true;
             $activeU = User::Where('users.name', 'like', '%' . $request->get('search') . '%')
@@ -130,7 +134,7 @@ class UserController extends Controller
             $orders = Order::select('*', 'orders.status')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-                ->where('units.ID_User', 'like', '%' . $branch->ID_User . '%')
+                ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
                 ->get();
         }
         return view('user.orders', ['users' => $users, 'orders' => $orders,
@@ -139,6 +143,74 @@ class UserController extends Controller
          'categories' => $categories, 'vehicles' => $vehicles]);
     }
 
+    //User Delivery//
+    public function userDelivery(Request $request){
+        $branch = User::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $vehicles = DeliveryVehicle::where('ID_User', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $orders = Order::Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+            ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $active = false;
+        $noDriver = false;
+        $activeV = 0;
+        $vehicleDriver = 0;
+        $searchName = '';
+        if($request->get('driver')){
+            $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
+                ->get();
+            $active = true;
+            $activeV = $request->get('driver');
+            $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
+            if ($vehicleDriver->ID_Admin != $branch->ID_Admin) {
+                $noDriver = true;
+                $searchName ='NO ACCESS';
+            }
+        }elseif($request->get('search')){
+            $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+                ->get();
+            $active = true;
+            $activeV = DeliveryVehicle::Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
+                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+                ->first();
+                if ($activeV) {
+                    $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)->first();
+                    $activeV = $activeV->ID_DeliveryVehicle;
+                }else{
+                    $noDriver = true;
+                    $searchName =$request->get('search');
+                }
+        }else{
+            $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
+            ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+            ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+            ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        }
+        return view('admin.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules,
+         'active' => $active, 'activeV' => $activeV, 'branch' => $branch, 'vehicleDriver' => $vehicleDriver
+         , 'noDriver' => $noDriver, 'searchName' => $searchName, 'orders' => $orders]);
+    }
+
+//User Delete Order//
 
     public function deleteOrder(Order $order)
     {
@@ -269,11 +341,11 @@ class UserController extends Controller
     public function userOrderDetails(Order $order)
     {
         $customer = User::where('ID_User', $order->ID_User)->first();
-        $branch = User::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
-        $vehicles = DeliveryVehicle::where('ID_User', 'like', '%' . $branch->ID_User . '%')->get();
+        $branch = User::where('ID_Admin', 'like', '%' . Auth::user()->ID_Admin . '%')->first();
+        $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
         $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
-                ->where('delivery_vehicles.ID_User', 'like', '%' . $branch->ID_User . '%')
-                ->where('delivery_schedules.ID_Order', 'like', '%' . $order->ID_Order . '%')
+                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->where('delivery_schedules.ID_Admin', 'like', '%' . $order->ID_Admin . '%')
                 ->get();
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
         $category = Category::where('ID_Category', $unit->ID_Category)->first();

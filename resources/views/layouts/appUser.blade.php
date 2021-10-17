@@ -59,8 +59,8 @@
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
                                 <li><a href="{{route('home')}}">Home</a></li>
-                                <li><a href="{{route('admin.orders')}}">Orders</a></li>
-                                <li><a href="{{route('admin.delivery')}}">Delivery</a></li>
+                                <li><a href="{{route('user.orders')}}">Orders</a></li>
+                                <li><a href="{{route('user.delivery')}}">Delivery</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
