@@ -30,16 +30,16 @@ Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->na
 Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
 Route::post('/user/defaultImage/{user}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('UserAccess');
 //UserAccess//Delivery
-Route::get('/user/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
+Route::get('/user/delivery', [UserController::class, 'userDelivery'])->name('user.delivery')->middleware('UserAccess');
 //UserAccess//Order
 Route::get('/user/orders', [UserController::class, 'userOrders'])->name('user.orders')->middleware('UserAccess');
-Route::delete('/user/driver/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('AdminAccess');
-Route::post('/user/driver/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('AdminAccess');
-Route::post('/user/defaultImage/user/{user}', [AdminController::class, 'editUserImageDefultCustomer'])->name('admin.defaultImageUser')->middleware('AdminAccess');
-Route::post('/user/addOrder', [AdminController::class, 'addOrder'])->name('admin.addOrder')->middleware('AdminAccess');
-Route::get('/user/order/detailsU/{unit}', [AdminController::class, 'userOrderDetailsU'])->name('user.orderDetailsU')->middleware('AdminAccess');
-Route::get('/user/order/details/{order}', [AdminController::class, 'userOrderDetails'])->name('user.orderDetails')->middleware('AdminAccess');
-Route::post('/user/driver/changeOrderStatus/{order}', [AdminController::class, 'changeOrderStatus'])->name('user.changeOrderStatus')->middleware('AdminAccess');
+Route::delete('/user/driver/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
+Route::post('/user/driver/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('UserAccess');
+Route::post('/user/defaultImage/user/{user}', [UserController::class, 'editUserImageDefultCustomer'])->name('user.defaultImageUser')->middleware('UserAccess');
+Route::post('/user/addOrder', [UserController::class, 'addOrder'])->name('user.addOrder')->middleware('UserAccess');
+Route::get('/user/order/detailsU/{unit}', [UserController::class, 'userOrderDetailsU'])->name('user.orderDetailsU')->middleware('UserAccess');
+Route::get('/user/order/details/{order}', [UserController::class, 'userOrderDetails'])->name('user.orderDetails')->middleware('UserAccess');
+Route::post('/user/driver/changeOrderStatus/{order}', [UserController::class, 'changeOrderStatus'])->name('user.changeOrderStatus')->middleware('UserAccess');
 
 //AdminAccess//Home
 Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home')->middleware('AdminAccess');
