@@ -32,22 +32,11 @@
 
     <div class="container-fluid" id="deliveryContainer">
         <div class="containerV container" style="padding: 0">
-            <div class="container headerVehiclesSchedules">
-                <h1>Users</h1>
-                <a data-toggle="modal" data-target="#addUser" class="btn btn-sm btn-success float-right"
-                    style="border-radius: 10px; text-align: center; margin-top: -30px">Add
-                </a>
-            </div>
 
             <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUser"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style="justify-content: center">
-                            <h5 class="modal-title" id="addUserTitle">
-                                Add New User
-                            </h5>
-                        </div>
                         <div class="modal-body">
                             <div>
                                 <form method="POST" id="addUserForm" class="row g-3"

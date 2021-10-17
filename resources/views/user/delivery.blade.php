@@ -15,54 +15,8 @@
         <div class="containerV container" style="padding: 0">
             <div class="container headerVehiclesSchedules">
                 <h1>Vehicles</h1>
-                <a data-toggle="modal" data-target="#addVehicle" class="btn btn-sm btn-success float-right"
-                    style="border-radius: 10px; text-align: center; margin-top: -30px">Add
-                </a>
             </div>
-
-            <div class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="addVehicle"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="justify-content: center">
-                            <h5 class="modal-title" id="addVehicleTitle">
-                                Add New Vehicle
-                            </h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="headerAddS">
-                                <form method="POST" id="addDriverForm" class="row g-3"
-                                    action="{{ route('user.addDriver')}}">
-                                    @csrf
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="model" class="form-label">Model</label>
-                                        <input type="text" class="form-control" id="model" name="model">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="plateNumber" class="form-label">Plate Number</label>
-                                        <input type="text" class="form-control" id="plateNumber" name="plateNumber">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="pricePerK" class="form-label">Price / K</label>
-                                        <input type="text" class="form-control" id="pricePerK" name="pricePerK">
-                                    </div>
-                                    <input hidden type="text" value="{{$branch->ID_User}}" name="ID_User">
-                                </form>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                data-dismiss="modal">Close</button>
-                            <button type="submit" onclick="$('#addDriverForm').submit();"
-                                class="btn btn-sm btn-outline-primary">Add</button>
                         </div>
                     </div>
                 </div>

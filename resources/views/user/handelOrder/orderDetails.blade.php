@@ -306,15 +306,6 @@
         <div style="text-align: center">
             <h4>Deliver History</h4>
         </div>
-        <div>
-            <a data-toggle="modal" data-target="#addDelivery" class="btn btn-sm btn-success float-right"
-                style="border-radius: 10px; text-align: center; margin-top: 10px">Add
-            </a>
-            <div class="modal fade" id="addDelivery" tabindex="-1" aria-labelledby="addDelivery" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="justify-content: center">
-                            <h5 class="modal-title" id="addDeliveryTitle">Add
                                 Delivery Schedule
                             </h5>
                         </div>
@@ -324,82 +315,7 @@
                                     Here you can change the trip and time of the delivery as well as
                                     the Vehicle and the total price of the delivery.
                                 </p>
-                                <form method="POST" id="addDeliveryForm" class="row g-3"
-                                    action="{{ route('user.addSchedule')}}">
-                                    @csrf
-                                    <input hidden type="text" value="{{$order->ID_Order}}" name="ID_Order">
-                                    <div class="col-md-12">
-                                        <label for="phone" class="form-label">Vehicle</label>
-                                        <div class="form-group">
-                                            <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
-                                                <option value="0">Select Vehicle</option>
-                                                @php
-                                                $vehicleNo = 1;
-                                                @endphp
-                                                @foreach ($vehicles as $vehicle)
-                                                <option value="{{$vehicle->ID_DeliveryVehicle}}">
-                                                    {{$vehicleNo++}}- (
-                                                    {{$vehicle->plateNumber}} )
-                                                    -
-                                                    @ {{$vehicle->name}}
-                                                    - {{$vehicle->model}}
-                                                    - Price {{$vehicle->pricePerK}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="pickedUpFrom" class="form-label">Pick Up
-                                            From</label>
-                                        <input type="text" class="form-control" id="pickedUpFrom" name="pickedUpFrom">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="deliveredTo" class="form-label">Deliver
-                                            To</label>
-                                        <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="pickedUp" class="form-label">Pick Up
-                                            Date</label>
-                                        <input type="datetime-local" class="form-control" id="pickedUp" name="pickedUp">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="delivered" class="form-label">Deliver
-                                            Date</label>
-                                        <input type="datetime-local" class="form-control" id="delivered"
-                                            name="delivered">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="totalPrice" class="form-label">Total
-                                            Price</label>
-                                        <input type="text" class="form-control" id="totalPrice" name="totalPrice">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="model" class="form-label">Status</label>
-                                        <div class="form-group">
-                                            <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
-                                                class="form-check form-switch">
-                                                <div>
-                                                    <label style="color: #000;" for="status">Status:
-                                                        <small style="display: none" id="statusDone">Done</small>
-                                                    </label>
-                                                </div>
-                                                <input style="margin-left: 0; margin-right: 5px; position: inherit"
-                                                    onchange="$('#statusDone').toggle('slow');" name="status"
-                                                    class="form-check-input" type="checkbox"
-                                                    id="flexSwitchCheckDefault">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                data-dismiss="modal">Close</button>
-                            <button onclick="$('#addDeliveryForm').submit();" type="button"
-                                class="btn btn-sm btn-outline-primary">Add</button>
                         </div>
                     </div>
                 </div>
