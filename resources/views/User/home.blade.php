@@ -1,26 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in as a user!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
 @extends('layouts.appUser')
 
 @section('content')
@@ -32,7 +9,7 @@
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript:void(0)">User : {{ Auth::user()->username }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                <li class="breadcrumb-item active" aria-current="page">User Profile Information</li>
             </ol>
         </nav>
         <!-- /Breadcrumb -->
@@ -49,7 +26,6 @@
                                 <h4 style="color: white;text-transform: uppercase">
                                     <strong>{{ Auth::user()->username }}</strong></h4>
                                 <p style="color: white"><strong>User</strong></p>
-                                <p style="color: white"><strong>User of Stash</strong></p>
                             </div>
                         </div>
                     </div>
@@ -127,7 +103,7 @@
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
                                         <form method="post" style="display: none;"
-                                            action="{{ route('user.editImage') }}"
+                                            action="{{ route('user.editImage', $user) }}"
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -139,7 +115,7 @@
                                         <a href="" onclick="$('#restore').submit(); return false;"
                                             class="btn btn-outline-dark">Restore Default</a>
                                         <form style="display: none" method="POST"
-                                            action="{{ route('admin.defaultImage') }}" id="restore">
+                                            action="{{ route('user.defaultImage', $user) }}" id="restore">
                                             @csrf
                                         </form>
                                     </div>
@@ -150,7 +126,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius:20px;">
-                        <form method="post" action="{{ route('user.editBioData') }}"
+                        <form method="post" action="{{ route('user.editBioData', $user) }}"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
@@ -208,23 +184,33 @@
                     </div>
                 </div>
             </div>
-            <div class="row gutters-sm">
-                <div class="col-md-8">
-                    <div class="card mb-3" style="border-radius:20px;">
-                        <div class="card-body">
-                            <div class="float-right" style="cursor: pointer;">
-                                <a style="text-decoration: none;cursor: pointer" onclick="$('#edit_loction').toggle('fast'); $('#branch-name-text').toggle('fast'); $('#branch-name').toggle('fast');
-                                $('#branch-city-text').toggle('fast'); $('#branch-city').toggle('fast');
-                                $('#branch-location-text').toggle('fast'); $('#branch-location').toggle('fast');
-                                $('#btn-edit-branch').toggle('fast');
-                                 return false;"><i class="fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
-                            </div>
-                            <form method="post" action="{{ route('user.editBranch', $branch) }}"
-                                enctype="multipart/form-data">
-                                @csrf
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3" style="border-radius:20px; padding: 5px;">
+                        <div class="form-group" id="edit_loction"
+                            style="display: none; text-align: center; padding: 5px">
+                            <label for="address_address" style=""><strong>Address</strong></label>
+                            <input type="text" id="address-input" name="address_address" class="form-control map-input">
+                            <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
+                            <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
+                        </div>
+                        <div id="address-map-container" style="width:100%;height:280px;border-radius:20px;">
+                            <div style="width: 100%; height: 100%; border-radius:20px;" id="address-map"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                    </div>
+                </div>
+            </div>
             @endsection
             @section('scripts')
             @parent
+            <script
+                src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+                async defer></script>
+            <script src="{{ asset('js/mapInput.js') }}"></script>
             @stop
         </div>
     </div>

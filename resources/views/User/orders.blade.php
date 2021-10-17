@@ -22,8 +22,8 @@
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.orders') }}">Orders</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)"> : {{ Auth::user()->username }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('.orders') }}">Orders</a></li>
             <li class="breadcrumb-item active" aria-current="page">Orders for {{$branch->branch}} Branch :Total of
                 {{count($orders)}} Orders
             </li>
@@ -51,7 +51,7 @@
                         <div class="modal-body">
                             <div>
                                 <form method="POST" id="addUserForm" class="row g-3"
-                                    action="{{ route('admin.addUser')}}">
+                                    action="{{ route('.addUser')}}">
                                     @csrf
                                     <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly"
                                         class="container">
@@ -147,7 +147,7 @@
                 <div class="headind_srch">
                     <div class="srch_bar">
                         <div class="stylish-input-group">
-                            <form action="{{route('admin.orders')}}" enctype="multipart/form-data">
+                            <form action="{{route('.orders')}}" enctype="multipart/form-data">
                                 <input name="search" type="text" class="search-bar" placeholder="Search User">
                                 <span class="input-group-addon">
                                     <button type="submit"> <i class="fa fa-search" aria-hidden="true"></i> </button>
@@ -162,7 +162,7 @@
                     @foreach ($users as $user)
                     @if ($noUser)
                     <div class="chat_list ">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
                                     <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
@@ -179,7 +179,7 @@
                     @else
                     @if ($active && $activeU == $user->ID_User)
                     <div class="chat_list active_chat">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
                                     <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
@@ -195,7 +195,7 @@
                     </div>
                     @else
                     <div class="chat_list ">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
                                     <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
@@ -238,7 +238,7 @@
             <div style="display: none" id="addOrder">
                 <div class="container" style="display: flex; justify-content: center">
                     <div class="headerAddS">
-                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('admin.addOrder')}}">
+                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('.addOrder')}}">
                             @csrf
                             <div class="container" id="userOption">
                                 <div class="container">
@@ -635,7 +635,7 @@
                                                 <a href="" onclick="$('#imageInput').click(); return false;"
                                                     class="btn btn-outline-dark">Change Picture</a>
                                                 <form method="post" style="display: none;"
-                                                    action="{{ route('admin.editImageUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('.editImageUser', ['user'=>$userProfile]) }}"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -648,7 +648,7 @@
                                                     class="btn btn-outline-dark">Restore
                                                     Default</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.defaultImageUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('.defaultImageUser', ['user'=>$userProfile]) }}"
                                                     id="restore">
                                                     @csrf
                                                 </form>
@@ -656,7 +656,7 @@
                                                     class="btn btn-outline-danger">Delete
                                                     User</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.deleteUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('.deleteUser', ['user'=>$userProfile]) }}"
                                                     id="delete">
                                                     @csrf
                                                     @method('DELETE')
@@ -670,7 +670,7 @@
                         <div class="col-md-8">
                             <div class="card mb-3" style="border-radius:20px;">
                                 <form method="post"
-                                    action="{{ route('admin.editBioDataUser', ['user'=>$userProfile]) }}"
+                                    action="{{ route('.editBioDataUser', ['user'=>$userProfile]) }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
@@ -731,7 +731,7 @@
                     <div class="headerS">
                         <h3>
                             This Is All Orders for {{ $userProfile->name}} Customer
-                            <a href="{{route('admin.orders', ['user' => $userProfile->ID_User])}}"
+                            <a href="{{route('.orders', ['user' => $userProfile->ID_User])}}"
                                 style="text-decoration: none;cursor: pointer"><i data-toggle="tooltip"
                                     title="Refresh Orders" class="refresh-hover fas fa-sync icons"></i></a>
                             <br>
@@ -859,13 +859,13 @@
                                     <p>{{$order->IdName}}</p>
                                 </td>
                                 <td data-label="Customer" class="column">
-                                    <a href="{{route('admin.orders', ['user' => $order->ID_User])}}">
+                                    <a href="{{route('.orders', ['user' => $order->ID_User])}}">
                                         <p>{{$order->username}}</p>
                                     </a>
                                 </td>
                                 <td data-label="Status" class="column">
-                                    @if ($order->madeByAdmin)
-                                    <p class="btn-sm btn-success">Admin</p>
+                                    @if ($order->madeBy)
+                                    <p class="btn-sm btn-success"></p>
                                     @else
                                     <p class="btn-sm btn-secondary">Customer</p>
                                     @endif
@@ -873,7 +873,7 @@
                                 </td>
                                 <td data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
-                                        <a href="{{ route('admin.orderDetails', ['order'=>$order]) }}" data-toggle="
+                                        <a href="{{ route('.orderDetails', ['order'=>$order]) }}" data-toggle="
                                             tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
                                             <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                         </a>
@@ -882,7 +882,7 @@
                                             style="text-decoration: none;cursor: pointer">
                                             <i class="delete-hover far fa-trash-alt icons"></i>
                                         </a>
-                                        <form hidden action="{{ route('admin.deleteOrder', $order) }}"
+                                        <form hidden action="{{ route('.deleteOrder', $order) }}"
                                             id="deleteOrder{{$order->ID_Order}}" enctype="multipart/form-data"
                                             method="POST">
                                             @csrf

@@ -6,8 +6,8 @@
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.orders') }}">Orders</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User : {{ Auth::user()->username }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('user.orders') }}">Orders</a></li>
             <li class="breadcrumb-item active" aria-current="page">Order Details in {{$branch->branch}} Branch</li>
         </ol>
     </nav>
@@ -49,7 +49,7 @@
                                 <p id="staticStatusOrder" style="width: 70%" class="btn-sm btn-secondary">In STASH</p>
                                 @endif
 
-                                <form action="{{ route('admin.changeOrderStatus', $order) }}" id="changeOrderStatusForm"
+                                <form action="{{ route('user.changeOrderStatus', $order) }}" id="changeOrderStatusForm"
                                     enctype="multipart/form-data" method="POST" style="display: none">
                                     @csrf
                                     <p style="margin: 0">
@@ -123,7 +123,7 @@
                                                     <div class="modal-body">
                                                         <div class="alert-success"
                                                             style="padding: 10px; border-radius: 20px">
-                                                            <form action="{{ route('admin.extendOrder', $order) }}"
+                                                            <form action="{{ route('user.extendOrder', $order) }}"
                                                                 id="extendOrderForm" enctype="multipart/form-data"
                                                                 method="POST">
                                                                 @csrf
@@ -182,7 +182,7 @@
                                                             onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"
                                                             type="button"
                                                             class="btn btn-sm btn-outline-danger">Delete</button>
-                                                        <form hidden action="{{ route('admin.deleteOrder', $order) }}"
+                                                        <form hidden action="{{ route('user.deleteOrder', $order) }}"
                                                             id="deleteOrder{{$order->ID_Order}}"
                                                             enctype="multipart/form-data" method="POST">
                                                             @csrf
@@ -203,7 +203,7 @@
             <h1>USER</h1>
             <div class="headerVehiclesSchedules widthHeader" style="text-align: center">
                 <div class="card-body" style="background: #9D3488;border-radius:20px">
-                    <a href="{{route('admin.orders', ['user' => $customer->ID_User])}}"
+                    <a href="{{route('user.orders', ['user' => $customer->ID_User])}}"
                         style="text-decoration: none;cursor: pointer" data-toggle="tooltip" title="View Profile">
                         <div class="d-flex flex-column align-items-center text-center">
                             <img width="100px" src="{{ asset('storage/' . $customer->img) }}"
@@ -248,7 +248,7 @@
                 <div class="card" style="border-radius:20px;">
                     <div class="card-body">
                         <div class="float-right" style="margin-bottom: 100px">
-                            <a href="{{ route('admin.orderDetailsU', ['unit'=>$unit]) }}">
+                            <a href="{{ route('user.orderDetailsU', ['unit'=>$unit]) }}">
                                 <p class="btn-sm btn-warning">Occupied</p>
                             </a>
                         </div>
@@ -325,7 +325,7 @@
                                     the Vehicle and the total price of the delivery.
                                 </p>
                                 <form method="POST" id="addDeliveryForm" class="row g-3"
-                                    action="{{ route('admin.addSchedule')}}">
+                                    action="{{ route('user.addSchedule')}}">
                                     @csrf
                                     <input hidden type="text" value="{{$order->ID_Order}}" name="ID_Order">
                                     <div class="col-md-12">
@@ -514,7 +514,7 @@
                             @endif
                         </td>
                         <td data-label="Vehicle" class="column">
-                            <a href="{{route('admin.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
+                            <a href="{{route('user.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
                                 <p>{{$schedule->name}}</p>
                             </a>
 
@@ -549,7 +549,7 @@
                                                     <form method="POST"
                                                         id="editDelivery{{$schedule->ID_DeliverySchedule}}Form"
                                                         class="row g-3"
-                                                        action="{{ route('admin.editSchedule', ['schedule'=>$schedule])}}">
+                                                        action="{{ route('user.editSchedule', ['schedule'=>$schedule])}}">
                                                         @csrf
                                                         <div class="col-md-12">
                                                             <label for="phone" class="form-label">Vehicle</label>
@@ -640,7 +640,7 @@
                                     style="text-decoration: none;cursor: pointer">
                                     <i class="refresh-hover fa fa-magic icons"></i>
                                 </a>
-                                <form hidden action="{{ route('admin.changeScheduleStatus', $schedule) }}"
+                                <form hidden action="{{ route('user.changeScheduleStatus', $schedule) }}"
                                     id="changeScheduleStatus{{$schedule->ID_DeliverySchedule}}"
                                     enctype="multipart/form-data" method="POST">
                                     @csrf
@@ -650,7 +650,7 @@
                                     style="text-decoration: none;cursor: pointer">
                                     <i class="delete-hover far fa-trash-alt icons"></i>
                                 </a>
-                                <form hidden action="{{ route('admin.deleteSchedule', $schedule) }}"
+                                <form hidden action="{{ route('user.deleteSchedule', $schedule) }}"
                                     id="deleteSchedule{{$schedule->ID_DeliverySchedule}}" enctype="multipart/form-data"
                                     method="POST">
                                     @csrf
