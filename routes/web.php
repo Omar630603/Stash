@@ -24,8 +24,22 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-//UserAccess//
+//UserAccess//Home
 Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
+Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->name('user.editBioData')->middleware('UserAccess');
+Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
+Route::post('/user/defaultImage/{admin}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('AdminAccess');
+//UserAccess//Delivery
+Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
+Route::post('/admin/defaultImage/driver/{driver}', [AdminController::class, 'editDriverImageDefult'])->name('admin.defaultImageDriver')->middleware('AdminAccess');
+//UserAccess//Order
+Route::get('/admin/orders', [AdminController::class, 'adminOrders'])->name('admin.orders')->middleware('AdminAccess');
+Route::delete('/admin/driver/deleteOrder/{order}', [AdminController::class, 'deleteOrder'])->name('admin.deleteOrder')->middleware('AdminAccess');
+Route::post('/admin/driver/extendOrder/{order}', [AdminController::class, 'extendOrder'])->name('admin.extendOrder')->middleware('AdminAccess');
+Route::post('/admin/defaultImage/user/{user}', [AdminController::class, 'editUserImageDefultCustomer'])->name('admin.defaultImageUser')->middleware('AdminAccess');
+Route::post('/admin/user/addOrder', [AdminController::class, 'addOrder'])->name('admin.addOrder')->middleware('AdminAccess');
+Route::get('/admin/order/detailsU/{unit}', [AdminController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('AdminAccess');
+Route::get('/admin/order/details/{order}', [AdminController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('AdminAccess');
 
 //AdminAccess//Home
 Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home')->middleware('AdminAccess');
