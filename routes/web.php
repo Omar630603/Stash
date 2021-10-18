@@ -26,6 +26,21 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
 Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
+Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->name('user.editBioData')->middleware('UserAccess');
+Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
+Route::post('/user/defaultImage/{user}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('UserAccess');
+//UserAccess//Delivery
+Route::get('/user/delivery', [UserController::class, 'userDelivery'])->name('user.delivery')->middleware('UserAccess');
+//UserAccess//Order
+Route::get('/user/orders', [UserController::class, 'userOrders'])->name('user.orders')->middleware('UserAccess');
+Route::delete('/user/driver/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
+Route::post('/user/driver/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('UserAccess');
+Route::post('/user/defaultImage/user/{user}', [UserController::class, 'editUserImageDefultCustomer'])->name('user.defaultImageUser')->middleware('UserAccess');
+Route::post('/user/addOrder', [UserController::class, 'addOrder'])->name('user.addOrder')->middleware('UserAccess');
+Route::get('/user/order/detailsU/{unit}', [UserController::class, 'userOrderDetailsU'])->name('user.orderDetailsU')->middleware('UserAccess');
+Route::get('/user/order/details/{order}', [UserController::class, 'userOrderDetails'])->name('user.orderDetails')->middleware('UserAccess');
+Route::post('/user/driver/changeOrderStatus/{order}', [UserController::class, 'changeOrderStatus'])->name('user.changeOrderStatus')->middleware('UserAccess');
+
 //AdminAccess//Home
 Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home')->middleware('AdminAccess');
 Route::post('/admin/editBioData/{admin}', [AdminController::class, 'editAdmin'])->name('admin.editBioData')->middleware('AdminAccess');
