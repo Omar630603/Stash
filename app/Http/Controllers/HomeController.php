@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
@@ -40,5 +41,10 @@ class HomeController extends Controller
         }else {
             return redirect()->route('user.home');
         }
+    }
+    public function welcome()
+    {
+        $categories = Category::all();
+        return view('welcome', ['categories' => $categories]);
     }
 }
