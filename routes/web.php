@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-Route::get('/', [HomeController::class, 'welcome']);
+Route::get('/', [WelcomeController::class, 'welcome']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
