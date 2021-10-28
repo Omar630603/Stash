@@ -90,7 +90,8 @@
                                             <a href="{{ route('home') }}" class="dropdown-item">Dashboard <i
                                                     style="margin-top: 4px" class="fa fa-dashboard float-right"
                                                     aria-hidden="true"></i></a>
-                                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                            <a id="logout-btn" class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
                                                          document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }} <i style="margin-top: 4px"
                                                     class="fa fa-sign-out float-right" aria-hidden="true"></i>
