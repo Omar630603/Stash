@@ -18,11 +18,12 @@ class DeliverySchedule extends Model
     protected $fillable = [
         'ID_Order',
         'ID_DeliveryVehicle',
-        'status',
+        'schedule_status',
+        'schedules_description',
         'pickedUp',
         'delivered',
         'pickedUpFrom',
         'deliveredTo',
-        'totalPrice',
+        'schedules_totalPrice',
     ];
 }

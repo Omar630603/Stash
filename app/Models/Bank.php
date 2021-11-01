@@ -17,6 +17,7 @@ class Bank extends Model
      */
     protected $fillable = [
         'name',
+        'ID_Branch',
         'accountNo',
     ];
 }

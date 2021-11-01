@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -23,57 +23,46 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
 Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
-Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->name('user.editBioData')->middleware('UserAccess');
-Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
-Route::post('/user/defaultImage/{user}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('UserAccess');
-//UserAccess//Delivery
-Route::get('/user/delivery', [UserController::class, 'userDelivery'])->name('user.delivery')->middleware('UserAccess');
-//UserAccess//Order
-Route::get('/user/orders', [UserController::class, 'userOrders'])->name('user.orders')->middleware('UserAccess');
-Route::delete('/user/driver/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
-Route::post('/user/driver/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('UserAccess');
-Route::post('/user/defaultImage/user/{user}', [UserController::class, 'editUserImageDefultCustomer'])->name('user.defaultImageUser')->middleware('UserAccess');
-Route::post('/user/addOrder', [UserController::class, 'addOrder'])->name('user.addOrder')->middleware('UserAccess');
-Route::get('/user/order/detailsU/{unit}', [UserController::class, 'userOrderDetailsU'])->name('user.orderDetailsU')->middleware('UserAccess');
-Route::get('/user/order/details/{order}', [UserController::class, 'userOrderDetails'])->name('user.orderDetails')->middleware('UserAccess');
-Route::post('/user/driver/changeOrderStatus/{order}', [UserController::class, 'changeOrderStatus'])->name('user.changeOrderStatus')->middleware('UserAccess');
 
-//AdminAccess//Home
-Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home')->middleware('AdminAccess');
-Route::post('/admin/editBioData/{admin}', [AdminController::class, 'editAdmin'])->name('admin.editBioData')->middleware('AdminAccess');
-Route::put('/admin/editImage/{admin}', [AdminController::class, 'editAdminImage'])->name('admin.editImage')->middleware('AdminAccess');
-Route::post('/admin/defaultImage/{admin}', [AdminController::class, 'editUserImageDefult'])->name('admin.defaultImage')->middleware('AdminAccess');
-Route::post('/admin/editBranch/{branch}', [AdminController::class, 'editBranch'])->name('admin.editBranch')->middleware('AdminAccess');
-//AdminAccess//Categories
-Route::get('/admin/categories', [AdminController::class, 'showCategories'])->name('admin.category')->middleware('AdminAccess');
-Route::post('/admin/categories/addUnit', [AdminController::class, 'addUnit'])->name('admin.addUnit')->middleware('AdminAccess');
-Route::delete('/admin/categories/DeleteUnit/{unit}', [AdminController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('AdminAccess');
-Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [AdminController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('AdminAccess');
-//AdminAccess//Delivery&drivers
-Route::get('/admin/delivery', [AdminController::class, 'adminDelivery'])->name('admin.delivery')->middleware('AdminAccess');
-Route::post('/admin/editBioData/driver/{driver}', [AdminController::class, 'editDriver'])->name('admin.editBioDataDriver')->middleware('AdminAccess');
-Route::put('/admin/editImage/driver/{driver}', [AdminController::class, 'editDriverImage'])->name('admin.editImageDriver')->middleware('AdminAccess');
-Route::post('/admin/defaultImage/driver/{driver}', [AdminController::class, 'editDriverImageDefult'])->name('admin.defaultImageDriver')->middleware('AdminAccess');
-Route::post('/admin/driver/addDriver', [AdminController::class, 'addDriver'])->name('admin.addDriver')->middleware('AdminAccess');
-Route::delete('/admin/driver/deleteDriver/{driver}', [AdminController::class, 'deleteDriver'])->name('admin.deleteDriver')->middleware('AdminAccess');
-Route::post('/admin/driver/addSchedule', [AdminController::class, 'addSchedule'])->name('admin.addSchedule')->middleware('AdminAccess');
-Route::post('/admin/driver/changeScheduleStatus/{schedule}', [AdminController::class, 'changeScheduleStatus'])->name('admin.changeScheduleStatus')->middleware('AdminAccess');
-Route::delete('/admin/driver/deleteSchedule/{schedule}', [AdminController::class, 'deleteSchedule'])->name('admin.deleteSchedule')->middleware('AdminAccess');
-Route::post('/admin/driver/editSchedule/{schedule}', [AdminController::class, 'editSchedule'])->name('admin.editSchedule')->middleware('AdminAccess');
 
-//AdminAccess//Orders&Users
-Route::get('/admin/orders', [AdminController::class, 'adminOrders'])->name('admin.orders')->middleware('AdminAccess');
-Route::delete('/admin/driver/deleteOrder/{order}', [AdminController::class, 'deleteOrder'])->name('admin.deleteOrder')->middleware('AdminAccess');
-Route::post('/admin/driver/extendOrder/{order}', [AdminController::class, 'extendOrder'])->name('admin.extendOrder')->middleware('AdminAccess');
-Route::post('/admin/editBioData/user/{user}', [AdminController::class, 'editUser'])->name('admin.editBioDataUser')->middleware('AdminAccess');
-Route::put('/admin/editImage/user/{user}', [AdminController::class, 'editUserImage'])->name('admin.editImageUser')->middleware('AdminAccess');
-Route::post('/admin/defaultImage/user/{user}', [AdminController::class, 'editUserImageDefultCustomer'])->name('admin.defaultImageUser')->middleware('AdminAccess');
-Route::post('/admin/user/addUser', [AdminController::class, 'addUser'])->name('admin.addUser')->middleware('AdminAccess');
-Route::delete('/admin/user/deleteUser/{user}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser')->middleware('AdminAccess');
-Route::post('/admin/user/addOrder', [AdminController::class, 'addOrder'])->name('admin.addOrder')->middleware('AdminAccess');
-Route::get('/admin/order/detailsU/{unit}', [AdminController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('AdminAccess');
-Route::get('/admin/order/details/{order}', [AdminController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('AdminAccess');
-Route::post('/admin/driver/changeOrderStatus/{order}', [AdminController::class, 'changeOrderStatus'])->name('admin.changeOrderStatus')->middleware('AdminAccess');
+//BranchAccess//Home
+Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');
+Route::post('/branch/editBioData/{branchEmployee}', [BranchController::class, 'editBranchEmployee'])->name('branch.editBioData')->middleware('BranchAccess');
+Route::put('/branch/editImage/{branchEmployee}', [BranchController::class, 'editBranchEmployeeImage'])->name('branch.editImage')->middleware('BranchAccess');
+Route::post('/branch/defaultImage/{branchEmployee}', [BranchController::class, 'editBranchEmployeeImageDefult'])->name('branch.defaultImage')->middleware('BranchAccess');
+Route::post('/branch/editBranch/{branch}', [BranchController::class, 'editBranch'])->name('branch.editBranch')->middleware('BranchAccess');
+
+// //BranchAccess//Categories
+Route::get('/branch/categories', [BranchController::class, 'showCategories'])->name('branch.category')->middleware('BranchAccess');
+// Route::post('/admin/categories/addUnit', [BranchController::class, 'addUnit'])->name('admin.addUnit')->middleware('BranchAccess');
+// Route::delete('/admin/categories/DeleteUnit/{unit}', [BranchController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('BranchAccess');
+// Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [BranchController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('BranchAccess');
+
+// //BranchAccess//Delivery&drivers
+Route::get('/branch/delivery', [BranchController::class, 'adminDelivery'])->name('branch.delivery')->middleware('BranchAccess');
+// Route::post('/admin/editBioData/driver/{driver}', [BranchController::class, 'editDriver'])->name('admin.editBioDataDriver')->middleware('BranchAccess');
+// Route::put('/admin/editImage/driver/{driver}', [BranchController::class, 'editDriverImage'])->name('admin.editImageDriver')->middleware('BranchAccess');
+// Route::post('/admin/defaultImage/driver/{driver}', [BranchController::class, 'editDriverImageDefult'])->name('admin.defaultImageDriver')->middleware('BranchAccess');
+// Route::post('/admin/driver/addDriver', [BranchController::class, 'addDriver'])->name('admin.addDriver')->middleware('BranchAccess');
+// Route::delete('/admin/driver/deleteDriver/{driver}', [BranchController::class, 'deleteDriver'])->name('admin.deleteDriver')->middleware('BranchAccess');
+// Route::post('/admin/driver/addSchedule', [BranchController::class, 'addSchedule'])->name('admin.addSchedule')->middleware('BranchAccess');
+// Route::post('/admin/driver/changeScheduleStatus/{schedule}', [BranchController::class, 'changeScheduleStatus'])->name('admin.changeScheduleStatus')->middleware('BranchAccess');
+// Route::delete('/admin/driver/deleteSchedule/{schedule}', [BranchController::class, 'deleteSchedule'])->name('admin.deleteSchedule')->middleware('BranchAccess');
+// Route::post('/admin/driver/editSchedule/{schedule}', [BranchController::class, 'editSchedule'])->name('admin.editSchedule')->middleware('BranchAccess');
+
+// //BranchAccess//Orders&Users
+Route::get('/branch/orders', [BranchController::class, 'adminOrders'])->name('branch.orders')->middleware('BranchAccess');
+// Route::delete('/admin/driver/deleteOrder/{order}', [BranchController::class, 'deleteOrder'])->name('admin.deleteOrder')->middleware('BranchAccess');
+// Route::post('/admin/driver/extendOrder/{order}', [BranchController::class, 'extendOrder'])->name('admin.extendOrder')->middleware('BranchAccess');
+// Route::post('/admin/editBioData/user/{user}', [BranchController::class, 'editUser'])->name('admin.editBioDataUser')->middleware('BranchAccess');
+// Route::put('/admin/editImage/user/{user}', [BranchController::class, 'editUserImage'])->name('admin.editImageUser')->middleware('BranchAccess');
+// Route::post('/admin/defaultImage/user/{user}', [BranchController::class, 'editUserImageDefultCustomer'])->name('admin.defaultImageUser')->middleware('BranchAccess');
+// Route::post('/admin/user/addUser', [BranchController::class, 'addUser'])->name('admin.addUser')->middleware('BranchAccess');
+// Route::delete('/admin/user/deleteUser/{user}', [BranchController::class, 'deleteUser'])->name('admin.deleteUser')->middleware('BranchAccess');
+// Route::post('/admin/user/addOrder', [BranchController::class, 'addOrder'])->name('admin.addOrder')->middleware('BranchAccess');
+// Route::get('/admin/order/detailsU/{unit}', [BranchController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('BranchAccess');
+// Route::get('/admin/order/details/{order}', [BranchController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('BranchAccess');
+// Route::post('/admin/driver/changeOrderStatus/{order}', [BranchController::class, 'changeOrderStatus'])->name('admin.changeOrderStatus')->middleware('BranchAccess');
 
 Auth::routes();
 

@@ -16,7 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id('ID_Category');
             $table->string('name');
-            $table->string('description');
+            $table->string('category_description');
             $table->string('dimensions');
             $table->integer('pricePerDay');
             $table->string('img')->default('Category_images/categoryDefault.png');;

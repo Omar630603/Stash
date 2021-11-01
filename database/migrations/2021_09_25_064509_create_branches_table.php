@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminsTable extends Migration
+class CreateBranchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateAdminsTable extends Migration
      */
     public function up()
     {
-        Schema::create('admins', function (Blueprint $table) {
-            $table->id('ID_Admin');
+        Schema::create('branches', function (Blueprint $table) {
+            $table->id('ID_Branch');
             $table->unsignedBigInteger('ID_User');
             $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('branch');
+            $table->string('branch_name');
             $table->string('city');
-            $table->string('location');
+            $table->string('branch_address');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateAdminsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admins');
+        Schema::dropIfExists('branches');
     }
 }

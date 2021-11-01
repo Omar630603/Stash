@@ -5,24 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Admin extends Model
+class Transactions extends Model
 {
     use HasFactory;
-
-    protected $table = 'admins';
-    protected $primaryKey = 'ID_Admin';
+    protected $table = 'transactions';
+    protected $primaryKey = 'ID_Transaction';
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'ID_User',
-        'branch',
-        'city',
-        'location',
-        'address_latitude',
-        'address_longitude',
+        'ID_Order',
+        'ID_Bank',
+        'transactions_description',
+        'proof',
     ];
-
 }

@@ -17,9 +17,9 @@ class Unit extends Model
      */
     protected $fillable = [
         'ID_Category',
-        'ID_Admin',
+        'ID_Branch',
+        'unit_name',
         'privateKey',
-        'status',
-        'IdName'
+        'unit_status', 
     ];
 }

@@ -17,10 +17,11 @@ class CreateUnitsTable extends Migration
             $table->id('ID_Unit');
             $table->unsignedBigInteger('ID_Category');
             $table->foreign('ID_Category')->references('ID_Category')->on('categories')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('ID_Admin');
-            $table->foreign('ID_Admin')->references('ID_Admin')->on('admins')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('ID_Branch');
+            $table->foreign('ID_Branch')->references('ID_Branch')->on('branches')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('unit_name');
             $table->string('privateKey');
-            $table->boolean('status')->default(0);;
+            $table->boolean('unit_status')->default(0);;
             $table->timestamps();
         });
     }

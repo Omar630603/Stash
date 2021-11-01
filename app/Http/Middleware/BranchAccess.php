@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Admin;
+use App\Models\Branch;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAccess
+class BranchAccess
 {
     /**
      * Handle an incoming request.
@@ -18,19 +18,19 @@ class AdminAccess
      */
     public function handle(Request $request, Closure $next)
     {
-        $admin = Admin::all();
-        $isAdmin = False;
+        $branch = Branch::all();
+        $isBranch = False;
         if (Auth::check()) {
-            for ($i = 0; $i < count($admin); $i++) {
-                if (auth()->user()->ID_User == $admin[$i]->ID_User) {
-                    $isAdmin = True;
+            for ($i = 0; $i < count($branch); $i++) {
+                if (auth()->user()->ID_User == $branch[$i]->ID_User) {
+                    $isBranch = True;
                     break;
                 }
             }
-            if ($isAdmin) {
+            if ($isBranch) {
                 return $next($request);
             } else {
-                return redirect('home')->with('error', "You don't have admin access.");
+                return redirect('home')->with('error', "You don't have branch access.");
             }
         } else {
             return redirect()->back();

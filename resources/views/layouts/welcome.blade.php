@@ -105,7 +105,7 @@
                                     </div>
                                     <a href="{{ route('home') }}"><img width="35px" height="35px"
                                             style="border-radius: 50%"
-                                            src="{{asset('storage/'.Auth::user()->img)}}"></a>
+                                            src="{{asset('storage/'.Auth::user()->user_img)}}"></a>
                                 </div>
                             </li>
                             @endguest

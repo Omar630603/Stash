@@ -17,12 +17,12 @@ class DeliveryVehicle extends Model
      */
     protected $fillable = [
         'ID_Admin',
-        'name',
-        'phone',
+        'vehicle_name',
+        'vehicle_phone',
         'model',
         'plateNumber',
-        'img',
+        'vehicle_img',
         'pricePerK',
-        'deliver',
+        'vehicle_deliveries',
     ];
 }

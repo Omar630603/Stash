@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class Branch extends Model
 {
     use HasFactory;
-    protected $table = 'messages';
-    protected $primaryKey = 'ID_Message';
+
+    protected $table = 'branches';
+    protected $primaryKey = 'ID_Branch';
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +18,9 @@ class Message extends Model
      */
     protected $fillable = [
         'ID_User',
-        'message',
-        'message_img',
+        'branch_name',
+        'city',
+        'branch_address',
     ];
+
 }
