@@ -24,7 +24,8 @@
                                 style="border: white 5px solid;">
                             <div style="margin-top: 40px">
                                 <h4 style="color: white;text-transform: uppercase">
-                                    <strong>{{ Auth::user()->username }}</strong></h4>
+                                    <strong>{{ Auth::user()->username }}</strong>
+                                </h4>
                                 <p style="color: white"><strong>Admin</strong></p>
                                 <p style="color: white"><strong>Admin of {{$branch->branch}} Branch</strong></p>
                             </div>
@@ -36,7 +37,7 @@
                 <div class="card mb-3" style="border-radius:20px;">
                     <div class="card-body">
                         <div class="float-right" style="cursor: pointer;">
-                            <a style="text-decoration: none;cursor: pointer"
+                            <a id="edit-profile-btn" style="text-decoration: none;cursor: pointer"
                                 onclick="$('#edit').toggle('fast'); $('#info').toggle('fast'); return false;"><i
                                     class="fa fa-pencil-square-o icons " aria-hidden="true"></i></a>
                         </div>
@@ -177,7 +178,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12" style="margin-top: 10px">
-                                        <button class="btn btn-outline-dark" style="float: right">Change</button>
+                                        <button id="changeAdminProfile-btn" class="btn btn-outline-dark"
+                                            style="float: right">Change</button>
                                     </div>
                                 </div>
                             </div>
