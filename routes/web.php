@@ -32,11 +32,12 @@ Route::put('/branch/editImage/{branchEmployee}', [BranchController::class, 'edit
 Route::post('/branch/defaultImage/{branchEmployee}', [BranchController::class, 'editBranchEmployeeImageDefult'])->name('branch.defaultImage')->middleware('BranchAccess');
 Route::post('/branch/editBranch/{branch}', [BranchController::class, 'editBranch'])->name('branch.editBranch')->middleware('BranchAccess');
 
-// //BranchAccess//Categories
+//BranchAccess//Categories
 Route::get('/branch/categories', [BranchController::class, 'showCategories'])->name('branch.category')->middleware('BranchAccess');
-// Route::post('/admin/categories/addUnit', [BranchController::class, 'addUnit'])->name('admin.addUnit')->middleware('BranchAccess');
-// Route::delete('/admin/categories/DeleteUnit/{unit}', [BranchController::class, 'deleteUnit'])->name('admin.deleteUnit')->middleware('BranchAccess');
-// Route::post('/admin/categories/changePrivateKeyUnit/{unit}', [BranchController::class, 'changePrivateKeyUnit'])->name('admin.changePrivateKeyUnit')->middleware('BranchAccess');
+Route::post('/branch/categories/addUnit', [BranchController::class, 'addUnit'])->name('branch.addUnit')->middleware('BranchAccess');
+Route::delete('/branch/categories/DeleteUnit/{unit}', [BranchController::class, 'deleteUnit'])->name('branch.deleteUnit')->middleware('BranchAccess');
+Route::post('/branch/categories/changePrivateKeyUnit/{unit}', [BranchController::class, 'changePrivateKeyUnit'])->name('branch.changePrivateKeyUnit')->middleware('BranchAccess');
+Route::get('/branch/order/detailsU/{unit}', [BranchController::class, 'branchOrderDetailsU'])->name('branch.orderDetailsU')->middleware('BranchAccess');
 
 // //BranchAccess//Delivery&drivers
 Route::get('/branch/delivery', [BranchController::class, 'adminDelivery'])->name('branch.delivery')->middleware('BranchAccess');
@@ -60,7 +61,6 @@ Route::get('/branch/orders', [BranchController::class, 'adminOrders'])->name('br
 // Route::post('/admin/user/addUser', [BranchController::class, 'addUser'])->name('admin.addUser')->middleware('BranchAccess');
 // Route::delete('/admin/user/deleteUser/{user}', [BranchController::class, 'deleteUser'])->name('admin.deleteUser')->middleware('BranchAccess');
 // Route::post('/admin/user/addOrder', [BranchController::class, 'addOrder'])->name('admin.addOrder')->middleware('BranchAccess');
-// Route::get('/admin/order/detailsU/{unit}', [BranchController::class, 'adminOrderDetailsU'])->name('admin.orderDetailsU')->middleware('BranchAccess');
 // Route::get('/admin/order/details/{order}', [BranchController::class, 'adminOrderDetails'])->name('admin.orderDetails')->middleware('BranchAccess');
 // Route::post('/admin/driver/changeOrderStatus/{order}', [BranchController::class, 'changeOrderStatus'])->name('admin.changeOrderStatus')->middleware('BranchAccess');
 

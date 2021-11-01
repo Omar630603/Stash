@@ -20,6 +20,7 @@ class Unit extends Model
         'ID_Branch',
         'unit_name',
         'privateKey',
-        'unit_status', 
+        'unit_status',
+        'capacity',
     ];
 }

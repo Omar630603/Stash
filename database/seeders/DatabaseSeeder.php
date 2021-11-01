@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
 
         Branch::insert($branches);
         $categories = [
-            ['name' => 'Small', 'category_description' => 'Small Storage Units', 'dimensions'=> '3 X 3 M', 'pricePerDay'=> '1000'],
-            ['name' => 'Medium', 'category_description' => 'Medium Storage Units', 'dimensions'=> '6 X 6 M', 'pricePerDay'=> '2000'],
-            ['name' => 'Large', 'category_description' => 'Large Storage Units', 'dimensions'=> '9 X 9 M', 'pricePerDay'=> '3000'],
+            ['category_name' => 'Small', 'category_description' => 'Small Storage Units', 'dimensions'=> '3 X 3 M', 'pricePerDay'=> '1000'],
+            ['category_name' => 'Medium', 'category_description' => 'Medium Storage Units', 'dimensions'=> '6 X 6 M', 'pricePerDay'=> '2000'],
+            ['category_name' => 'Large', 'category_description' => 'Large Storage Units', 'dimensions'=> '9 X 9 M', 'pricePerDay'=> '3000'],
         ];
 
         Category::insert($categories);

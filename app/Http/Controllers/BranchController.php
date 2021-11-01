@@ -88,58 +88,62 @@ class BranchController extends Controller
         $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         return view('branch.categories', ['categories' => $categories, 'units' => $units, 'branch' => $branch]);
     }
-    // public function addUnit(Request $request){
+    public function addUnit(Request $request){
         
-    //     $unit = new Unit;
-    //     $unit->ID_Category = $request->ID_Category;
-    //     $unit->ID_Admin = $request->ID_Admin;
-    //     $unit->IdName = '0'.$request->ID_Admin.'-0'.$request->ID_Category.'-'.$request->categoryName.'/'.$request->ind;
-    //     $unit->privateKey = $this->generatePrivateKey($request->categoryName, $request->ID_Admin);
-    //     $unit->status = 0;
+        $unit = new Unit;
+        $unit->ID_Category = $request->ID_Category;
+        $unit->ID_Branch = $request->ID_Branch;
+        $unit->unit_name = '0'.$request->ID_Branch.'-0'.$request->ID_Category.'-'.$request->categoryName.'/'.$request->ind;
+        $unit->privateKey = $this->generatePrivateKey($request->categoryName, $request->ID_Branch);
+        $unit->unit_status = 0;
         
-    //     $unit->save();
-    //     return redirect()->back();
-    // }
-    // public function generatePrivateKey($categoryName, $ID_Admin)
-    // {
-    //     $units = Unit::where('ID_Admin', 'like', '%' . $ID_Admin . '%')->get();
-    //     $privateKey = "S-" . $categoryName[0] ."-" . $this->random_strings(6);
-    //     $isAva = True;
-    //     for ($i = 0; $i < count($units); $i++) {
-    //         if ($units[$i]->privateKey === $privateKey) {
-    //             $isAva = False;
-    //         } else {
-    //             $isAva = True;
-    //         }
-    //     }
-    //     if ($isAva) {
-    //         return $privateKey;
-    //     } else {
-    //         $this->checkIfAva();
-    //     }
-    //     return $privateKey;
-    // }
-    // public function random_strings($length_of_string)
-    // {
-    //     $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    //     return substr(
-    //         str_shuffle($str_result),
-    //         0,
-    //         $length_of_string
-    //     );
-    // }
-    // public function deleteUnit(Unit $unit){
+        $unit->save();
+        return redirect()->back();
+    }
+    public function generatePrivateKey($categoryName, $ID_Branch)
+    {
+        $units = Unit::where('ID_Branch', 'like', '%' . $ID_Branch . '%')->get();
+        $privateKey = "S-" . $categoryName[0] ."-" . $this->random_strings(6);
+        $isAva = True;
+        for ($i = 0; $i < count($units); $i++) {
+            if ($units[$i]->privateKey === $privateKey) {
+                $isAva = False;
+            } else {
+                $isAva = True;
+            }
+        }
+        if ($isAva) {
+            return $privateKey;
+        } else {
+            $this->checkIfAva();
+        }
+        return $privateKey;
+    }
+    public function random_strings($length_of_string)
+    {
+        $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        return substr(
+            str_shuffle($str_result),
+            0,
+            $length_of_string
+        );
+    }
+    public function deleteUnit(Unit $unit){
         
-    //     $unit->delete();
-    //     return redirect()->back();
-    // }
-    // public function changePrivateKeyUnit(Unit $unit){
-    //     $categoryName = Category::where('ID_Category', 'like', '%' . $unit->ID_Category . '%')->first();
-    //     $unit->privateKey = $this->generatePrivateKey($categoryName->name, $unit->ID_Admin);
-    //     $unit->save();
-    //     return redirect()->back();
-    // }
-
+        $unit->delete();
+        return redirect()->back();
+    }
+    public function changePrivateKeyUnit(Unit $unit){
+        $categoryName = Category::where('ID_Category', 'like', '%' . $unit->ID_Category . '%')->first();
+        $unit->privateKey = $this->generatePrivateKey($categoryName->category_name, $unit->ID_Branch);
+        $unit->save();
+        return redirect()->back();
+    }
+    public function branchOrderDetailsU(Unit $unit)
+    {
+        $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
+        return redirect()->route('branch.orderDetails', ['order' => $order]);
+    }
     // //admin Delivery Page
     // public function adminDelivery(Request $request){
     //     $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
@@ -651,11 +655,6 @@ class BranchController extends Controller
     //         $message ='Order has been made successfuly';
     //         return redirect()->back()->with('success', $message);
     //     }
-    // }
-    // public function adminOrderDetailsU(Unit $unit)
-    // {
-    //     $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
-    //     return redirect()->route('admin.orderDetails', ['order' => $order]);
     // }
     // public function adminOrderDetails(Order $order)
     // {

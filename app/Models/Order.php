@@ -21,6 +21,7 @@ class Order extends Model
         'order_status',
         'startsFrom',
         'endsAt',
+        'order_description',
         'order_deliveries',
         'order_totalPrice',
         'expandPrice',

@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->integer('order_status')->default(0);;
             $table->dateTime('startsFrom');
             $table->dateTime('endsAt');
+            $table->mediumText('order_description')->nullable();
             $table->integer('order_deliveries')->default(0);
             $table->integer('order_totalPrice');
             $table->integer('expandPrice')->default(0);

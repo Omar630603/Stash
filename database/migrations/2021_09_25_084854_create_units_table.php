@@ -21,7 +21,8 @@ class CreateUnitsTable extends Migration
             $table->foreign('ID_Branch')->references('ID_Branch')->on('branches')->onDelete('cascade')->onUpdate('cascade');
             $table->string('unit_name');
             $table->string('privateKey');
-            $table->boolean('unit_status')->default(0);;
+            $table->boolean('unit_status')->default(0);
+            $table->integer('capacity')->default(0);
             $table->timestamps();
         });
     }
