@@ -19,13 +19,13 @@ class CreateDeliverySchedulesTable extends Migration
             $table->foreign('ID_Order')->references('ID_Order')->on('orders')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('ID_DeliveryVehicle');
             $table->foreign('ID_DeliveryVehicle')->references('ID_DeliveryVehicle')->on('delivery_vehicles')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('schedules_status')->default(0);
-            $table->string('schedules_description')->nullable();
+            $table->integer('schedule_status')->default(0);
+            $table->string('schedule_description')->nullable();
             $table->dateTime('pickedUp');
             $table->dateTime('delivered');
             $table->string('pickedUpFrom');
             $table->string('deliveredTo');
-            $table->integer('totalPrice');
+            $table->integer('schedule_totalPrice');
             $table->timestamps();
         });
     }

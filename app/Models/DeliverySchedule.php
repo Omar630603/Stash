@@ -19,11 +19,11 @@ class DeliverySchedule extends Model
         'ID_Order',
         'ID_DeliveryVehicle',
         'schedule_status',
-        'schedules_description',
+        'schedule_description',
         'pickedUp',
         'delivered',
         'pickedUpFrom',
         'deliveredTo',
-        'schedules_totalPrice',
+        'schedule_totalPrice',
     ];
 }

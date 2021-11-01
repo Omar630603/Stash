@@ -25,7 +25,7 @@ class BranchFactory extends Factory
             'ID_User'=> 1,
             'branch_name' => "Malang Main",
             'city' => "Malang",
-            'location' => "Malang, Suhat",
+            'branch_address' => "Malang, Suhat",
         ];
     }
 }

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
 
         User::insert($users);
         $branches = [
-            ['ID_User' => 1, 'branch_name' => 'Malang Main', 'city'=> 'Malang', 'branch_address'=> 'Malang'],
+            ['ID_User' => 1, 'branch_name' => 'Malang Main', 'city'=> 'Malang', 'branch_address'=> 'Malang, Suhat'],
             ['ID_User' => 2, 'branch_name' => 'Jakarta Main', 'city'=> 'Jakarta', 'branch_address'=> 'Jakarta'],
         ];
 

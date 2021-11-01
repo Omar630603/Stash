@@ -1,4 +1,4 @@
-@extends('layouts.appAdmin')
+@extends('layouts.appBranch')
 
 @section('content')
 <div class="container-fluid">
@@ -22,9 +22,10 @@
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.orders') }}">Orders</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Orders for {{$branch->branch}} Branch :Total of
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee : {{ Auth::user()->username }}</a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('branch.orders') }}">Orders</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Orders for {{$branch->branch_name}} Branch :Total of
                 {{count($orders)}} Orders
             </li>
         </ol>
@@ -51,7 +52,7 @@
                         <div class="modal-body">
                             <div>
                                 <form method="POST" id="addUserForm" class="row g-3"
-                                    action="{{ route('admin.addUser')}}">
+                                    action="{{ route('branch.addUser')}}">
                                     @csrf
                                     <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly"
                                         class="container">
@@ -147,7 +148,7 @@
                 <div class="headind_srch">
                     <div class="srch_bar">
                         <div class="stylish-input-group">
-                            <form action="{{route('admin.orders')}}" enctype="multipart/form-data">
+                            <form action="{{route('branch.orders')}}" enctype="multipart/form-data">
                                 <input name="search" type="text" class="search-bar" placeholder="Search User">
                                 <span class="input-group-addon">
                                     <button type="submit"> <i class="fa fa-search" aria-hidden="true"></i> </button>
@@ -162,16 +163,16 @@
                     @foreach ($users as $user)
                     @if ($noUser)
                     <div class="chat_list ">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('branch.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
+                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->user_img) }}"
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
                                     <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
-                                    <p>Ordered : {{$user->order}}</p>
+                                    <p>Ordered : {{$user->ordered}}</p>
                                 </div>
                             </div>
                         </a>
@@ -179,10 +180,10 @@
                     @else
                     @if ($active && $activeU == $user->ID_User)
                     <div class="chat_list active_chat">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('branch.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
+                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->user_img) }}"
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
@@ -195,16 +196,16 @@
                     </div>
                     @else
                     <div class="chat_list ">
-                        <a href="{{route('admin.orders', ['user' => $user->ID_User])}}">
+                        <a href="{{route('branch.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->img) }}"
+                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $user->user_img) }}"
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
                                     <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
-                                    <p>Ordered : {{$user->order}}</p>
+                                    <p>Ordered : {{$user->ordered}}</p>
                                 </div>
                             </div>
                         </a>
@@ -238,7 +239,7 @@
             <div style="display: none" id="addOrder">
                 <div class="container" style="display: flex; justify-content: center">
                     <div class="headerAddS">
-                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('admin.addOrder')}}">
+                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('branch.addOrder')}}">
                             @csrf
                             <div class="container" id="userOption">
                                 <div class="container">
@@ -363,104 +364,153 @@
                             </div>
                             <div class="container" id="orderOptionAndStatusOption" style="display: flex">
                                 <div class="container">
-                                    <div class="container headerOrder" style="display: flex; gap: 20px">
-                                        <div>
-                                            <label><strong>Category </strong></label>
-                                        </div>
-                                        <div class="form-check">
-                                            @foreach ($categories as $category)
-                                            @php
-                                            $ind = 0;
-                                            $unitName= '';
-                                            $idUnit = 0;
-                                            @endphp
+                                    <div class="container headerOrder">
+                                        <div class="container">
                                             <div>
-                                                @foreach ($units as $unit)
-                                                @if ($unit->ID_Category == $category->ID_Category)
-                                                @php
-                                                $ind++;
-                                                $unitName = $unit->IdName;
-                                                $idUnit = $unit->ID_Unit;
-                                                @endphp
-                                                @endif
-                                                @endforeach
-                                                @if ($ind <= 0) <input disabled name="Idunit"
-                                                    class="check form-check-input" type="checkbox" value="{{$idUnit}}">
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        {{$category->name}}
-                                                        (There is {{$ind}} available units)
-                                                        <br>
-                                                        <small>This Category is has no units </small>
-                                                    </label>
-                                                    @else
-                                                    <input name="Idunit" class="check form-check-input" type="checkbox"
-                                                        value="{{$idUnit}}">
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        {{$category->name}}
-                                                        (There is {{$ind}} available units)
-                                                        <br>
-                                                        <small>Unit {{$unitName}} is ready to use </small>
-                                                    </label>
-                                                    @endif
+                                                <label><strong>Category </strong></label>
                                             </div>
-                                            @endforeach
+                                            <div class="form-check">
+                                                @foreach ($categories as $category)
+                                                @php
+                                                $ind = 0;
+                                                $unitName= '';
+                                                $idUnit = 0;
+                                                @endphp
+                                                <div>
+                                                    @foreach ($units as $unit)
+                                                    @if ($unit->ID_Category == $category->ID_Category)
+                                                    @php
+                                                    $ind++;
+                                                    $unitName = $unit->IdName;
+                                                    $idUnit = $unit->ID_Unit;
+                                                    @endphp
+                                                    @endif
+                                                    @endforeach
+                                                    @if ($ind <= 0) <input disabled name="Idunit"
+                                                        class="check form-check-input" type="checkbox"
+                                                        value="{{$idUnit}}">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            {{$category->name}}
+                                                            (There is {{$ind}} available units)
+                                                            <br>
+                                                            <small>This Category is has no units </small>
+                                                        </label>
+                                                        @else
+                                                        <input name="Idunit" class="check form-check-input"
+                                                            type="checkbox" value="{{$idUnit}}">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            {{$category->name}}
+                                                            (There is {{$ind}} available units)
+                                                            <br>
+                                                            <small>Unit {{$unitName}} is ready to use </small>
+                                                        </label>
+                                                        @endif
+                                                </div>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder" style="display: flex; gap: 40px">
-                                        <div>
-                                            <label for="status"><strong>Status </strong></label>
-                                        </div>
-                                        <div class="form-check">
+                                    <div class="container headerOrder">
+                                        <div class="container">
                                             <div>
-                                                <input name="status" checked class="checkStatus form-check-input"
-                                                    type="checkbox" value="0">
-                                                <label class="form-check-label" for="flexCheckDefault"> Waiting
-                                                </label>
+                                                <label for="order_status"><strong>Status </strong></label>
                                             </div>
-                                            <div>
-                                                <input name="status" class="checkStatus form-check-input"
-                                                    type="checkbox" value="1">
-                                                <label class="form-check-label" for="flexCheckDefault"> Delivery
-                                                </label>
-                                            </div>
-                                            <div>
-                                                <input name="status" class="checkStatus form-check-input"
-                                                    type="checkbox" value="2">
-                                                <label class="form-check-label" for="flexCheckDefault"> In STASH
-                                                </label>
+                                            <div class="form-check">
+                                                <div>
+                                                    <input name="order_status" checked
+                                                        class="checkStatus form-check-input" type="checkbox" value="0">
+                                                    <p class="btn-sm btn-info">With Customer</p>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input name="order_status" class="checkStatus form-check-input"
+                                                        type="checkbox" value="1">
+                                                    <p class="btn-sm btn-light">Waiting for Payment</p>
+                                                </div>
+                                                <div>
+                                                    <input name="order_status" class="checkStatus form-check-input"
+                                                        type="checkbox" value="2">
+                                                    <p class="btn-sm btn-warning">Delivery</p>
+                                                </div>
+                                                <div>
+                                                    <input name="order_status" class="checkStatus form-check-input"
+                                                        type="checkbox" value="2">
+                                                    <p class="btn-sm btn-success">In Stash</p>
+                                                </div>
+                                                <div>
+                                                    <input name="order_status" class="checkStatus form-check-input"
+                                                        type="checkbox" value="2">
+                                                    <p class="btn-sm btn-secondary">Canceled</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="container">
-                                    <div class="container headerOrder" style="display: flex; gap: 20px">
-                                        <div>
-                                            <label for="status"><strong>Period </strong></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="startsFrom">From</label>
-                                            <input class="form-control" type="datetime-local" name="startsFrom">
-                                            <label for="endsAt">Until</label>
-                                            <input class="form-control" type="datetime-local" name="endsAt">
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div>
+                                                <label for="status"><strong>Period </strong></label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="startsFrom">From</label>
+                                                <input class="form-control" type="datetime-local" name="startsFrom">
+                                                <label for="endsAt">Until</label>
+                                                <input class="form-control" type="datetime-local" name="endsAt">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder" style="display: flex; gap: 20px">
-                                        <div>
-                                            <label for="status"><strong>Delivery </strong></label>
-                                        </div>
-                                        <div class="form-check" style="margin-bottom: 10px">
+                                    <div class="container headerOrder">
+                                        <div class="container">
                                             <div>
-                                                <input onclick="$('#addDeliverySchedule').toggle('slow');"
-                                                    name="delivery" class="checkDeleivery form-check-input"
-                                                    type="checkbox" value="1">
-                                                <label class="form-check-label" for="flexCheckDefault"> Yes
-                                                </label>
+                                                <label for="capacity"><strong>Unit Capacity </strong></label>
                                             </div>
                                             <div>
-                                                <input checked name="delivery" class="checkDeleivery form-check-input"
-                                                    type="checkbox" value="0">
-                                                <label class="form-check-label" for="flexCheckDefault"> No
-                                                </label>
+                                                <small> The items stored is filling the unit by the following percent
+                                                </small>
+                                                <input class="form-control" name="capacity" type="number" min="0"
+                                                    max="100" style="margin-bottom: 20px">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div>
+                                                <label for="status"><strong>Delivery </strong></label>
+                                            </div>
+                                            <div class="form-check" style="margin-bottom: 10px">
+                                                <div>
+                                                    <input onclick="$('#addDeliverySchedule').toggle('slow');"
+                                                        name="delivery" class="checkDeleivery form-check-input"
+                                                        type="checkbox" value="1">
+                                                    <label class="form-check-label" for="flexCheckDefault"> Yes
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input checked name="delivery"
+                                                        class="checkDeleivery form-check-input" type="checkbox"
+                                                        value="0">
+                                                    <label class="form-check-label" for="flexCheckDefault"> No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="container">
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div>
+                                                <label for="capacity"><strong>Order description
+                                                        <small>(optional)</small> </strong></label>
+                                            </div>
+                                            <div>
+                                                <small> The items stored is filling the unit by the following percent
+                                                </small>
+                                                <textarea class="form-control" name="order_description"
+                                                    style="margin-bottom: 20px"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -530,7 +580,14 @@
                                         <div class="col-md-2">
                                             <label for="totalPrice" class="form-label">Delivery Price
                                             </label>
-                                            <input type="text" class="form-control" id="totalPrice" name="totalPrice">
+                                            <input type="text" class="form-control" id="schedule_totalPrice"
+                                                name="schedule_totalPrice">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="schedule_description"><strong>Schedule description
+                                                    <small>(optional)</small> </strong></label>
+                                            <textarea class="form-control" name="schedule_description"
+                                                style="margin-bottom: 20px"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -560,7 +617,7 @@
                             <div class="card" style="border-radius:20px; padding: 5px">
                                 <div class="card-body" style="background: #9D3488;border-radius:20px;">
                                     <div class="d-flex flex-column align-items-center text-center">
-                                        <img width="100px" src="{{ asset('storage/' . $userProfile->img) }}"
+                                        <img width="100px" src="{{ asset('storage/' . $userProfile->user_img) }}"
                                             alt="user{{ $userProfile->name }}" class="img-fluid rounded-circle"
                                             style="border: white 5px solid;">
                                         <div style="margin-top: 5px">
@@ -627,7 +684,7 @@
                             <div class="card" style="border-radius:20px;">
                                 <div class="card-body" style="background: #fff;border-radius:20px;">
                                     <div class="d-flex flex-column align-items-center text-center">
-                                        <img src="{{ asset('storage/' . $userProfile->img) }}"
+                                        <img src="{{ asset('storage/' . $userProfile->user_img) }}"
                                             alt="user{{ $userProfile->name }}" class="rounded-circle" width="150"
                                             style="border: white 2px solid;">
                                         <div class="mt-2">
@@ -635,7 +692,7 @@
                                                 <a href="" onclick="$('#imageInput').click(); return false;"
                                                     class="btn btn-outline-dark">Change Picture</a>
                                                 <form method="post" style="display: none;"
-                                                    action="{{ route('admin.editImageUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('branch.editImageUser', ['user'=>$userProfile]) }}"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -648,7 +705,7 @@
                                                     class="btn btn-outline-dark">Restore
                                                     Default</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.defaultImageUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('branch.defaultImageUser', ['user'=>$userProfile]) }}"
                                                     id="restore">
                                                     @csrf
                                                 </form>
@@ -656,7 +713,7 @@
                                                     class="btn btn-outline-danger">Delete
                                                     User</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.deleteUser', ['user'=>$userProfile]) }}"
+                                                    action="{{ route('branch.deleteUser', ['user'=>$userProfile]) }}"
                                                     id="delete">
                                                     @csrf
                                                     @method('DELETE')
@@ -670,7 +727,7 @@
                         <div class="col-md-8">
                             <div class="card mb-3" style="border-radius:20px;">
                                 <form method="post"
-                                    action="{{ route('admin.editBioDataUser', ['user'=>$userProfile]) }}"
+                                    action="{{ route('branch.editBioDataUser', ['user'=>$userProfile]) }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
@@ -731,7 +788,7 @@
                     <div class="headerS">
                         <h3>
                             This Is All Orders for {{ $userProfile->name}} Customer
-                            <a href="{{route('admin.orders', ['user' => $userProfile->ID_User])}}"
+                            <a href="{{route('branch.orders', ['user' => $userProfile->ID_User])}}"
                                 style="text-decoration: none;cursor: pointer"><i data-toggle="tooltip"
                                     title="Refresh Orders" class="refresh-hover fas fa-sync icons"></i></a>
                             <br>
@@ -770,12 +827,16 @@
                             @foreach ($orders as $order)
                             <tr>
                                 <td data-label="Status" class="column">
-                                    @if ($order->status == 0)
-                                    <p class="btn-sm btn-primary">Waiting</p>
-                                    @elseif($order->status == 1)
-                                    <p class="btn-sm btn-warning">In Delivery</p>
-                                    @elseif($order->status == 2)
-                                    <p class="btn-sm btn-secondary">In STASH</p>
+                                    @if ($order->order_status == 0)
+                                    <p class="btn-sm btn-info">With Customer</p>
+                                    @elseif($order->order_status == 1)
+                                    <p class="btn-sm btn-light">Waiting for Payment</p>
+                                    @elseif($order->order_status == 2)
+                                    <p class="btn-sm btn-warning">Delivery</p>
+                                    @elseif($order->order_status == 3)
+                                    <p class="btn-sm btn-success">In Stash</p>
+                                    @elseif($order->order_status == 4)
+                                    <p class="btn-sm btn-secondary">Canceled</p>
                                     @endif
                                 </td>
 
@@ -785,7 +846,7 @@
                                     $date2 = new DateTime($order->endsAt);
                                     $interval = $date1->diff($date2);
                                     @endphp
-                                    <p>@if($interval->d == 0)
+                                    <p>@if($interval->d == 0 && $interval->m == 0 && $interval->y == 0)
                                         <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
                                             class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
                                             <small id="fromIcon{{$order->ID_Order}}" style="display: none">From:</small>
@@ -846,26 +907,26 @@
                                     </p>
                                 </td>
                                 <td data-label="Has Delivery" class="column">
-                                    @if ($order->delivery)
-                                    <p class="btn-sm btn-success">Yes</p>
-                                    @else
-                                    <p class="btn-sm btn-secondary">No</p>
-                                    @endif
+                                    @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No Deliveries
+                                        </p>
+                                        @else
+                                        <p class="btn-sm btn-success">{{$order_deliveries}}</p>
+                                        @endif
                                 </td>
                                 <td data-label="Total Price" class="column">
-                                    <p>{{$order->totalPrice}}</p>
+                                    <p>{{$order->order_totalPrice}}</p>
                                 </td>
                                 <td data-label="Unit" class="column">
-                                    <p>{{$order->IdName}}</p>
+                                    <p>{{$order->unit_name}}</p>
                                 </td>
                                 <td data-label="Customer" class="column">
-                                    <a href="{{route('admin.orders', ['user' => $order->ID_User])}}">
+                                    <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
                                         <p>{{$order->username}}</p>
                                     </a>
                                 </td>
                                 <td data-label="Status" class="column">
-                                    @if ($order->madeByAdmin)
-                                    <p class="btn-sm btn-success">Admin</p>
+                                    @if ($order->madeBy)
+                                    <p class="btn-sm btn-success">Branch</p>
                                     @else
                                     <p class="btn-sm btn-secondary">Customer</p>
                                     @endif
@@ -873,7 +934,7 @@
                                 </td>
                                 <td data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
-                                        <a href="{{ route('admin.orderDetails', ['order'=>$order]) }}" data-toggle="
+                                        <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}" data-toggle="
                                             tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
                                             <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                         </a>
@@ -882,7 +943,7 @@
                                             style="text-decoration: none;cursor: pointer">
                                             <i class="delete-hover far fa-trash-alt icons"></i>
                                         </a>
-                                        <form hidden action="{{ route('admin.deleteOrder', $order) }}"
+                                        <form hidden action="{{ route('branch.deleteOrder', $order) }}"
                                             id="deleteOrder{{$order->ID_Order}}" enctype="multipart/form-data"
                                             method="POST">
                                             @csrf
