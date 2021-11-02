@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use App\Models\Branch;
 use App\Models\Category;
 use App\Models\DeliverySchedule;
 use App\Models\DeliveryVehicle;
 use App\Models\Order;
+use App\Models\Transactions;
 use App\Models\Unit;
 use App\Models\User;
 use DateTime;
@@ -383,6 +385,7 @@ class BranchController extends Controller
         $searchName = '';        
         $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
         $categories = Category::all();
+        $banks = Bank::all();
         
         if($request->get('user')){
             $orders = Order::select('*')
@@ -443,7 +446,7 @@ class BranchController extends Controller
         return view('branch.orders', ['users' => $users, 'orders' => $orders,
         'active' => $active, 'activeU' => $activeU, 'branch' => $branch, 'userProfile' => $userProfile
         , 'noUser' => $noUser, 'searchName' => $searchName, 'units' => $units,
-         'categories' => $categories, 'vehicles' => $vehicles]);
+         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks]);
     }
     public function addUser(Request $request)
     {
@@ -610,19 +613,53 @@ class BranchController extends Controller
             $date2 = new DateTime($request->get('endsAt'));
             $interval = $date1->diff($date2);
             $unit = Unit::where('ID_Unit', $request->get('Idunit'))->first();
-            $unit->unit_status = 1;
-            $unit->capacity = $request->get('capacity');
-            $unit->save();
             $category = Category::find($unit->ID_Category)->first();
                 if ($interval->days == 0) {
                     $order->order_totalPrice = $category->pricePerDay;
                 }else{
                 $order->order_totalPrice = $category->pricePerDay * $interval->days;
                 }
+            if ($request->get('capacity')) {
+                $unit->unit_status = 1;
+                $unit->capacity = $request->get('capacity');
+            } else {
+                $message = 'Insert Capacity';
+                return redirect()->back()->with('fail', $message);
+            }  
             $order->save();
-            $userOrder = User::where('ID_User', $ID_User)->first();;
+            $unit->save();
+            $userOrder = User::where('ID_User', $ID_User)->first();
             $userOrder->ordered++;
             $userOrder->save();
+            $transaction = new Transactions;
+            if ($request->get('transaction') == 1) {
+                $transaction->ID_Order = $order->ID_Order;
+                if ($request->get('ID_Bank') == 0) {
+                    $message = 'Select Bank';
+                    return redirect()->back()->with('fail', $message);
+                }else{
+                    $transaction->ID_Bank = $request->get('ID_Bank');
+                }
+                $transaction->transactions_description = 'Entry Transaction';
+                $transaction->transactions_totalPrice = $order->order_totalPrice;
+                $transaction->transactions_status = 1;
+                if ($request->file('proof')) {
+                    $image_name = $request->file('proof')->store('transactions_images', 'public');
+                    $transaction->proof = $image_name;
+                }else{
+                    $message = 'Add Proof';
+                    return redirect()->back()->with('fail', $message);
+                }
+                $transaction->save();
+            }else{
+                $transaction->ID_Order = $order->ID_Order;
+                $transaction->transactions_description = 'Entry Transaction';
+                $transaction->transactions_totalPrice = $order->order_totalPrice;
+                $transaction->transactions_status = 0;
+                $transaction->proof = 'Waiting for Payment';
+                $transaction->save();
+            }
+            
             if ($request->get('delivery') == 1) {
                 $request->validate([
                     'ID_DeliveryVehicle' => 'required',
@@ -649,6 +686,8 @@ class BranchController extends Controller
                 $order->order_deliveries++;
                 $order->order_totalPrice += $request->get('totalPrice');
                 $order->save();
+                $transaction->transactions_totalPrice = $order->order_totalPrice;
+                $transaction->save();
                 $message ='Order has been made successfuly';
                 return redirect()->back()->with('success', $message);
             }
@@ -656,18 +695,18 @@ class BranchController extends Controller
             return redirect()->back()->with('success', $message);
         }
     }
-    public function adminOrderDetails(Order $order)
+    public function branchOrderDetails(Order $order)
     {
         $customer = User::where('ID_User', $order->ID_User)->first();
         $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
-        $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
+        $vehicles = DeliveryVehicle::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
-                ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
+                ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
                 ->where('delivery_schedules.ID_Order', 'like', '%' . $order->ID_Order . '%')
                 ->get();
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
         $category = Category::where('ID_Category', $unit->ID_Category)->first();
-        return view('admin.handelOrder.orderDetails', ['order' => $order, 'unit' => $unit,
+        return view('branch.handelOrder.orderDetails', ['order' => $order, 'unit' => $unit,
          'category' => $category, 'customer' => $customer, 'branch' => $branch, 'schedules' => $schedules, 'vehicles' => $vehicles]);
     }
     public function extendOrder(Request $request, Order $order)
@@ -681,10 +720,10 @@ class BranchController extends Controller
         
         $extentionPrice = 0;
         if ($interval->d <= 0 && $interval->m <= 0 && $interval->y <= 0 && $interval->h > 0) {
-            $order->totalPrice += $category->pricePerDay;
+            $order->order_totalPrice += $category->pricePerDay;
             $extentionPrice= $category->pricePerDay;
         }else{
-            $order->totalPrice += $category->pricePerDay * $interval->days;
+            $order->order_totalPrice += $category->pricePerDay * $interval->days;
             $extentionPrice= $category->pricePerDay * $interval->days;;
         }
         $order->endsAt= $request->get('extendEndsAt');
@@ -694,7 +733,7 @@ class BranchController extends Controller
     }
     public function changeOrderStatus(Request $request, Order $order)
     {
-       $order->status = $request->get('status');
+       $order->order_status = $request->get('status');
        $order->save();
        return redirect()->back();
     }

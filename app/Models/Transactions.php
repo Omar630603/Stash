@@ -19,6 +19,8 @@ class Transactions extends Model
         'ID_Order',
         'ID_Bank',
         'transactions_description',
+        'transactions_totalPrice',
+        'transactions_status',
         'proof',
     ];
 }

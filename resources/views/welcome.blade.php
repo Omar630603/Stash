@@ -29,11 +29,12 @@
             @foreach ($categories as $category)
             <div class="card"
                 style="width: 20rem; border-radius: 20px; color: #fff; background-color: #E53D71; padding: 10px 10px">
-                <img src=" {{ asset('storage/'. $category->img) }}" class="card-img-top" alt="...">
+                <img src=" {{ asset('storage/'. $category->category_img) }}" class="card-img-top" alt="...">
                 <div class="card-body d-flex flex-column">
-                    <h5 class="mt-auto card-title" style="text-align: center;">{{ $category->name }}</h5>
+                    <h5 class="mt-auto card-title" style="text-align: center;">{{ $category->category_name }}</h5>
                     <div>
-                        <p class="mt-auto card-text"><strong>Description: </strong>{{ $category->description }}</p>
+                        <p class="mt-auto card-text"><strong>Description: </strong>{{ $category->category_description }}
+                        </p>
                         <p class="mt-auto card-text" style="margin-bottom: 10px"><strong>Dimensions:
                             </strong>{{ $category->dimensions }}</p>
                     </div>

@@ -16,7 +16,7 @@ class Bank extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'bank_name',
         'ID_Branch',
         'accountNo',
     ];

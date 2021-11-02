@@ -189,7 +189,7 @@
                                 <div class="chat_ib">
                                     <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
-                                    <p>Ordered : {{$user->order}}</p>
+                                    <p>Ordered : {{$user->ordered}}</p>
                                 </div>
                             </div>
                         </a>
@@ -239,7 +239,8 @@
             <div style="display: none" id="addOrder">
                 <div class="container" style="display: flex; justify-content: center">
                     <div class="headerAddS">
-                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('branch.addOrder')}}">
+                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('branch.addOrder')}}"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="container" id="userOption">
                                 <div class="container">
@@ -434,12 +435,12 @@
                                                 </div>
                                                 <div>
                                                     <input name="order_status" class="checkStatus form-check-input"
-                                                        type="checkbox" value="2">
+                                                        type="checkbox" value="3">
                                                     <p class="btn-sm btn-success">In Stash</p>
                                                 </div>
                                                 <div>
                                                     <input name="order_status" class="checkStatus form-check-input"
-                                                        type="checkbox" value="2">
+                                                        type="checkbox" value="4">
                                                     <p class="btn-sm btn-secondary">Canceled</p>
                                                 </div>
                                             </div>
@@ -480,16 +481,16 @@
                                             </div>
                                             <div class="form-check" style="margin-bottom: 10px">
                                                 <div>
-                                                    <input onclick="$('#addDeliverySchedule').toggle('slow');"
+                                                    <input onclick="$('#addDeliverySchedule').show('fast');"
                                                         name="delivery" class="checkDeleivery form-check-input"
                                                         type="checkbox" value="1">
                                                     <label class="form-check-label" for="flexCheckDefault"> Yes
                                                     </label>
                                                 </div>
                                                 <div>
-                                                    <input checked name="delivery"
-                                                        class="checkDeleivery form-check-input" type="checkbox"
-                                                        value="0">
+                                                    <input onclick="$('#addDeliverySchedule').hide('fast');" checked
+                                                        name="delivery" class="checkDeleivery form-check-input"
+                                                        type="checkbox" value="0">
                                                     <label class="form-check-label" for="flexCheckDefault"> No
                                                     </label>
                                                 </div>
@@ -503,12 +504,10 @@
                                     <div class="container headerOrder">
                                         <div class="container">
                                             <div>
-                                                <label for="capacity"><strong>Order description
+                                                <label for="order_description"><strong>Order Description
                                                         <small>(optional)</small> </strong></label>
                                             </div>
                                             <div>
-                                                <small> The items stored is filling the unit by the following percent
-                                                </small>
                                                 <textarea class="form-control" name="order_description"
                                                     style="margin-bottom: 20px"></textarea>
                                             </div>
@@ -516,7 +515,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="display: none" id="addDeliverySchedule">
+                            <div class="container" style="display: none" id="addDeliverySchedule">
                                 <div class="container" style="padding: 0 20px">
                                     <div class="headerOrder"
                                         style="display: flex; justify-content: space-evenly; flex-wrap: wrap">
@@ -592,7 +591,76 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container" style="padding: 0 30px">
+                            <div class="container">
+                                <div class="container">
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div>
+                                                <label for="capacity"><strong>Order Payment
+                                                        <small>(This will add the payment details for
+                                                            the
+                                                            entry transaction)</small>
+                                                    </strong></label>
+                                            </div>
+                                            <div>
+                                                <div class="form-check" style="margin-bottom: 10px">
+                                                    <div>
+                                                        <input onclick="$('#addPayment').show('fast');"
+                                                            name="transaction" class="checkPayment form-check-input"
+                                                            type="checkbox" value="1">
+                                                        <label class="form-check-label" for="flexCheckDefault"> Include
+                                                            Payment
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <input onclick="$('#addPayment').hide('fast');" checked
+                                                            name="transaction" class="checkPayment form-check-input"
+                                                            type="checkbox" value="0">
+                                                        <label class="form-check-label" for="flexCheckDefault"> Exclude
+                                                            Payment
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="container" style="display: none" id="addPayment">
+                                    <div class="container" style="padding: 10px 15px">
+                                        <div class="headerOrder row">
+                                            <div class="form-group" style="margin: 10px 0">
+                                                <select name="ID_Bank" style="width: 100%" class="select2">
+                                                    <option value="0">Select Bank</option>
+                                                    @php
+                                                    $bankNo = 1;
+                                                    @endphp
+                                                    @foreach ($banks as $bank)
+                                                    <option value="{{$bank->ID_Bank}}">
+                                                        {{$bankNo++}}- (
+                                                        {{$bank->bank_name}} )
+                                                        -
+                                                        @ {{$bank->accountNo}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div style="margin: 10px 0">
+                                                <a style="width: 100%;"
+                                                    onclick="$('#proofInputImage').click(); return false;"
+                                                    class="btn btn-sm btn-outline-light">Add Payment Proof</a>
+                                                <input id="proofInputImage" style="display: none;" type="file"
+                                                    name="proof">
+                                                <input
+                                                    style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                    disabled style="display: none" id="proofPhoto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container" style="padding: 0 35px">
                                 <button style="width: 100%" type="submit" class="btn btn-outline-dark">Order</button>
                             </div>
                         </form>
@@ -841,70 +909,166 @@
                                 </td>
 
                                 <td data-label="Period" class="column">
-                                    @php
-                                    $date1 = new DateTime($order->startsFrom);
-                                    $date2 = new DateTime($order->endsAt);
-                                    $interval = $date1->diff($date2);
-                                    @endphp
-                                    <p>@if($interval->d == 0 && $interval->m == 0 && $interval->y == 0)
-                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$order->ID_Order}}" style="display: none">From:</small>
-                                        </i>
-                                        {{$order->startsFrom}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$order->ID_Order}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$order->endsAt}}
-                                        <small>The same day</small>
-                                        @elseif($interval->m == 0 && $interval->y == 0)
-                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$order->ID_Order}}" style="display: none">From:</small>
-                                        </i>
-                                        {{$date1->format('Y-m-d')}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$order->ID_Order}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$date2->format('Y-m-d')}}
-                                        <small>{{$interval->d}} Days</small>
-                                        @elseif($interval->y == 0 && $interval->m > 0)
-                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$order->ID_Order}}" style="display: none">From:</small>
-                                        </i>
-                                        {{$date1->format('Y-m-d')}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$order->ID_Order}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$date2->format('Y-m-d')}}
-                                        <small>{{$interval->m}} months, {{$interval->d}} days</small>
-                                        @elseif($interval->y > 0)
-                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$order->ID_Order}}" style="display: none">From:</small>
-                                        </i>
-                                        {{$date1->format('Y-m-d')}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$order->ID_Order}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$date2->format('Y-m-d')}}
-                                        <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
-                                            days</small>
+                                    <div>
+                                        @php
+                                        $startsFrom = new DateTime($order->startsFrom);
+                                        $endsAt = new DateTime($order->endsAt);
+                                        $today = new DateTime(date("Y-m-d H:i:s"));
+                                        $interval = $startsFrom->diff($endsAt);
+                                        $orderCheck = $endsAt->diff($today);
+                                        @endphp
+                                        @if ($orderCheck->invert)
+                                        <div class="btn-sm btn-primary">Active
+                                            <h6 class="mb-0">Period: {{ $interval->days }} @if ($interval->days
+                                                <= 1) Day @else Days @endif Left <i data-toggle="tooltip"
+                                                    title="Order Date Details"
+                                                    onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
+                                                    class="fas fa-arrow-down float-right"></i>
+                                            </h6>
+                                            <p style="display: none; width: max-content"
+                                                id="orderDateDetailsPositive{{$order->ID_Order}}">
+                                                @if($interval->days ==
+                                                0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$order->startsFrom}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$order->endsAt}}
+                                                <small>The same day</small>
+                                                @elseif($interval->m == 0 && $interval->y == 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->d}} Days</small>
+                                                @elseif($interval->y == 0 && $interval->m > 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                @elseif($interval->y > 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
+                                                    days</small>
+                                                @endif
+                                            </p>
+                                        </div>
+                                        @else
+                                        <div class="btn-sm btn-danger">Expaired
+                                            <h6 class="mb-0">Period: {{ $interval->days }} @if ($interval->days
+                                                <= 1) Day @else Days @endif Exceeded <i data-toggle="tooltip"
+                                                    title="Order Date Details"
+                                                    onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
+                                                    class="fas fa-arrow-down float-right"></i>
+
+                                            </h6>
+                                            <p style="display: none; width: max-content"
+                                                id="orderDateDetailsNegative{{$order->ID_Order}}">
+                                                @if($interval->days == 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$order->startsFrom}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$order->endsAt}}
+                                                <small>The same day</small>
+                                                @elseif($interval->m == 0 && $interval->y == 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->d}} Days</small>
+                                                @elseif($interval->y == 0 && $interval->m > 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                @elseif($interval->y > 0)
+                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$order->ID_Order}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$order->ID_Order}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
+                                                    days</small>
+                                                @endif
+                                            </p>
+                                        </div>
                                         @endif
-                                    </p>
+                                    </div>
                                 </td>
                                 <td data-label="Has Delivery" class="column">
                                     @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No Deliveries
@@ -991,5 +1155,21 @@
             $('.checkDeleivery').not(this).prop('checked', false);
         });
     });
+    $(document).ready(function(){
+        $('.checkPayment').click(function() {
+            $('.checkPayment').not(this).prop('checked', false);
+        });
+    });
+</script>
+<script>
+    + function($) {
+    'use strict';
+    var proofInputImage = document.getElementById('proofInputImage');
+    var p = document.getElementById('proofPhoto');
+    proofInputImage.onchange = function() {
+        p.style.display = '';
+        p.value = 'File Name:' + proofInputImage.files[0].name;
+    }
+    }(jQuery);
 </script>
 @endsection
