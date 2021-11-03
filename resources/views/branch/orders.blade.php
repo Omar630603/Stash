@@ -1078,14 +1078,14 @@
                                         @endif
                                 </td>
                                 <td data-label="Total Price" class="column">
-                                    <p>{{$order->order_totalPrice}}</p>
+                                    <p class="btn-sm btn-light">{{$order->order_totalPrice}}</p>
                                 </td>
                                 <td data-label="Unit" class="column">
-                                    <p>{{$order->unit_name}}</p>
+                                    <p class="btn-sm btn-light">{{$order->unit_name}}</p>
                                 </td>
                                 <td data-label="Customer" class="column">
                                     <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
-                                        <p>{{$order->username}}</p>
+                                        <p class="btn-sm btn-light">{{$order->username}}</p>
                                     </a>
                                 </td>
                                 <td data-label="Status" class="column">
@@ -1098,8 +1098,9 @@
                                 </td>
                                 <td data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
-                                        <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}" data-toggle="
-                                            tooltip" title="Detials" style="text-decoration: none;cursor: pointer">
+                                        <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}"
+                                            data-toggle="tooltip" title="Detials"
+                                            style="text-decoration: none;cursor: pointer">
                                             <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                         </a>
                                         <a onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"

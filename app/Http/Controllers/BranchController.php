@@ -385,7 +385,7 @@ class BranchController extends Controller
         $searchName = '';        
         $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
         $categories = Category::all();
-        $banks = Bank::all();
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         
         if($request->get('user')){
             $orders = Order::select('*')
@@ -687,6 +687,7 @@ class BranchController extends Controller
                 $order->order_totalPrice += $request->get('totalPrice');
                 $order->save();
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
+                $transaction->transactions_description = 'Entry Transaction + Delivery';
                 $transaction->save();
                 $message ='Order has been made successfuly';
                 return redirect()->back()->with('success', $message);
@@ -705,9 +706,14 @@ class BranchController extends Controller
                 ->where('delivery_schedules.ID_Order', 'like', '%' . $order->ID_Order . '%')
                 ->get();
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
         $category = Category::where('ID_Category', $unit->ID_Category)->first();
+        $banks = Bank::where('ID_Branch', $branch->ID_Branch)->get();
+
         return view('branch.handelOrder.orderDetails', ['order' => $order, 'unit' => $unit,
-         'category' => $category, 'customer' => $customer, 'branch' => $branch, 'schedules' => $schedules, 'vehicles' => $vehicles]);
+         'category' => $category, 'customer' => $customer, 'branch' => $branch,
+          'schedules' => $schedules, 'vehicles' => $vehicles, 'transactions'=> $transactions,
+        'banks'=>$banks]);
     }
     public function extendOrder(Request $request, Order $order)
     {
