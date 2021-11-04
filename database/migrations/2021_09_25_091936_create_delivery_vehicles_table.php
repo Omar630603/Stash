@@ -20,7 +20,7 @@ class CreateDeliveryVehiclesTable extends Migration
             $table->string('vehicle_name');
             $table->string('vehicle_phone');
             $table->string('model');
-            $table->string('plateNumber');
+            $table->string('plateNumber')->unique();
             $table->string('vehicle_img')->default('DeliveryVehicle_images/deliveryVehicleDefault.png');
             $table->integer('pricePerK');
             $table->integer('vehicle_deliveries')->default(0);
