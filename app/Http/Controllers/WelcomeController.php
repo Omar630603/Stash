@@ -12,4 +12,8 @@ class WelcomeController extends Controller
         $categories = Category::all();
         return view('welcome', ['categories' => $categories]);
     }
+    public function services()
+    {
+        return view('services');
+    }
 }

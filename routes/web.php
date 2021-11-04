@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 Route::get('/', [WelcomeController::class, 'welcome']);
+Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.services');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
