@@ -535,22 +535,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container">
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div class="container">
-                                            <div>
-                                                <label for="order_description"><strong>Order Description
-                                                        <small>(optional)</small> </strong></label>
-                                            </div>
-                                            <div>
-                                                <textarea class="form-control" name="order_description"
-                                                    style="margin-bottom: 20px"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="container" style="display: none" id="addDeliverySchedule">
                                 <div class="container" style="padding: 0 20px">
                                     <div class="headerOrder"
@@ -654,6 +638,24 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="container">
+                                <div class="container">
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div>
+                                                <label for="order_description"><strong>Order Description
+                                                        <small>(optional)</small> </strong></label>
+                                            </div>
+                                            <div>
+                                                <textarea class="form-control" name="order_description"
+                                                    style="margin-bottom: 20px"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="container">
                                 <div class="container">
                                     <div class="container headerOrder">
