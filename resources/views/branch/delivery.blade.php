@@ -601,7 +601,7 @@
                                                 onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                                 class="fas fa-arrow-down float-right"></i>
                                         </h6>
-                                        <p style="display: none; width: max-content"
+                                        <p class="mb-0" style="display: none; width: max-content"
                                             id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
                                             Pick-Up : {{$schedule->pickedUpFrom}}
                                             <br>Destination: {{$schedule->deliveredTo}}
@@ -682,7 +682,7 @@
                                                 onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                                 class="fas fa-arrow-down float-right"></i>
                                         </h6>
-                                        <p style="display: none; width: max-content"
+                                        <p class="mb-0" style="display: none; width: max-content"
                                             id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
                                             Pick-Up : {{$schedule->pickedUpFrom}}
                                             <br>Destination: {{$schedule->deliveredTo}}

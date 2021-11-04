@@ -377,7 +377,7 @@
                     <tr>
                         <td data-label="Bank" class="column">
                             @if ($transaction->ID_Bank == Null)
-                            <p class="btn-sm btn-light">No bank</p>
+                            <p class="btn-sm btn-light">No bank (not paid yet)</p>
                             @else
                             @foreach ($banks as $bank)
                             @if ($transaction->ID_Bank == $bank->ID_Bank)
@@ -612,7 +612,7 @@
                                             onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                             class="fas fa-arrow-down float-right"></i>
                                     </h6>
-                                    <p style="display: none; width: max-content"
+                                    <p class="mb-0" style="display: none; width: max-content"
                                         id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
                                         Pick-Up : {{$schedule->pickedUpFrom}}
                                         <br>Destination: {{$schedule->deliveredTo}}
@@ -692,7 +692,7 @@
                                             onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                             class="fas fa-arrow-down float-right"></i>
                                     </h6>
-                                    <p style="display: none; width: max-content"
+                                    <p class="mb-0" style="display: none; width: max-content"
                                         id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
                                         Pick-Up : {{$schedule->pickedUpFrom}}
                                         <br>Destination: {{$schedule->deliveredTo}}

@@ -420,7 +420,9 @@ class BranchController extends Controller
         $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
         $categories = Category::all();
         $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
-        
+        $schedules = DeliverySchedule::select('ID_Order', 'schedule_status')
+        ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+        ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         if($request->get('user')){
             $orders = Order::select('*')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
@@ -480,7 +482,7 @@ class BranchController extends Controller
         return view('branch.orders', ['users' => $users, 'orders' => $orders,
         'active' => $active, 'activeU' => $activeU, 'branch' => $branch, 'userProfile' => $userProfile
         , 'noUser' => $noUser, 'searchName' => $searchName, 'units' => $units,
-         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks]);
+         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks, 'schedules' => $schedules]);
     }
     public function addUser(Request $request)
     {

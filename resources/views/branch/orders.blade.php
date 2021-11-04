@@ -989,7 +989,7 @@
                                                     onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
                                                     class="fas fa-arrow-down float-right"></i>
                                             </h6>
-                                            <p style="display: none; width: max-content"
+                                            <p class="mb-0" style="display: none; width: max-content"
                                                 id="orderDateDetailsPositive{{$order->ID_Order}}">
                                                 @if($interval->days ==
                                                 0)
@@ -1065,7 +1065,7 @@
                                                     class="fas fa-arrow-down float-right"></i>
 
                                             </h6>
-                                            <p style="display: none; width: max-content"
+                                            <p class="mb-0" style="display: none; width: max-content"
                                                 id="orderDateDetailsNegative{{$order->ID_Order}}">
                                                 @if($interval->days == 0)
                                                 <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
@@ -1138,7 +1138,44 @@
                                     @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No Deliveries
                                         </p>
                                         @else
-                                        <p class="btn-sm btn-success">Amount:{{$order->order_deliveries}}</p>
+                                        @php
+                                        $status_waiting = 0;
+                                        $status_On_Going = 0;
+                                        $status_Done = 0;
+                                        @endphp
+                                        @foreach ($schedules as $schedule)
+                                        @if ($schedule->ID_Order == $order->ID_Order && $schedule->schedule_status==0)
+                                        @php
+                                        $status_waiting++;
+                                        @endphp
+                                        @elseif ($schedule->ID_Order == $order->ID_Order &&
+                                        $schedule->schedule_status==1)
+                                        @php
+                                        $status_On_Going++;
+                                        @endphp
+                                        @elseif ($schedule->ID_Order == $order->ID_Order &&
+                                        $schedule->schedule_status==2)
+                                        @php
+                                        $status_Done++;
+                                        @endphp
+                                        @endif
+                                        @endforeach
+                                        <div class="btn-sm btn-success">
+                                            <h6 class="mb-0">
+                                                Deliveries: {{$order->order_deliveries}}
+                                                <i data-toggle="tooltip" title="Order Deliveries Details"
+                                                    onclick="$('#orderDeliveriesDetail{{$order->ID_Order}}').toggle('fast')"
+                                                    class="fas fa-arrow-down float-right"></i>
+                                                <p class="mb-0" style="display: none; width: max-content"
+                                                    id="orderDeliveriesDetail{{$order->ID_Order}}">
+                                                    <small>
+                                                        Waiting: {{$status_waiting}}
+                                                        <br>On-Going: {{$status_On_Going}}
+                                                        <br>Done: {{$status_Done}}
+                                                    </small>
+                                                </p>
+                                            </h6>
+                                        </div>
                                         @endif
                                 </td>
                                 <td data-label="Total Price" class="column">
