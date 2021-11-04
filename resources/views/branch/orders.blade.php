@@ -1221,6 +1221,9 @@
         $('.checkPayment').click(function() {
             $('.checkPayment').not(this).prop('checked', false);
         });
+        $('.checkDescription_type').click(function() {
+            $('.checkDescription_type').not(this).prop('checked', false);
+        });
     });
     function showPrice() {
         var orderStartDate = new Date($('#orderStartDate').val()); 
