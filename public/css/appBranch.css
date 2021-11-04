@@ -130,6 +130,7 @@ tbody tr:hover {
     background-color: #fceabe;
     padding: 10px;
     border-radius: 20px;
+    min-height: 300px;
 }
 .line {
     background: rgb(63, 22, 82);
@@ -180,6 +181,7 @@ img {
     max-width: 100%;
 }
 .inbox_people {
+    width: 100%;
     background: #f8f8f8 none repeat scroll 0 0;
     float: left;
     overflow: hidden;
