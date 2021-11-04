@@ -198,7 +198,8 @@
                     <div class="chat_list active_chat">
                         <a href="{{route('branch.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
-                                <div class="chat_img">
+                                <div class="chat_img"
+                                    style="border: 2px solid #9D3488; border-radius: 50%; padding: 2px;">
                                     <img style="border-radius: 50%" src="{{ asset('storage/' . $user->user_img) }}"
                                         alt="{{$user->name}}">
                                 </div>

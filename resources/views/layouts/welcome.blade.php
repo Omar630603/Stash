@@ -37,6 +37,11 @@
     </head>
 
     <body style="background-color: #fff8e6">
+        <div id="loading">
+            <div id="loader-container">
+                <div id="loading-image"></div>
+            </div>
+        </div>
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="padding: 0">
                 <div class="container">
@@ -157,6 +162,11 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
+    </script>
+    <script>
+        $(window).on('load', function () {
+      $('#loading').slideToggle('fast');
+    }) 
     </script>
 
 </html>
