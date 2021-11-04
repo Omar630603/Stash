@@ -1,12 +1,46 @@
-@extends('layouts.appAdmin')
+@extends('layouts.appBranch')
 
 @section('content')
+<div class="container-fluid">
+    <div>
+        @if ($message = Session::get('fail'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @elseif ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style=" text-align: center; border-radius: 20px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @endif
+    </div>
+</div>
+<div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px">
+        <strong>Whoops!</strong> There were some problems with your input.<br>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+</div>
 <div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.delivery') }}">Delivery</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee : {{ Auth::user()->username }}</a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ route('branch.delivery') }}">Delivery</a></li>
             <li class="breadcrumb-item active" aria-current="page">Delivery Vehicles & Schedules</li>
         </ol>
     </nav>
@@ -32,7 +66,7 @@
                         <div class="modal-body">
                             <div class="headerAddS">
                                 <form method="POST" id="addDriverForm" class="row g-3"
-                                    action="{{ route('admin.addDriver')}}">
+                                    action="{{ route('branch.addDriver')}}">
                                     @csrf
                                     <div class="col-md-6">
                                         <label for="name" class="form-label">Name</label>
@@ -54,7 +88,7 @@
                                         <label for="pricePerK" class="form-label">Price / K</label>
                                         <input type="text" class="form-control" id="pricePerK" name="pricePerK">
                                     </div>
-                                    <input hidden type="text" value="{{$branch->ID_Admin}}" name="ID_Admin">
+                                    <input hidden type="text" value="{{$branch->ID_Branch}}" name="ID_Branch">
                                 </form>
                             </div>
                         </div>
@@ -72,7 +106,7 @@
                 <div class="headind_srch">
                     <div class="srch_bar">
                         <div class="stylish-input-group">
-                            <form action="{{route('admin.delivery')}}" enctype="multipart/form-data">
+                            <form action="{{route('branch.delivery')}}" enctype="multipart/form-data">
                                 <input name="search" type="text" class="search-bar" placeholder="Search Vehicle">
                                 <span class="input-group-addon">
                                     <button type="submit"> <i class="fa fa-search" aria-hidden="true"></i> </button>
@@ -87,32 +121,36 @@
                     @foreach ($vehicles as $vehicle)
                     @if ($active && $activeV == $vehicle->ID_DeliveryVehicle)
                     <div class="chat_list active_chat">
-                        <a href="{{route('admin.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
+                        <a href="{{route('branch.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $vehicle->img) }}"
-                                        alt="{{$vehicle->name}}">
+                                    <img style="border-radius: 50%"
+                                        src="{{ asset('storage/' . $vehicle->vehicle_img) }}"
+                                        alt="{{$vehicle->vehicle_name}}">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{$vehicle->name}} <span class="chat_date">Phone: {{$vehicle->phone}}</span>
+                                    <h5>{{$vehicle->vehicle_name}} <span class="chat_date">Phone:
+                                            {{$vehicle->vehicle_phone}}</span>
                                     </h5>
-                                    <p>Delivered : {{$vehicle->deliver}}</p>
+                                    <p>Delivered : {{$vehicle->vehicle_deliveries}}</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                     @else
                     <div class="chat_list ">
-                        <a href="{{route('admin.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
+                        <a href="{{route('branch.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border-radius: 50%" src="{{ asset('storage/' . $vehicle->img) }}"
-                                        alt="{{$vehicle->name}}">
+                                    <img style="border-radius: 50%"
+                                        src="{{ asset('storage/' . $vehicle->vehicle_img) }}"
+                                        alt="{{$vehicle->vehicle_name}}">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{$vehicle->name}} <span class="chat_date">Phone: {{$vehicle->phone}}</span>
+                                    <h5>{{$vehicle->vehicle_name}} <span class="chat_date">Phone:
+                                            {{$vehicle->vehicle_phone}}</span>
                                     </h5>
-                                    <p>Delivered : {{$vehicle->deliver}}</p>
+                                    <p>Delivered : {{$vehicle->vehicle_deliveries}}</p>
                                 </div>
                             </div>
                         </a>
@@ -144,7 +182,7 @@
                 <div class="container" style="display: flex; justify-content: center">
                     <div class="headerAddS">
                         <form method="POST" id="addScheduleForm" class="row g-3"
-                            action="{{ route('admin.addSchedule')}}">
+                            action="{{ route('branch.addSchedule')}}" enctype="multipart/form-data">
                             @csrf
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Order</label>
@@ -155,7 +193,7 @@
                                         $orderNo = 1;
                                         @endphp
                                         @foreach ($orders as $order)
-                                        <option value="{{$order->ID_Order}}">{{$orderNo++}}- ( {{$order->IdName}} )
+                                        <option value="{{$order->ID_Order}}">{{$orderNo++}}- ( {{$order->unit_name}} )
                                             -
                                             @ {{$order->username}}
                                             - {{$order->name}}
@@ -177,7 +215,7 @@
                                         <option selected value="{{$vehicle->ID_DeliveryVehicle}}">{{$vehicleNo++}}- (
                                             {{$vehicle->plateNumber}} )
                                             -
-                                            @ {{$vehicle->name}}
+                                            @ {{$vehicle->vehicle_name}}
                                             - {{$vehicle->model}}
                                             - Price {{$vehicle->pricePerK}}
                                         </option>
@@ -185,7 +223,7 @@
                                         <option value="{{$vehicle->ID_DeliveryVehicle}}">{{$vehicleNo++}}- (
                                             {{$vehicle->plateNumber}} )
                                             -
-                                            @ {{$vehicle->name}}
+                                            @ {{$vehicle->vehicle_name}}
                                             - {{$vehicle->model}}
                                             - Price {{$vehicle->pricePerK}}
                                         </option>
@@ -202,19 +240,51 @@
                                 <label for="deliveredTo" class="form-label">Deliver To</label>
                                 <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
+                                <label for="description_type" class="form-label">Description Type</label>
+                                <div class="form-check">
+                                    <div>
+                                        <input name="description_type" checked
+                                            class="checkDescription_type form-check-input" type="checkbox"
+                                            value="First Delivery">
+                                        <p style="width: 100%" class="btn-sm btn-info">First Delivery</p>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input name="description_type" class="checkDescription_type form-check-input"
+                                            type="checkbox" value="Add to Unit">
+                                        <p class="btn-sm btn-info">Add to Unit</p>
+                                    </div>
+                                    <div>
+                                        <input name="description_type" class="checkDescription_type form-check-input"
+                                            type="checkbox" value="Transform from Unit">
+                                        <p class="btn-sm btn-info">Transform from Unit</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="description_note" class="form-label">Description Note</label>
+                                <textarea type="text" class="form-control" id="description_note" name="description_note"
+                                    rows="5"></textarea>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="model" class="form-label">Status</label>
-                                <div class="form-group">
-                                    <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
-                                        class="form-check form-switch">
-                                        <div>
-                                            <label style="color: #000;" for="status">Status:
-                                                <small style="display: none" id="statusDone">Done</small>
-                                            </label>
-                                        </div>
-                                        <input style="margin-left: 0; margin-right: 5px; position: inherit"
-                                            onchange="$('#statusDone').toggle('slow');" name="status"
-                                            class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                <div class="form-check">
+                                    <div>
+                                        <input name="status" checked class="checkStatus form-check-input"
+                                            type="checkbox" value="0">
+                                        <p style="width: 100%" class="btn-sm btn-info">Waiting</p>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <input name="status" class="checkStatus form-check-input" type="checkbox"
+                                            value="1">
+                                        <p class="btn-sm btn-warning">On-going</p>
+                                    </div>
+                                    <div>
+                                        <input name="status" class="checkStatus form-check-input" type="checkbox"
+                                            value="2">
+                                        <p class="btn-sm btn-success">Done</p>
                                     </div>
                                 </div>
                             </div>
@@ -226,12 +296,64 @@
                                 <label for="delivered" class="form-label">Deliver Date</label>
                                 <input type="datetime-local" class="form-control" id="delivered" name="delivered">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <label for="totalPrice" class="form-label">Total Price</label>
-                                <input type="text" class="form-control" id="totalPrice" name="totalPrice">
+                                <input onchange="showPrice()" type="number" class="form-control" id="totalPriceInput"
+                                    name="totalPrice">
                             </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-outline-dark">Schedule</button>
+                            <div class="col-md-12">
+                                <div>
+                                    <label for="capacity"><strong>Delivery Payment
+                                            <small>(This will add the payment details for
+                                                the transaction with price: <small id="price"></small>)</small>
+                                        </strong></label>
+                                </div>
+                                <div>
+                                    <div class="form-check" style="margin-bottom: 10px">
+                                        <div>
+                                            <input onclick="$('#addPayment').show('fast');" name="transaction"
+                                                class="checkPayment form-check-input" type="checkbox" value="1">
+                                            <label class="form-check-label" for="flexCheckDefault"> Include
+                                                Payment
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <input onclick="$('#addPayment').hide('fast');" checked name="transaction"
+                                                class="checkPayment form-check-input" type="checkbox" value="0">
+                                            <label class="form-check-label" for="flexCheckDefault"> Exclude
+                                                Payment
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="addPayment" style="display: none" class="col-md-12">
+                                <div class="form-group" style="margin: 10px 0">
+                                    <select name="ID_Bank" style="width: 100%" class="select2">
+                                        <option value="0">Select Bank</option>
+                                        @php
+                                        $bankNo = 1;
+                                        @endphp
+                                        @foreach ($banks as $bank)
+                                        <option value="{{$bank->ID_Bank}}">
+                                            {{$bankNo++}}- (
+                                            {{$bank->bank_name}} )
+                                            -
+                                            @ {{$bank->accountNo}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div style="margin: 10px 0">
+                                    <a style="width: 100%;" onclick="$('#proofInputImage').click(); return false;"
+                                        class="btn btn-sm btn-outline-dark">Add Payment Proof</a>
+                                    <input id="proofInputImage" style="display: none;" type="file" name="proof">
+                                    <input style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                        disabled style="display: none" id="proofPhoto">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button style="width: 100%" type="submit" class="btn btn-outline-dark">Schedule</button>
                             </div>
                         </form>
                     </div>
@@ -255,15 +377,15 @@
                             <div class="card" style="border-radius:20px; padding: 5px">
                                 <div class="card-body" style="background: #9D3488;border-radius:20px;">
                                     <div class="d-flex flex-column align-items-center text-center">
-                                        <img width="100px" src="{{ asset('storage/' . $vehicleDriver->img) }}"
-                                            alt="user{{ $vehicleDriver->name }}" class="img-fluid rounded-circle"
-                                            style="border: white 5px solid;">
+                                        <img width="100px" src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
+                                            alt="user{{ $vehicleDriver->vehicle_name }}"
+                                            class="img-fluid rounded-circle" style="border: white 5px solid;">
                                         <div style="margin-top: 5px">
                                             <h4 style="color: white;text-transform: uppercase">
-                                                <strong>{{ $vehicleDriver->name }}</strong>
+                                                <strong>{{ $vehicleDriver->vehicle_name }}</strong>
                                             </h4>
                                             <p style="color: white"><strong>Driver</strong></p>
-                                            <p style="color: white"><strong>Driver for {{$branch->branch}}
+                                            <p style="color: white"><strong>Driver for {{$branch->branch_name}}
                                                     Branch</strong></p>
                                         </div>
                                     </div>
@@ -283,7 +405,7 @@
                                             <h6 class="mb-0"><strong>Name</strong></h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            {{ $vehicleDriver->name }}
+                                            {{ $vehicleDriver->vehicle_name }}
                                         </div>
                                     </div>
                                     <hr>
@@ -304,7 +426,7 @@
                                             <h6 class="mb-2"><strong>Phone</strong></h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            {{ $vehicleDriver->phone }}
+                                            {{ $vehicleDriver->vehicle_phone }}
                                         </div>
                                         <div class="col-sm-3">
                                             <h6 class="mb-2"><strong>Price / K</strong></h6>
@@ -323,15 +445,15 @@
                             <div class="card" style="border-radius:20px;">
                                 <div class="card-body" style="background: #fff;border-radius:20px;">
                                     <div class="d-flex flex-column align-items-center text-center">
-                                        <img src="{{ asset('storage/' . $vehicleDriver->img) }}"
-                                            alt="user{{ $vehicleDriver->name }}" class="rounded-circle" width="150"
-                                            style="border: white 2px solid;">
+                                        <img src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
+                                            alt="user{{ $vehicleDriver->vehicle_name }}" class="rounded-circle"
+                                            width="150" style="border: white 2px solid;">
                                         <div class="mt-2">
                                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                                 <a href="" onclick="$('#imageInput').click(); return false;"
                                                     class="btn btn-outline-dark">Change Picture</a>
                                                 <form method="post" style="display: none;"
-                                                    action="{{ route('admin.editImageDriver', ['driver'=>$vehicleDriver]) }}"
+                                                    action="{{ route('branch.editImageDriver', ['driver'=>$vehicleDriver]) }}"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -344,7 +466,7 @@
                                                     class="btn btn-outline-dark">Restore
                                                     Default</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.defaultImageDriver', ['driver'=>$vehicleDriver]) }}"
+                                                    action="{{ route('branch.defaultImageDriver', ['driver'=>$vehicleDriver]) }}"
                                                     id="restore">
                                                     @csrf
                                                 </form>
@@ -352,7 +474,7 @@
                                                     class="btn btn-outline-danger">Delete
                                                     Driver</a>
                                                 <form style="display: none" method="POST"
-                                                    action="{{ route('admin.deleteDriver', ['driver'=>$vehicleDriver]) }}"
+                                                    action="{{ route('branch.deleteDriver', ['driver'=>$vehicleDriver]) }}"
                                                     id="delete">
                                                     @csrf
                                                     @method('DELETE')
@@ -366,7 +488,7 @@
                         <div class="col-md-8">
                             <div class="card mb-3" style="border-radius:20px;">
                                 <form method="post"
-                                    action="{{ route('admin.editBioDataDriver', ['driver'=>$vehicleDriver]) }}"
+                                    action="{{ route('branch.editBioDataDriver', ['driver'=>$vehicleDriver]) }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
@@ -379,7 +501,7 @@
                                             <div class="col-sm-12">
                                                 <label for="name"><strong>Name</strong></label>
                                                 <input name="name" type="text" class="form-control"
-                                                    value="{{ $vehicleDriver->name }}"
+                                                    value="{{ $vehicleDriver->vehicle_name }}"
                                                     placeholder="Enter Your Full Name">
                                             </div>
                                         </div>
@@ -402,7 +524,8 @@
                                             <div class="col-sm-12">
                                                 <label for="phone"><strong>Phone</strong></label>
                                                 <input name="phone" type="text" class="form-control"
-                                                    value="{{ $vehicleDriver->phone }}" placeholder="Enter Your Phone">
+                                                    value="{{ $vehicleDriver->vehicle_phone }}"
+                                                    placeholder="Enter Your Phone">
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top: 5px">
@@ -428,7 +551,7 @@
                 <div class="container">
                     <div class="headerS">
                         <h3>
-                            This Is All Delivery Schedules by {{ $vehicleDriver->name}} Driver<br>
+                            This Is All Delivery Schedules by {{ $vehicleDriver->vehicle_name}} Driver<br>
                             <small>Here you can see all the schedules and their information.</small>
                         </h3>
                     </div>
@@ -462,137 +585,217 @@
                         @foreach ($schedules as $schedule)
                         <tr>
                             <td data-label="Trip" class="column">
-                                @php
-                                $date1 = new DateTime($schedule->pickedUp);
-                                $date2 = new DateTime($schedule->delivered);
-                                $interval = $date1->diff($date2);
-                                @endphp
-                                <p>
-                                    @if($interval->d == 0)
-                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                        class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">From:</small>
-                                    </i>
-                                    {{$schedule->pickedUpFrom}}
-                                    <small>{{$schedule->pickedUp}}</small>
-                                    <br>
-                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                        class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">To:</small>
-                                    </i>
-                                    {{$schedule->deliveredTo}}
-                                    <small>{{$schedule->delivered}}</small>
-                                    <br>
-                                    <small>The same day</small>
-                                    @elseif($interval->m == 0 && $interval->y == 0)
-                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                        class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">From:</small>
-                                    </i>
-                                    {{$schedule->pickedUpFrom}}
-                                    <small>{{$date1->format('Y-m-d')}}</small>
-                                    <br>
-                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                        class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">To:</small>
-                                    </i>
-                                    {{$schedule->deliveredTo}}
-                                    <small>{{$date2->format('Y-m-d')}}</small>
-                                    <br>
-                                    <small>{{$interval->d}} Days</small>
-
-                                    @elseif($interval->y == 0 && $interval->m > 0)
-                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                        class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">From:</small>
-                                    </i>
-                                    {{$schedule->pickedUpFrom}}
-                                    <small>{{$date1->format('Y-m-d')}}</small>
-                                    <br>
-                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                        class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">To:</small>
-                                    </i>
-                                    {{$schedule->deliveredTo}}
-                                    <small>{{$date2->format('Y-m-d')}}</small>
-                                    <br>
-                                    <small>{{$interval->m}} months, {{$interval->d}} days</small>
-
-                                    @elseif($interval->y > 0)
-                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                        class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">From:</small>
-                                    </i>
-                                    {{$schedule->pickedUpFrom}}
-                                    <small>{{$date1->format('Y-m-d')}}</small>
-                                    <br>
-                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                        class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                            style="display: none">To:</small>
-                                    </i>
-                                    {{$schedule->deliveredTo}}
-                                    <small>{{$date2->format('Y-m-d')}}</small>
-                                    <br>
-                                    <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
-                                        days</small>
+                                <div>
+                                    @php
+                                    $startsFrom = new DateTime($schedule->pickedUp);
+                                    $endsAt = new DateTime($schedule->delivered);
+                                    $today = new DateTime(date("Y-m-d H:i:s"));
+                                    $interval = $startsFrom->diff($endsAt);
+                                    $scheduleCheck = $endsAt->diff($today);
+                                    @endphp
+                                    @if ($scheduleCheck->invert)
+                                    <div class="btn-sm btn-primary">
+                                        <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
+                                            {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Left
+                                                <i data-toggle="tooltip" title="Delivery Trip Details"
+                                                onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                                class="fas fa-arrow-down float-right"></i>
+                                        </h6>
+                                        <p style="display: none; width: max-content"
+                                            id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                            Pick-Up : {{$schedule->pickedUpFrom}}
+                                            <br>Destination: {{$schedule->deliveredTo}}
+                                            <br>
+                                            @if($interval->days == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$order->startsFrom}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$order->endsAt}}
+                                            <small>(The same day)</small>
+                                            @elseif($interval->m == 0 && $interval->y == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$startsFrom->format('Y-m-d')}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$endsAt->format('Y-m-d')}}
+                                            <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                    </small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days)</small>
+                                                    @endif
+                                                    <br>Description: {{$schedule->schedule_description}}
+                                        </p>
+                                    </div>
+                                    @else
+                                    <div class="btn-sm btn-danger">
+                                        <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
+                                            @endif:
+                                            {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif
+                                                Exceeded <i data-toggle="tooltip" title="Delivery Trip Details"
+                                                onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                                class="fas fa-arrow-down float-right"></i>
+                                        </h6>
+                                        <p style="display: none; width: max-content"
+                                            id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                            Pick-Up : {{$schedule->pickedUpFrom}}
+                                            <br>Destination: {{$schedule->deliveredTo}}
+                                            <br>
+                                            @if($interval->days == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$order->startsFrom}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$order->endsAt}}
+                                            <small>(The same day)</small>
+                                            @elseif($interval->m == 0 && $interval->y == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$startsFrom->format('Y-m-d')}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$endsAt->format('Y-m-d')}}
+                                            <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                    </small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days)</small>
+                                                    @endif
+                                                    <br>Description: {{$schedule->schedule_description}}
+                                        </p>
+                                    </div>
                                     @endif
-                                </p>
+                                </div>
                             </td>
                             <td data-label="Status" class="column">
-                                @if ($schedule->status)
-                                <p class="btn-sm btn-secondary">Done</p>
-                                @else
+                                @if ($schedule->schedule_status == 0)
+                                <p class="btn-sm btn-info">Done</p>
+                                @elseif ($schedule->schedule_status == 1)
                                 <p class="btn-sm btn-warning">On-Going</p>
+                                @elseif ($schedule->schedule_status == 2)
+                                <p class="btn-sm btn-success">Done</p>
                                 @endif
                             </td>
                             <td data-label="Vehicle" class="column">
-                                <a href="{{route('admin.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
-                                    <p>{{$schedule->name}}</p>
+                                <a href="{{route('branch.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
+                                    <p class="btn-sm btn-light">{{$schedule->vehicle_name}}</p>
                                 </a>
 
                             </td>
                             <td data-label="Total Price" class="column">
-                                <p>{{$schedule->totalPrice}}</p>
+                                <p class="btn-sm btn-light">{{$schedule->schedule_totalPrice}}</p>
                             </td>
                             <td data-label="Unit" class="column">
-                                <p>{{$schedule->IdName}}</p>
+                                <p class="btn-sm btn-light">{{$schedule->unit_name}}</p>
                             </td>
                             <td data-label="Customer" class="column">
-                                <a href="{{route('admin.orders', ['user' => $schedule->ID_User])}}">
-                                    <p>{{$schedule->username}}</p>
+                                <a href="{{route('branch.orders', ['user' => $schedule->ID_User])}}">
+                                    <p class="btn-sm btn-light">{{$schedule->username}}</p>
                                 </a>
                             </td>
                             <td data-label="Action" class="column">
                                 <div style="display: flex; justify-content:space-around">
-                                    <a href="{{ route('admin.orderDetails', ['order'=>$schedule->ID_Order]) }}"
+                                    <a href="{{ route('branch.orderDetails', ['order'=>$schedule->ID_Order]) }}"
                                         data-toggle="tooltip" title="Detials"
                                         style="text-decoration: none;cursor: pointer">
                                         <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                     </a>
-                                    <a onclick="$('#changeScheduleStatus{{$schedule->ID_DeliverySchedule}}').submit();"
-                                        data-toggle="tooltip" title="Change Status"
-                                        style="text-decoration: none;cursor: pointer">
-                                        <i class="refresh-hover fa fa-magic icons"></i>
-                                    </a>
-                                    <form hidden action="{{ route('admin.changeScheduleStatus', $schedule) }}"
-                                        id="changeScheduleStatus{{$schedule->ID_DeliverySchedule}}"
-                                        enctype="multipart/form-data" method="POST">
-                                        @csrf
-                                    </form>
                                     <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
                                         data-toggle="tooltip" title="Delete Record"
                                         style="text-decoration: none;cursor: pointer">
                                         <i class="delete-hover far fa-trash-alt icons"></i>
                                     </a>
-                                    <form hidden action="{{ route('admin.deleteSchedule', $schedule) }}"
+                                    <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
                                         id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
                                         enctype="multipart/form-data" method="POST">
                                         @csrf
@@ -623,5 +826,32 @@
         selectionCssClass: "select2--small", // For Select2 v4.1
         dropdownCssClass: "select2--small",
     });
+    $(document).ready(function(){
+        $('.checkStatus').click(function() {
+            $('.checkStatus').not(this).prop('checked', false);
+        });
+        $('.checkDescription_type').click(function() {
+            $('.checkDescription_type').not(this).prop('checked', false);
+        });
+        $('.checkPayment').click(function() {
+            $('.checkPayment').not(this).prop('checked', false);
+        });
+    });
+    function showPrice() {
+        price = document.getElementById('price');
+        totalPriceInput = document.getElementById('totalPriceInput');
+        price.textContent = totalPriceInput.value;
+    }
+</script>
+<script>
+    + function($) {
+    'use strict';
+    var proofInputImage = document.getElementById('proofInputImage');
+    var p = document.getElementById('proofPhoto');
+    proofInputImage.onchange = function() {
+        p.style.display = '';
+        p.value = 'File Name:' + proofInputImage.files[0].name;
+    }
+    }(jQuery);
 </script>
 @endsection

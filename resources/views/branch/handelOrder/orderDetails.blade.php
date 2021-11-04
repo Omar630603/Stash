@@ -114,7 +114,9 @@
                                     No Deliveries
                                     </p>
                                     @else
-                                    <p style="width: 70%" class="btn-sm btn-success">{{$order_deliveries}}</p>
+                                    <p style="width: 70%" class="btn-sm btn-success">Amount:
+                                        {{$order->order_deliveries}}
+                                    </p>
                                     @endif
                             </div>
                             <div class="col-sm-3">
@@ -403,8 +405,7 @@
                         </td>
                         <td data-label="Action" class="column">
                             @if ($transaction->transactions_status == 0)
-                            <a data-toggle="
-                                tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
+                            <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
                                 <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
                             </a>
                             <a data-toggle="tooltip" title="Delete Transaction"
@@ -587,6 +588,7 @@
                         <th class="column">Status</th>
                         <th class="column">Vehicle</th>
                         <th class="column">Total Price</th>
+                        <th class="column">Description</th>
                         <th class="column">Action</th>
                     </tr>
                 </thead>
@@ -594,109 +596,199 @@
                     @foreach ($schedules as $schedule)
                     <tr>
                         <td data-label="Trip" class="column">
-                            @php
-                            $date1 = new DateTime($schedule->pickedUp);
-                            $date2 = new DateTime($schedule->delivered);
-                            $interval = $date1->diff($date2);
-                            @endphp
-                            <p>
-                                @if($interval->d == 0)
-                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                    class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">From:</small>
-                                </i>
-                                {{$schedule->pickedUpFrom}}
-                                <small>{{$schedule->pickedUp}}</small>
-                                <br>
-                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                    class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">To:</small>
-                                </i>
-                                {{$schedule->deliveredTo}}
-                                <small>{{$schedule->delivered}}</small>
-                                <br>
-                                <small>The same day</small>
-                                @elseif($interval->m == 0 && $interval->y == 0)
-                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                    class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">From:</small>
-                                </i>
-                                {{$schedule->pickedUpFrom}}
-                                <small>{{$date1->format('Y-m-d')}}</small>
-                                <br>
-                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                    class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">To:</small>
-                                </i>
-                                {{$schedule->deliveredTo}}
-                                <small>{{$date2->format('Y-m-d')}}</small>
-                                <br>
-                                <small>{{$interval->days}} Days</small>
-
-                                @elseif($interval->y == 0 && $interval->m > 0)
-                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                    class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">From:</small>
-                                </i>
-                                {{$schedule->pickedUpFrom}}
-                                <small>{{$date1->format('Y-m-d')}}</small>
-                                <br>
-                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                    class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">To:</small>
-                                </i>
-                                {{$schedule->deliveredTo}}
-                                <small>{{$date2->format('Y-m-d')}}</small>
-                                <br>
-                                <small>{{$interval->m}} months, {{$interval->d}} days</small>
-
-                                @elseif($interval->y > 0)
-                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule }}').toggle('fast');"
-                                    class="fa fa-long-arrow-right fromIcon" aria-hidden="true">
-                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">From:</small>
-                                </i>
-                                {{$schedule->pickedUpFrom}}
-                                <small>{{$date1->format('Y-m-d')}}</small>
-                                <br>
-                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                    class="fa fa-long-arrow-left fromIcon" aria-hidden="true">
-                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                        style="display: none">To:</small>
-                                </i>
-                                {{$schedule->deliveredTo}}
-                                <small>{{$date2->format('Y-m-d')}}</small>
-                                <br>
-                                <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
-                                    days</small>
+                            <div>
+                                @php
+                                $startsFrom = new DateTime($schedule->pickedUp);
+                                $endsAt = new DateTime($schedule->delivered);
+                                $today = new DateTime(date("Y-m-d H:i:s"));
+                                $interval = $startsFrom->diff($endsAt);
+                                $scheduleCheck = $endsAt->diff($today);
+                                @endphp
+                                @if ($scheduleCheck->invert)
+                                <div class="btn-sm btn-primary">
+                                    <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
+                                        {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Left <i
+                                            data-toggle="tooltip" title="Delivery Trip Details"
+                                            onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                            class="fas fa-arrow-down float-right"></i>
+                                    </h6>
+                                    <p style="display: none; width: max-content"
+                                        id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                        Pick-Up : {{$schedule->pickedUpFrom}}
+                                        <br>Destination: {{$schedule->deliveredTo}}
+                                        <br>
+                                        @if($interval->days == 0)
+                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">From:</small>
+                                        </i>
+                                        {{$order->startsFrom}}
+                                        <br>
+                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">Until:</small>
+                                        </i>
+                                        {{$order->endsAt}}
+                                        <small>(The same day)</small>
+                                        @elseif($interval->m == 0 && $interval->y == 0)
+                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">From:</small>
+                                        </i>
+                                        {{$startsFrom->format('Y-m-d')}}
+                                        <br>
+                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">Until:</small>
+                                        </i>
+                                        {{$endsAt->format('Y-m-d')}}
+                                        <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                </small>
+                                                @elseif($interval->y == 0 && $interval->m > 0)
+                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                @elseif($interval->y > 0)
+                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                    {{$interval->d}}
+                                                    days)</small>
+                                                @endif
+                                    </p>
+                                </div>
+                                @else
+                                <div class="btn-sm btn-danger">
+                                    <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
+                                        @endif:
+                                        {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Exceeded
+                                            <i data-toggle="tooltip" title="Delivery Trip Details"
+                                            onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                            class="fas fa-arrow-down float-right"></i>
+                                    </h6>
+                                    <p style="display: none; width: max-content"
+                                        id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                        Pick-Up : {{$schedule->pickedUpFrom}}
+                                        <br>Destination: {{$schedule->deliveredTo}}
+                                        <br>
+                                        @if($interval->days == 0)
+                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">From:</small>
+                                        </i>
+                                        {{$order->startsFrom}}
+                                        <br>
+                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">Until:</small>
+                                        </i>
+                                        {{$order->endsAt}}
+                                        <small>(The same day)</small>
+                                        @elseif($interval->m == 0 && $interval->y == 0)
+                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">From:</small>
+                                        </i>
+                                        {{$startsFrom->format('Y-m-d')}}
+                                        <br>
+                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                style="display: none">Until:</small>
+                                        </i>
+                                        {{$endsAt->format('Y-m-d')}}
+                                        <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                </small>
+                                                @elseif($interval->y == 0 && $interval->m > 0)
+                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                @elseif($interval->y > 0)
+                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">From:</small>
+                                                </i>
+                                                {{$startsFrom->format('Y-m-d')}}
+                                                <br>
+                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                        style="display: none">Until:</small>
+                                                </i>
+                                                {{$endsAt->format('Y-m-d')}}
+                                                <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                    {{$interval->d}}
+                                                    days)</small>
+                                                @endif
+                                    </p>
+                                </div>
                                 @endif
-                            </p>
+                            </div>
                         </td>
                         <td data-label="Status" class="column">
-                            @if ($schedule->status)
-                            <p class="btn-sm btn-secondary">Done</p>
-                            @else
+                            @if ($schedule->schedule_status == 0)
+                            <p class="btn-sm btn-info">Done</p>
+                            @elseif ($schedule->schedule_status == 1)
                             <p class="btn-sm btn-warning">On-Going</p>
+                            @elseif ($schedule->schedule_status == 2)
+                            <p class="btn-sm btn-success">Done</p>
                             @endif
                         </td>
                         <td data-label="Vehicle" class="column">
                             <a href="{{route('branch.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
-                                <p>{{$schedule->name}}</p>
+                                <p class="btn-sm btn-light">{{$schedule->vehicle_name}}</p>
                             </a>
 
                         </td>
                         <td data-label="Total Price" class="column">
-                            <p>{{$schedule->totalPrice}}</p>
+                            <p class="btn-sm btn-light">{{$schedule->schedule_totalPrice}}</p>
+                        </td>
+                        <td data-label="Description" class="column">
+                            <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
                         </td>
                         <td data-label="Action" class="column">
                             <div style="display: flex; justify-content:space-around">
-                                @if (!$schedule->status)
                                 <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
                                     data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
                                     <i class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
@@ -806,17 +898,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
-                                <a onclick="$('#changeScheduleStatus{{$schedule->ID_DeliverySchedule}}').submit();"
-                                    data-toggle="tooltip" title="Change Status"
-                                    style="text-decoration: none;cursor: pointer">
-                                    <i class="refresh-hover fa fa-magic icons"></i>
-                                </a>
-                                <form hidden action="{{ route('branch.changeScheduleStatus', $schedule) }}"
-                                    id="changeScheduleStatus{{$schedule->ID_DeliverySchedule}}"
-                                    enctype="multipart/form-data" method="POST">
-                                    @csrf
-                                </form>
                                 <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
                                     data-toggle="tooltip" title="Delete Record"
                                     style="text-decoration: none;cursor: pointer">

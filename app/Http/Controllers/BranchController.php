@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPUnit\Framework\isEmpty;
+
 class BranchController extends Controller
 {
     //Branch Main Page
@@ -146,230 +148,262 @@ class BranchController extends Controller
         $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
         return redirect()->route('branch.orderDetails', ['order' => $order]);
     }
-    // //admin Delivery Page
-    // public function adminDelivery(Request $request){
-    //     $branch = Admin::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
-    //     $vehicles = DeliveryVehicle::where('ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
-    //     $orders = Order::Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-    //         ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-    //         ->where('units.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
-    //     $active = false;
-    //     $noDriver = false;
-    //     $activeV = 0;
-    //     $vehicleDriver = 0;
-    //     $searchName = '';
-    //     if($request->get('driver')){
-    //         $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
-    //             ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
-    //             ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
-    //             ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-    //             ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-    //             ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
-    //             ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
-    //             ->get();
-    //         $active = true;
-    //         $activeV = $request->get('driver');
-    //         $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
-    //         if ($vehicleDriver->ID_Admin != $branch->ID_Admin) {
-    //             $noDriver = true;
-    //             $searchName ='NO ACCESS';
-    //         }
-    //     }elseif($request->get('search')){
-    //         $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
-    //             ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
-    //             ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
-    //             ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-    //             ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-    //             ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')            
-    //             ->Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
-    //             ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
-    //             ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
-    //             ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
-    //             ->get();
-    //         $active = true;
-    //         $activeV = DeliveryVehicle::Where('delivery_vehicles.name', 'like', '%' . $request->get('search') . '%')
-    //             ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')
-    //             ->orWhere('delivery_vehicles.phone', 'like', '%' . $request->get('search') . '%')
-    //             ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
-    //             ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
-    //             ->first();
-    //             if ($activeV) {
-    //                 $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)->first();
-    //                 $activeV = $activeV->ID_DeliveryVehicle;
-    //             }else{
-    //                 $noDriver = true;
-    //                 $searchName =$request->get('search');
-    //             }
-    //     }else{
-    //         $schedules = DeliverySchedule::select('*', 'delivery_vehicles.name', 'delivery_schedules.totalPrice', 'delivery_schedules.status')
-    //         ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
-    //         ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
-    //         ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
-    //         ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-    //         ->where('delivery_vehicles.ID_Admin', 'like', '%' . $branch->ID_Admin . '%')->get();
-    //     }
-    //     return view('admin.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules,
-    //      'active' => $active, 'activeV' => $activeV, 'branch' => $branch, 'vehicleDriver' => $vehicleDriver
-    //      , 'noDriver' => $noDriver, 'searchName' => $searchName, 'orders' => $orders]);
-    // }
-    // public function editDriver(Request $request, DeliveryVehicle $driver)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'model' => 'required',
-    //         'plateNumber' => 'required',
-    //         'phone' => 'required',
-    //         'pricePerK' => 'required',
-    //     ]);
-    //     $driver->name = $request->get('name');
-    //     $driver->model = $request->get('model');
-    //     $driver->plateNumber = $request->get('plateNumber');
-    //     $driver->phone = $request->get('phone');
-    //     $driver->pricePerK = $request->get('pricePerK');
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function editDriverImage(Request $request, DeliveryVehicle $driver)
-    // {
-    //     if ($driver->img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
-    //         if ($request->file('image')) {
-    //             $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
-    //         }
-    //         $driver->img = $image_name;
-    //     } else {
-    //         Storage::delete('public/' . $driver->img);
-    //         if ($request->file('image')) {
-    //             $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
-    //         }
-    //         $driver->img = $image_name;
-    //     }
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function editDriverImageDefult(DeliveryVehicle $driver)
-    // {
-    //     if ($driver->img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
-    //         $driver->img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
-    //     } else {
-    //         Storage::delete('public/' . $driver->img);
-    //         $driver->img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
-    //     }
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function addDriver(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'model' => 'required',
-    //         'plateNumber' => 'required',
-    //         'phone' => 'required',
-    //         'pricePerK' => 'required',
-    //     ]);
-    //     $driver = new DeliveryVehicle;
-    //     $driver->ID_Admin = $request->get('ID_Admin');
-    //     $driver->name = $request->get('name');
-    //     $driver->model = $request->get('model');
-    //     $driver->plateNumber = $request->get('plateNumber');
-    //     $driver->phone = $request->get('phone');
-    //     $driver->pricePerK = $request->get('pricePerK');
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function deleteDriver(DeliveryVehicle $driver)
-    // {
-    //    if ($driver->img != "DeliveryVehicle_images/deliveryVehicleDefault.png") {
-    //     Storage::delete('public/' . $driver->img);
-    //     } 
-    //    $driver->delete();
-    //    return redirect()->route('admin.delivery');
-    // }
-    // public function addSchedule(Request $request)
-    // {
-    //     $request->validate([
-    //         'ID_Order' => 'required',
-    //         'ID_DeliveryVehicle' => 'required',
-    //         'pickedUpFrom' => 'required',
-    //         'deliveredTo' => 'required',
-    //         'pickedUp' => 'required',
-    //         'delivered' => 'required',
-    //         'totalPrice' => 'required',
-    //     ]);
-    //     $schedule = new DeliverySchedule();
-    //     $schedule->ID_Order = $request->get('ID_Order');
-    //     $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
-    //     $schedule->pickedUpFrom = $request->get('pickedUpFrom');
-    //     $schedule->deliveredTo = $request->get('deliveredTo');
-    //     $schedule->pickedUp = $request->get('pickedUp');
-    //     $schedule->delivered = $request->get('delivered');
-    //     $schedule->totalPrice = $request->get('totalPrice');
-    //     $order = Order::where('ID_Order', $request->get('ID_Order'))->first();
-    //     $order->totalPrice += $request->get('totalPrice');
-    //     $order->save();
-    //     if ($request->get('status') == "on") {
-    //         $schedule->status = true;
-    //     }else{
-    //         $schedule->status = false;
-    //     }
-    //     $schedule->save();
-    //     $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
-    //     $driver->deliver++;
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function editSchedule(Request $request, DeliverySchedule $schedule)
-    // {
-    //     $request->validate([
-    //         'ID_DeliveryVehicle' => 'required',
-    //         'pickedUpFrom' => 'required',
-    //         'deliveredTo' => 'required',
-    //         'pickedUp' => 'required',
-    //         'delivered' => 'required',
-    //         'totalPrice' => 'required',
-    //     ]);
-    //     $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
-    //     $driver->deliver--;
-    //     $driver->save();
+    //Branch Delivery Page
+    public function branchDelivery(Request $request){
+        $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $vehicles = DeliveryVehicle::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $orders = Order::Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+            ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $active = false;
+        $noDriver = false;
+        $activeV = 0;
+        $vehicleDriver = 0;
+        $searchName = '';
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        if($request->get('driver')){
+            $schedules = DeliverySchedule::select('*')
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+                ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
+                ->get();
+            $active = true;
+            $activeV = $request->get('driver');
+            $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
 
-    //     $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
-    //     $schedule->pickedUpFrom = $request->get('pickedUpFrom');
-    //     $schedule->deliveredTo = $request->get('deliveredTo');
-    //     $schedule->pickedUp = $request->get('pickedUp');
-    //     $schedule->delivered = $request->get('delivered');
+            if (!$vehicleDriver || $vehicleDriver->ID_Branch != $branch->ID_Branch) {
+                $noDriver = true;
+                $searchName ='NO ACCESS';
+            }
+        }elseif($request->get('search')){
+            $schedules = DeliverySchedule::select('*',)
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')            
+                ->Where('delivery_vehicles.vehicle_name', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.vehicle_phone', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+                ->get();
+            $active = true;
+            $activeV = DeliveryVehicle::Where('delivery_vehicles.vehicle_name', 'like', '%' . $request->get('search') . '%')
+                ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+                ->orWhere('delivery_vehicles.vehicle_phone', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
+                ->first();
+                if ($activeV) {
+                    $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)->first();
+                    $activeV = $activeV->ID_DeliveryVehicle;
+                }else{
+                    $noDriver = true;
+                    $searchName =$request->get('search');
+                }
+        }else{
+            $schedules = DeliverySchedule::select('*')
+            ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+            ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+            ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        }
+        return view('branch.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules,
+         'active' => $active, 'activeV' => $activeV, 'branch' => $branch, 'vehicleDriver' => $vehicleDriver
+         , 'noDriver' => $noDriver, 'searchName' => $searchName, 'orders' => $orders, 'banks' => $banks]);
+    }
+    public function editDriver(Request $request, DeliveryVehicle $driver)
+    {
+        $request->validate([
+            'name' => 'required',
+            'model' => 'required',
+            'plateNumber' => 'required',
+            'phone' => 'required',
+            'pricePerK' => 'required',
+        ]);
+        $driver->vehicle_name = $request->get('name');
+        $driver->model = $request->get('model');
+        $driver->plateNumber = $request->get('plateNumber');
+        $driver->vehicle_phone = $request->get('phone');
+        $driver->pricePerK = $request->get('pricePerK');
+        $driver->save();
+        return redirect()->back();
+    }
+    public function editDriverImage(Request $request, DeliveryVehicle $driver)
+    {
+        if ($driver->vehicle_img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
+            }
+            $driver->vehicle_img = $image_name;
+        } else {
+            Storage::delete('public/' . $driver->vehicle_img);
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
+            }
+            $driver->vehicle_img = $image_name;
+        }
+        $driver->save();
+        return redirect()->back();
+    }
+    public function editDriverImageDefult(DeliveryVehicle $driver)
+    {
+        if ($driver->vehicle_img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+            $driver->vehicle_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+        } else {
+            Storage::delete('public/' . $driver->vehicle_img);
+            $driver->vehicle_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+        }
+        $driver->save();
+        return redirect()->back();
+    }
+    public function addDriver(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'model' => 'required',
+            'plateNumber' => 'required',
+            'phone' => 'required',
+            'pricePerK' => 'required',
+        ]);
+        $driver = new DeliveryVehicle;
+        $driver->ID_Branch = $request->get('ID_Branch');
+        $driver->vehicle_name = $request->get('name');
+        $driver->model = $request->get('model');
+        $driver->plateNumber = $request->get('plateNumber');
+        $driver->vehicle_phone = $request->get('phone');
+        $driver->pricePerK = $request->get('pricePerK');
+        $driver->save();
+        return redirect()->back();
+    }
+    public function deleteDriver(DeliveryVehicle $driver)
+    {
+       if ($driver->vehicle_img != "DeliveryVehicle_images/deliveryVehicleDefault.png") {
+        Storage::delete('public/' . $driver->vehicle_img);
+        } 
+       $driver->delete();
+       return redirect()->route('branch.delivery');
+    }
+    public function addSchedule(Request $request)
+    {
+        $schedule = new DeliverySchedule();
+        if (!$request->get('ID_Order')) {
+            $message = 'Add Order';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->ID_Order = $request->get('ID_Order');
+        if (!$request->get('ID_DeliveryVehicle')) {
+            $message = 'Add Vehicle';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+        $schedule->schedule_status = $request->get('status');
+        $schedule->schedule_description = $request->get('description_type') . ': ' . $request->get('description_note');
+        if (!$request->get('pickedUpFrom') || !$request->get('deliveredTo')) {
+            $message = 'Add Trip Detials';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+        $schedule->deliveredTo = $request->get('deliveredTo');
+        if (!$request->get('pickedUp') || !$request->get('delivered')) {
+            $message = 'Add Trip Date Detials';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->pickedUp = $request->get('pickedUp');
+        $schedule->delivered = $request->get('delivered');
+        if (!$request->get('totalPrice')) {
+            $message = 'Add Price';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->schedule_totalPrice = $request->get('totalPrice');   
+        $schedule->save();
 
-    //     $order = Order::where('ID_Order', $schedule->ID_Order)->first();
-    //     echo $order;
-    //     $order->totalPrice -= $schedule->totalPrice;
-    //     $order->totalPrice += $request->get('totalPrice');
-    //     $order->save();
+        $order = Order::where('ID_Order', $request->get('ID_Order'))->first();
+        $order->order_totalPrice += $request->get('totalPrice');
+        $order->order_deliveries++;
+        $order->save();
+
+        $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
+                $transaction->transactions_description = 'Delivery: ' . $request->get('description_type');
+                $transaction->transactions_totalPrice = $request->get('totalPrice');
+            if ($request->get('transaction') == 1) {
+                if ($request->get('ID_Bank') == 0) {
+                    $message = 'Select Bank';
+                    return redirect()->back()->with('fail', $message);
+                }else{
+                    $transaction->ID_Bank = $request->get('ID_Bank');
+                }
+                $transaction->transactions_status = 1;
+                if ($request->file('proof')) {
+                    $image_name = $request->file('proof')->store('transactions_images', 'public');
+                    $transaction->proof = $image_name;
+                }else{
+                    $message = 'Add Proof';
+                    return redirect()->back()->with('fail', $message);
+                }
+                $transaction->save();
+            }else{
+                $transaction->transactions_status = 0;
+                $transaction->proof = 'Waiting for Payment';
+                $transaction->save();
+            }
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+        $driver->vehicle_deliveries++;
+        $driver->save();
+        return redirect()->back();
+    }
+    public function editSchedule(Request $request, DeliverySchedule $schedule)
+    {
+        $request->validate([
+            'ID_DeliveryVehicle' => 'required',
+            'pickedUpFrom' => 'required',
+            'deliveredTo' => 'required',
+            'pickedUp' => 'required',
+            'delivered' => 'required',
+            'totalPrice' => 'required',
+        ]);
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
+        $driver->vehicle_deliveries--;
+        $driver->save();
+
+        $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+        $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+        $schedule->deliveredTo = $request->get('deliveredTo');
+        $schedule->pickedUp = $request->get('pickedUp');
+        $schedule->delivered = $request->get('delivered');
+
+        $order = Order::where('ID_Order', $schedule->ID_Order)->first();
+        $order->order_totalPrice -= $schedule->totalPrice;
+        $order->order_totalPrice += $request->get('totalPrice');
+        $order->save();
         
-    //     $schedule->totalPrice = $request->get('totalPrice');
-    //     $schedule->save();
+        $schedule->schedule_totalPrice = $request->get('totalPrice');
+        $schedule->save();
 
-    //     $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
-    //     $driver->deliver++;
-    //     $driver->save();
-    //     return redirect()->back();
-    // }
-    // public function changeScheduleStatus(DeliverySchedule $schedule)
-    // {
-    //     if ($schedule->status) {
-    //         $schedule->status = false;
-    //     }else{
-    //         $schedule->status = true;
-    //     }
-    //    $schedule->save();
-       
-    //    return redirect()->back();
-    // }
-    // public function deleteSchedule(DeliverySchedule $schedule)
-    // {
-    //    $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
-    //    $driver->deliver--;
-    //    $driver->save();
-    //    $schedule->delete();
-    //    return redirect()->back();
-    // }
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+        $driver->vehicle_deliveries++;
+        $driver->save();
+        return redirect()->back();
+    }
+    public function changeScheduleStatus(Request $request, DeliverySchedule $schedule)
+    {
+        $schedule->schedule_status = $request->get('status');
+        $schedule->save();  
+       return redirect()->back();
+    }
+    public function deleteSchedule(DeliverySchedule $schedule)
+    {
+       $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
+       $driver->vehicle_deliveries--;
+       $driver->save();
+       $schedule->delete();
+       return redirect()->back();
+    }
 
     //Branch Orders Page
     public function branchOrders(Request $request){
@@ -527,6 +561,13 @@ class BranchController extends Controller
                     $driver->save();
                     $key->delete();
             }
+            $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
+            foreach ($transactions as $key) {
+                    if ($key->proof != 'Waiting for Payment') {
+                        Storage::delete('public/' . $key->proof);
+                    }
+                    $key->delete();
+            }
             $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
             $unit->unit_status = false;
             $unit->capacity = 0;
@@ -548,6 +589,13 @@ class BranchController extends Controller
             $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $key->ID_DeliveryVehicle)->first();
             $driver->vehicle_deliveries--;
             $driver->save();
+            $key->delete();
+       }
+       $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
+       foreach ($transactions as $key) {
+            if ($key->proof != 'Waiting for Payment') {
+                Storage::delete('public/' . $key->proof);
+            }
             $key->delete();
        }
        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
@@ -661,24 +709,32 @@ class BranchController extends Controller
             }
             
             if ($request->get('delivery') == 1) {
-                $request->validate([
-                    'ID_DeliveryVehicle' => 'required',
-                    'pickedUpFrom' => 'required',
-                    'deliveredTo' => 'required',
-                    'pickedUp' => 'required',
-                    'delivered' => 'required',
-                    'totalPrice' => 'required',
-                ]);
                 $schedule = new DeliverySchedule();
                 $schedule->ID_Order = $order->ID_Order;
+                if (!$request->get('ID_DeliveryVehicle')) {
+                    $message = 'Add Vehicle';
+                    return redirect()->back()->with('fail', $message);
+                }
                 $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+                $schedule->schedule_status = $request->get('status');
+                $schedule->schedule_description = $request->get('description_type') . ': ' . $request->get('description_note');
+                if (!$request->get('pickedUpFrom') || !$request->get('deliveredTo')) {
+                    $message = 'Add Trip Detials';
+                    return redirect()->back()->with('fail', $message);
+                }
                 $schedule->pickedUpFrom = $request->get('pickedUpFrom');
                 $schedule->deliveredTo = $request->get('deliveredTo');
+                if (!$request->get('pickedUp') || !$request->get('delivered')) {
+                    $message = 'Add Trip Date Detials';
+                    return redirect()->back()->with('fail', $message);
+                }
                 $schedule->pickedUp = $request->get('pickedUp');
                 $schedule->delivered = $request->get('delivered');
-                $schedule->schedule_description = $request->get('schedule_description');
-                $schedule->schedule_totalPrice = $request->get('schedule_totalPrice');
-                $schedule->schedule_status = $request->get('statusDelivery');
+                if (!$request->get('totalPrice')) {
+                    $message = 'Add Price';
+                    return redirect()->back()->with('fail', $message);
+                }
+                $schedule->schedule_totalPrice = $request->get('totalPrice');   
                 $schedule->save();
                 $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
                 $driver->vehicle_deliveries++;
@@ -687,7 +743,7 @@ class BranchController extends Controller
                 $order->order_totalPrice += $request->get('totalPrice');
                 $order->save();
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_description = 'Entry Transaction + Delivery';
+                $transaction->transactions_description = 'Entry Transaction + ' . $schedule->schedule_description;
                 $transaction->save();
                 $message ='Order has been made successfuly';
                 return redirect()->back()->with('success', $message);

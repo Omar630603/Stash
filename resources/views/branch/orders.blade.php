@@ -4,19 +4,35 @@
 <div class="container-fluid">
     <div>
         @if ($message = Session::get('fail'))
-        <div class="alert alert-danger" style="text-align: center; border-radius: 20px">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
             </strong>
         </div>
         @elseif ($message = Session::get('success'))
-        <div class="alert alert-success" style="text-align: center; border-radius: 20px">
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style=" text-align: center; border-radius: 20px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
             </strong>
         </div>
         @endif
     </div>
+</div>
+<div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px">
+        <strong>Whoops!</strong> There were some problems with your input.<br>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 </div>
 <div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
@@ -382,7 +398,7 @@
                                                     @if ($unit->ID_Category == $category->ID_Category)
                                                     @php
                                                     $ind++;
-                                                    $unitName = $unit->IdName;
+                                                    $unitName = $unit->unit_name;
                                                     $idUnit = $unit->ID_Unit;
                                                     @endphp
                                                     @endif
@@ -391,19 +407,24 @@
                                                         class="check form-check-input" type="checkbox"
                                                         value="{{$idUnit}}">
                                                         <label class="form-check-label" for="flexCheckDefault">
-                                                            {{$category->name}}
+                                                            {{$category->category_name}}
                                                             (There is {{$ind}} available units)
                                                             <br>
                                                             <small>This Category is has no units </small>
                                                         </label>
                                                         @else
-                                                        <input name="Idunit" class="check form-check-input"
-                                                            type="checkbox" value="{{$idUnit}}">
+                                                        <input onchange="showPrice()" id="unitPrice" name="Idunit"
+                                                            class="check form-check-input" type="checkbox"
+                                                            value="{{$idUnit}}">
+                                                        <input hidden id="unitPricePerDay{{$idUnit}}"
+                                                            value="{{$category->pricePerDay}}">
                                                         <label class="form-check-label" for="flexCheckDefault">
-                                                            {{$category->name}}
+                                                            {{$category->category_name}}
                                                             (There is {{$ind}} available units)
                                                             <br>
-                                                            <small>Unit {{$unitName}} is ready to use </small>
+                                                            <small>Unit {{$unitName}} is ready to use <br>
+                                                                Price/Day: {{$category->pricePerDay}}
+                                                            </small>
                                                         </label>
                                                         @endif
                                                 </div>
@@ -412,7 +433,7 @@
                                         </div>
                                     </div>
                                     <div class="container headerOrder">
-                                        <div class="container">
+                                        <div class="container" style="margin-top: 15px">
                                             <div>
                                                 <label for="order_status"><strong>Status </strong></label>
                                             </div>
@@ -450,14 +471,18 @@
                                 <div class="container">
                                     <div class="container headerOrder">
                                         <div class="container">
-                                            <div>
-                                                <label for="status"><strong>Period </strong></label>
+                                            <div style="display: flex; gap: 4px">
+                                                <label style="white-space: nowrap" for="Period"><strong>Period</strong>
+                                                </label>
+                                                <p style="margin: 0" id="orderPeriodDiff"></p>
                                             </div>
                                             <div class="form-group">
                                                 <label for="startsFrom">From</label>
-                                                <input class="form-control" type="datetime-local" name="startsFrom">
+                                                <input id="orderStartDate" class="form-control" type="datetime-local"
+                                                    name="startsFrom">
                                                 <label for="endsAt">Until</label>
-                                                <input class="form-control" type="datetime-local" name="endsAt">
+                                                <input id="orderEndDate" onchange="showPrice()" class="form-control"
+                                                    type="datetime-local" name="endsAt">
                                             </div>
                                         </div>
                                     </div>
@@ -497,6 +522,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="container headerOrder">
+                                        <div class="container">
+                                            <div style="display: flex; gap:10px; padding:0 5px; margin-top: 3px">
+                                                <label style="vertical-align: bottom" for="status"><strong>Total Payment
+                                                    </strong></label>
+                                                <input style="margin-top: 5px" disabled type="text" class="form-control"
+                                                    id="orderTotalPayment" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="container">
@@ -519,7 +554,7 @@
                                 <div class="container" style="padding: 0 20px">
                                     <div class="headerOrder"
                                         style="display: flex; justify-content: space-evenly; flex-wrap: wrap">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <label for="phone" class="form-label">Vehicle</label>
                                             <div class="form-group">
                                                 <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
@@ -540,29 +575,63 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <label for="pickedUpFrom" class="form-label">Pick Up From</label>
                                             <input type="text" class="form-control" id="pickedUpFrom"
                                                 name="pickedUpFrom">
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <label for="deliveredTo" class="form-label">Deliver To</label>
                                             <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
+                                            <label for="description_type" class="form-label">Description Type</label>
+                                            <div class="form-check">
+                                                <div>
+                                                    <input name="description_type" checked
+                                                        class="checkDescription_type form-check-input" type="checkbox"
+                                                        value="First Delivery">
+                                                    <p style="width: 100%" class="btn-sm btn-info">First Delivery</p>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input name="description_type"
+                                                        class="checkDescription_type form-check-input" type="checkbox"
+                                                        value="Add to Unit">
+                                                    <p class="btn-sm btn-info">Add to Unit</p>
+                                                </div>
+                                                <div>
+                                                    <input name="description_type"
+                                                        class="checkDescription_type form-check-input" type="checkbox"
+                                                        value="Transform from Unit">
+                                                    <p class="btn-sm btn-info">Transform from Unit</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="description_note" class="form-label">Description Note</label>
+                                            <textarea type="text" class="form-control" id="description_note"
+                                                name="description_note" rows="5"></textarea>
+                                        </div>
+                                        <div class="col-md-3">
                                             <label for="model" class="form-label">Status</label>
-                                            <div class="form-group">
-                                                <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
-                                                    class="form-check form-switch">
-                                                    <div>
-                                                        <label style="color: #000;" for="status">Status:
-                                                            <small style="display: none" id="statusDone">Done</small>
-                                                        </label>
-                                                    </div>
-                                                    <input style="margin-left: 0; margin-right: 5px; position: inherit"
-                                                        onchange="$('#statusDone').toggle('slow');"
-                                                        name="statusDelivery" class="form-check-input" type="checkbox"
-                                                        id="flexSwitchCheckDefault">
+                                            <div class="form-check">
+                                                <div>
+                                                    <input name="status" checked
+                                                        class="checkStatusDelivery form-check-input" type="checkbox"
+                                                        value="0">
+                                                    <p style="width: 100%" class="btn-sm btn-info">Waiting</p>
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input name="status" class="checkStatusDelivery form-check-input"
+                                                        type="checkbox" value="1">
+                                                    <p class="btn-sm btn-warning">On-going</p>
+                                                </div>
+                                                <div>
+                                                    <input name="status" class="checkStatusDelivery form-check-input"
+                                                        type="checkbox" value="2">
+                                                    <p class="btn-sm btn-success">Done</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -576,17 +645,10 @@
                                             <input type="datetime-local" class="form-control" id="delivered"
                                                 name="delivered">
                                         </div>
-                                        <div class="col-md-2">
-                                            <label for="totalPrice" class="form-label">Delivery Price
-                                            </label>
-                                            <input type="text" class="form-control" id="schedule_totalPrice"
-                                                name="schedule_totalPrice">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="schedule_description"><strong>Schedule description
-                                                    <small>(optional)</small> </strong></label>
-                                            <textarea class="form-control" name="schedule_description"
-                                                style="margin-bottom: 20px"></textarea>
+                                        <div class="col-md-4">
+                                            <label for="totalPrice" class="form-label">Deliver Price</label>
+                                            <input onchange="updatePrice()" type="number" class="form-control"
+                                                id="totalPriceInput" name="totalPrice">
                                         </div>
                                     </div>
                                 </div>
@@ -599,7 +661,8 @@
                                                 <label for="capacity"><strong>Order Payment
                                                         <small>(This will add the payment details for
                                                             the
-                                                            entry transaction)</small>
+                                                            entry transaction with price: <small
+                                                                id="finallPrice"></small>)</small>
                                                     </strong></label>
                                             </div>
                                             <div>
@@ -918,8 +981,8 @@
                                         $orderCheck = $endsAt->diff($today);
                                         @endphp
                                         @if ($orderCheck->invert)
-                                        <div class="btn-sm btn-primary">Active
-                                            <h6 class="mb-0">Period: {{ $interval->days }} @if ($interval->days
+                                        <div class="btn-sm btn-primary">
+                                            <h6 class="mb-0">Active: {{ $interval->days }} @if ($interval->days
                                                 <= 1) Day @else Days @endif Left <i data-toggle="tooltip"
                                                     title="Order Date Details"
                                                     onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
@@ -993,8 +1056,8 @@
                                             </p>
                                         </div>
                                         @else
-                                        <div class="btn-sm btn-danger">Expaired
-                                            <h6 class="mb-0">Period: {{ $interval->days }} @if ($interval->days
+                                        <div class="btn-sm btn-danger">
+                                            <h6 class="mb-0">Expaired: {{ $interval->days }} @if ($interval->days
                                                 <= 1) Day @else Days @endif Exceeded <i data-toggle="tooltip"
                                                     title="Order Date Details"
                                                     onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
@@ -1074,7 +1137,7 @@
                                     @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No Deliveries
                                         </p>
                                         @else
-                                        <p class="btn-sm btn-success">{{$order_deliveries}}</p>
+                                        <p class="btn-sm btn-success">Amount:{{$order->order_deliveries}}</p>
                                         @endif
                                 </td>
                                 <td data-label="Total Price" class="column">
@@ -1145,22 +1208,54 @@
         $('.check').click(function() {
             $('.check').not(this).prop('checked', false);
         });
-    });
-    $(document).ready(function(){
         $('.checkStatus').click(function() {
             $('.checkStatus').not(this).prop('checked', false);
         });
-    });
-    $(document).ready(function(){
         $('.checkDeleivery').click(function() {
             $('.checkDeleivery').not(this).prop('checked', false);
         });
-    });
-    $(document).ready(function(){
+        $('.checkStatusDelivery').click(function() {
+            $('.checkStatusDelivery').not(this).prop('checked', false);
+        });
         $('.checkPayment').click(function() {
             $('.checkPayment').not(this).prop('checked', false);
         });
     });
+    function showPrice() {
+        var orderStartDate = new Date($('#orderStartDate').val()); 
+        var orderEndDate = new Date($('#orderEndDate').val()); 
+        var today = new Date();
+
+        if (orderStartDate > orderEndDate) {
+            alert('Dates are Invalid')
+            $('#orderStartDate').val(null)
+            $('#orderEndDate').val(null)
+        } else {
+            if(today < orderEndDate)
+            {
+            dateDif = Math.round((orderEndDate-orderStartDate)/(1000*60*60*24));
+            $('#orderPeriodDiff').text(': '+dateDif + ' Days');
+            unitVal = $("input:checkbox[id=unitPrice]:checked");
+            pricePerDay = document.getElementById('unitPricePerDay'+unitVal.val())
+            $('#orderTotalPayment').val(pricePerDay.value * dateDif)
+            finallPrice = document.getElementById('finallPrice');
+            finallPrice.textContent = $('#orderTotalPayment').val(); 
+            }else{
+                if (orderEndDate != 'Invalid Date') {
+                    alert('Date is already passed')
+                    $('#orderEndDate').val(null)
+                }
+            }
+        }
+    
+    }
+    function updatePrice() {
+        orderTotalPayment = $('#orderTotalPayment').val();
+        totalPriceInput = $('#totalPriceInput').val();
+        $('#orderTotalPayment').val(parseInt(orderTotalPayment) + parseInt(totalPriceInput));
+        finallPrice = document.getElementById('finallPrice');
+        finallPrice.textContent = $('#orderTotalPayment').val();
+    }
 </script>
 <script>
     + function($) {
