@@ -663,7 +663,7 @@ class BranchController extends Controller
             $date2 = new DateTime($request->get('endsAt'));
             $interval = $date1->diff($date2);
             $unit = Unit::where('ID_Unit', $request->get('Idunit'))->first();
-            $category = Category::find($unit->ID_Category)->first();
+            $category = Category::where('ID_Category', $unit->ID_Category)->first();
                 if ($interval->days == 0) {
                     $order->order_totalPrice = $category->pricePerDay;
                 }else{
