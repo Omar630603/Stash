@@ -10498,7 +10498,7 @@ a:hover {
 nav.shift {
     padding-right: 130px;
     padding-left: 130px;
-    background: #fff;
+    background: #fff8e6;
 }
 nav.shift ul {
     list-style: none;
@@ -10553,4 +10553,48 @@ nav.shift ul li a:hover:after {
     opacity: 1;
     visibility: visible;
     height: 90%;
+}
+#loading {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 6%;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    background-color: rgb(40, 40, 40);
+    z-index: 99;
+}
+#loading-image {
+    z-index: 100;
+    border: 3px solid;
+    border-image: linear-gradient(
+            0deg,
+            rgba(63, 22, 82, 1) 10%,
+            rgba(157, 52, 136, 1) 40%,
+            rgba(248, 159, 91, 1) 80%
+        )
+        10;
+    width: 29px;
+    height: 29px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

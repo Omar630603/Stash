@@ -18,13 +18,14 @@ class Order extends Model
     protected $fillable = [
         'ID_User',
         'ID_Unit',
-        'status',
+        'order_status',
         'startsFrom',
         'endsAt',
-        'delivery',
-        'totalPrice',
+        'order_description',
+        'order_deliveries',
+        'order_totalPrice',
         'expandPrice',
-        'madeByAdmin',
+        'madeBy',
     ];
 
     /**

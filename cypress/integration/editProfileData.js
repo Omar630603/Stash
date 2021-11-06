@@ -1,4 +1,4 @@
-describe("Edit Admin Profile data", () => {
+describe("Edit branch Profile data", () => {
     it("Edit Data", () => {
         cy.visit("/login");
         cy.get("#login")
@@ -30,6 +30,6 @@ describe("Edit Admin Profile data", () => {
             .clear()
             .type("Suhat")
             .should("have.value", "Suhat");
-        cy.get("#changeAdminProfile-btn").click();
+        cy.get("#changeBranchProfile-btn").click();
     });
 });

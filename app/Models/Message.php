@@ -18,6 +18,6 @@ class Message extends Model
     protected $fillable = [
         'ID_User',
         'message',
-        'img',
+        'message_img',
     ];
 }

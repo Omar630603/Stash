@@ -23,13 +23,15 @@ table thead tr {
 }
 table tbody td {
     padding: 5px 10px;
+    text-align: left;
+    vertical-align: text-bottom;
 }
 table tbody tr:last-child {
     border: 0;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #e7e7e7;
+    background-color: #dddddd;
 }
 
 tbody tr:hover {
@@ -56,6 +58,7 @@ tbody tr:hover {
     }
     table tbody tr td {
         padding-left: 30% !important;
+        border-bottom: 1px solid #ccc;
     }
     table tbody tr td:last-child {
         margin-bottom: 0;
@@ -127,6 +130,7 @@ tbody tr:hover {
     background-color: #fceabe;
     padding: 10px;
     border-radius: 20px;
+    min-height: 300px;
 }
 .line {
     background: rgb(63, 22, 82);
@@ -177,6 +181,7 @@ img {
     max-width: 100%;
 }
 .inbox_people {
+    width: 100%;
     background: #f8f8f8 none repeat scroll 0 0;
     float: left;
     overflow: hidden;

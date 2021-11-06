@@ -1,4 +1,4 @@
-@extends('layouts.appAdmin')
+@extends('layouts.appBranch')
 
 @section('content')
 <div class="container">
@@ -8,8 +8,9 @@
         <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Admin : {{ Auth::user()->username }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Admin Profile & Branch Information</li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee :
+                        {{ Auth::user()->username }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Branch Employee Profile & Branch Information</li>
             </ol>
         </nav>
         <!-- /Breadcrumb -->
@@ -19,15 +20,17 @@
                 <div class="card" style="border-radius:20px; padding: 5px">
                     <div class="card-body" style="background: #9D3488;border-radius:20px;">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="{{ asset('storage/' . Auth::user()->img) }}"
+                            <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                 alt="user{{ Auth::user()->username }}" class="rounded-circle" width="160"
                                 style="border: white 5px solid;">
                             <div style="margin-top: 40px">
                                 <h4 style="color: white;text-transform: uppercase">
                                     <strong>{{ Auth::user()->username }}</strong>
                                 </h4>
-                                <p style="color: white"><strong>Admin</strong></p>
-                                <p style="color: white"><strong>Admin of {{$branch->branch}} Branch</strong></p>
+                                <p style="color: white"><strong>Branch</strong></p>
+                                <p style="color: white"><strong>Branch Employee of {{$branch->branch_name}}
+                                        Branch</strong>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +100,7 @@
                     <div class="card" style="border-radius:20px;">
                         <div class="card-body" style="background: #fff;border-radius:20px;">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('storage/' . Auth::user()->img) }}"
+                                <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                     alt="user{{ Auth::user()->username }}" class="rounded-circle" width="150"
                                     style="border: white 2px solid;">
                                 <div class="mt-3">
@@ -105,7 +108,7 @@
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
                                         <form method="post" style="display: none;"
-                                            action="{{ route('admin.editImage', $admin) }}"
+                                            action="{{ route('branch.editImage', $branchEmployee) }}"
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -117,7 +120,7 @@
                                         <a href="" onclick="$('#restore').submit(); return false;"
                                             class="btn btn-outline-dark">Restore Default</a>
                                         <form style="display: none" method="POST"
-                                            action="{{ route('admin.defaultImage', $admin) }}" id="restore">
+                                            action="{{ route('branch.defaultImage', $branchEmployee) }}" id="restore">
                                             @csrf
                                         </form>
                                     </div>
@@ -128,7 +131,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius:20px;">
-                        <form method="post" action="{{ route('admin.editBioData', $admin) }}"
+                        <form method="post" action="{{ route('branch.editBioData', $branchEmployee) }}"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
@@ -178,7 +181,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12" style="margin-top: 10px">
-                                        <button id="changeAdminProfile-btn" class="btn btn-outline-dark"
+                                        <button id="changeBranchProfile-btn" class="btn btn-outline-dark"
                                             style="float: right">Change</button>
                                     </div>
                                 </div>
@@ -198,7 +201,7 @@
                                 $('#btn-edit-branch').toggle('fast');
                                  return false;"><i class="fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
                             </div>
-                            <form method="post" action="{{ route('admin.editBranch', $branch) }}"
+                            <form method="post" action="{{ route('branch.editBranch', $branch) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="row" style="margin-top: 35px">
@@ -206,9 +209,9 @@
                                         <h6 class="mb-0"><strong>Branch name</strong></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <p id="branch-name-text">{{ $branch->branch }}</p>
-                                        <input style="display: none" id="branch-name" name="branch" type="text"
-                                            class="form-control" value="{{ $branch->branch }}"
+                                        <p id="branch-name-text">{{ $branch->branch_name }}</p>
+                                        <input style="display: none" id="branch-name" name="branch_name" type="text"
+                                            class="form-control" value="{{ $branch->branch_name }}"
                                             placeholder="Branch Name">
                                     </div>
 
@@ -230,9 +233,9 @@
                                         <h6 class="mb-0"><strong>Location</strong></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <p id="branch-location-text">{{ $branch->location }}</p>
-                                        <input style="display: none" id="branch-location" name="location" type="text"
-                                            class="form-control" value="{{ $branch->location }}"
+                                        <p id="branch-location-text">{{ $branch->branch_address }}</p>
+                                        <input style="display: none" id="branch-location" name="branch_address"
+                                            type="text" class="form-control" value="{{ $branch->branch_address }}"
                                             placeholder="Branch Location">
                                     </div>
                                 </div>

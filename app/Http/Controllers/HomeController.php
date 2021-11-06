@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
-use App\Models\Category;
+use App\Models\Branch;
 
 class HomeController extends Controller
 {
@@ -22,29 +21,24 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function checkAdmin()
+    public function checkBranch()
     {
-        $admin = Admin::all();
-        $isAdmin = False;
-        for ($i = 0; $i < count($admin); $i++) {
-            if (auth()->user()->ID_User == $admin[$i]->ID_User) {
-                $isAdmin = True;
+        $branch = Branch::all();
+        $isBranch = False;
+        for ($i = 0; $i < count($branch); $i++) {
+            if (auth()->user()->ID_User == $branch[$i]->ID_User) {
+                $isBranch = True;
                 break;
             }
         }
-        return $isAdmin;
+        return $isBranch;
     }
     public function index()
     {
-        if ($this->checkAdmin()) {
-            return redirect()->route('admin.home');
+        if ($this->checkBranch()) {
+            return redirect()->route('branch.home');
         }else {
             return redirect()->route('user.home');
         }
-    }
-    public function welcome()
-    {
-        $categories = Category::all();
-        return view('welcome', ['categories' => $categories]);
     }
 }

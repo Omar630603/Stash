@@ -1,6 +1,6 @@
-describe("Create a new Admin from the previous test register", () => {
-    it("Make Admin", () => {
-        cy.create("App\\Models\\Admin", {
+describe("Create a new branch from the previous test register", () => {
+    it("Make branch", () => {
+        cy.create("App\\Models\\Branch", {
             ID_User: 1,
             branch: "Malang Main",
             city: "Malang",
@@ -16,6 +16,6 @@ describe("Create a new Admin from the previous test register", () => {
 
         cy.get("#login-btn").click();
         cy.visit("/home").contains("fakeUsername");
-        cy.visit("/home").contains("Admin");
+        cy.visit("/home").contains("Branch Employee");
     });
 });

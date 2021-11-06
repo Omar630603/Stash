@@ -1,4 +1,4 @@
-describe("Admin Search User", () => {
+describe("branch Search User", () => {
     it("Search User", () => {
         cy.visit("/login");
         cy.get("#login").type("Omar").should("have.value", "Omar");
@@ -6,7 +6,7 @@ describe("Admin Search User", () => {
             .type("fakePassword")
             .should("have.value", "fakePassword");
         cy.get("#login-btn").click();
-        cy.visit("/admin/orders");
+        cy.visit("/branch/orders");
         cy.get(".search-bar").type("Omar");
         cy.get("button > .fa").click();
         cy.get(".containerV > .headerVehiclesSchedules > .btn").click();
@@ -29,7 +29,7 @@ describe("Admin Search User", () => {
             ":nth-child(4) > :nth-child(2) > .input-group > .form-floating > .form-control"
         ).type("user123456");
         cy.get(".btn-outline-primary").click();
-        cy.visit("/admin/orders");
+        cy.visit("/branch/orders");
         cy.get(".search-bar").type("Omar630603User");
         cy.get("button > .fa").click();
     });

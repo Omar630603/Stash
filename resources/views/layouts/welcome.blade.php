@@ -37,6 +37,11 @@
     </head>
 
     <body style="background-color: #fff8e6">
+        <div id="loading">
+            <div id="loader-container">
+                <div id="loading-image"></div>
+            </div>
+        </div>
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="padding: 0">
                 <div class="container">
@@ -59,7 +64,7 @@
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
                                 <li><a href="/">Home</a></li>
-                                <li><a href="#">Services</a></li>
+                                <li><a href="{{ route('welcome.services') }}">Services</a></li>
                                 <li><a href="#">About Us</a></li>
                                 <li><a href="#">ContactS Us</a></li>
                             </ul>
@@ -105,7 +110,7 @@
                                     </div>
                                     <a href="{{ route('home') }}"><img width="35px" height="35px"
                                             style="border-radius: 50%"
-                                            src="{{asset('storage/'.Auth::user()->img)}}"></a>
+                                            src="{{asset('storage/'.Auth::user()->user_img)}}"></a>
                                 </div>
                             </li>
                             @endguest
@@ -127,7 +132,8 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-                                    <li><a style="color: #fff8e6" href="#">Services</a></li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
+                                    </li>
                                     <li><a style="color: #fff8e6" href="#">About Us</a></li>
                                     <li><a style="color: #fff8e6" href="#">Contact Us</a></li>
                                 </ul>
@@ -157,6 +163,11 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
+    </script>
+    <script>
+        $(window).on('load', function () {
+      $('#loading').slideToggle('fast');
+    }) 
     </script>
 
 </html>
