@@ -100,7 +100,7 @@
         </div>
         <div class="card-body" style="padding: 10px;">
             <div class="categories" style="display: flex; justify-content: flex-end; gap: 20px">
-                <div>
+                <div style="text-align: center">
                     <img width="200px" class="img-fluid" style="border-radius: 10px;"
                         src="{{ asset('storage/' . $category->category_img) }}" alt="">
                 </div>
