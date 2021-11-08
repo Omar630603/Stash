@@ -102,7 +102,7 @@
             <div class="categories" style="display: flex; justify-content: flex-end; gap: 20px">
                 <div>
                     <img width="200px" class="img-fluid" style="border-radius: 10px;"
-                        src="{{ asset('storage/' . $category->img) }}" alt="">
+                        src="{{ asset('storage/' . $category->category_img) }}" alt="">
                 </div>
                 <div style="flex: 1">
                     <div class="table100">

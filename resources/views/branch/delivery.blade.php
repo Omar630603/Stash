@@ -759,7 +759,7 @@
                             </td>
                             <td data-label="Status" class="column">
                                 @if ($schedule->schedule_status == 0)
-                                <p class="btn-sm btn-info">Done</p>
+                                <p class="btn-sm btn-info">Waiting</p>
                                 @elseif ($schedule->schedule_status == 1)
                                 <p class="btn-sm btn-warning">On-Going</p>
                                 @elseif ($schedule->schedule_status == 2)

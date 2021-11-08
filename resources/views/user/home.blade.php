@@ -18,7 +18,7 @@
                 <div class="card" style="border-radius:20px; padding: 5px">
                     <div class="card-body" style="background: #9D3488;border-radius:20px;">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="{{ asset('storage/' . Auth::user()->img) }}"
+                            <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                 alt="user{{ Auth::user()->username }}" class="rounded-circle" width="160"
                                 style="border: white 5px solid;">
                             <div style="margin-top: 40px">
@@ -96,15 +96,14 @@
                     <div class="card" style="border-radius:20px;">
                         <div class="card-body" style="background: #fff;border-radius:20px;">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ asset('storage/' . Auth::user()->img) }}"
+                                <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                     alt="user{{ Auth::user()->username }}" class="rounded-circle" width="150"
                                     style="border: white 2px solid;">
                                 <div class="mt-3">
                                     <div style="display: flex; flex-direction: column; gap: 10px;">
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
-                                        <form method="post" style="display: none;"
-                                            action="{{ route('user.editImage', (Auth::user()->username)) }}"
+                                        <form method="post" style="display: none;" action=""
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -115,9 +114,7 @@
                                         </form>
                                         <a href="" onclick="$('#restore').submit(); return false;"
                                             class="btn btn-outline-dark">Restore Default</a>
-                                        <form style="display: none" method="POST"
-                                            action="{{ route('user.defaultImage', (Auth::user()->username)) }}"
-                                            id="restore">
+                                        <form style="display: none" method="POST" action="" id="restore">
                                             @csrf
                                         </form>
                                     </div>
@@ -128,8 +125,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius:20px;">
-                        <form method="post" action="{{ route('user.editBioData', (Auth::user()->username)) }}"
-                            enctype="multipart/form-data">
+                        <form method="post" action="" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="float-right" style="cursor: pointer;">

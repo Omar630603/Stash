@@ -64,8 +64,7 @@
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
                                 <li><a href="{{route('home')}}">Home</a></li>
-                                <li><a href="{{route('user.orders')}}">Orders</a></li>
-                                <li><a href="{{route('user.delivery')}}">Delivery</a></li>
+
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -109,7 +108,7 @@
                                     </div>
                                     <a href="{{ route('home') }}"><img width="35px" height="35px"
                                             style="border-radius: 50%"
-                                            src="{{asset('storage/'.Auth::user()->img)}}"></a>
+                                            src="{{asset('storage/'.Auth::user()->user_img)}}"></a>
                                 </div>
                             </li>
                             @endguest
@@ -131,8 +130,7 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-                                    <li><a style="color: #fff8e6" href="{{route('admin.orders')}}">Orders</a></li>
-                                    <li><a style="color: #fff8e6" href="{{route('admin.delivery')}}">Delivery</a></li>
+
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>

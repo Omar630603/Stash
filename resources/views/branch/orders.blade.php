@@ -1191,7 +1191,7 @@
                                         <p class="btn-sm btn-light">{{$order->username}}</p>
                                     </a>
                                 </td>
-                                <td data-label="Status" class="column">
+                                <td data-label="Made by" class="column">
                                     @if ($order->madeBy)
                                     <p class="btn-sm btn-success">Branch</p>
                                     @else

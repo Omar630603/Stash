@@ -65,8 +65,8 @@
                             <ul class="navbar-nav m-auto">
                                 <li><a href="/">Home</a></li>
                                 <li><a href="{{ route('welcome.services') }}">Services</a></li>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">ContactS Us</a></li>
+                                <li><a href="{{ route('welcome.aboutus') }}">About Us</a></li>
+                                <li><a href="{{ route('welcome.contactus') }}">ContactS Us</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -134,8 +134,10 @@
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
                                     <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
                                     </li>
-                                    <li><a style="color: #fff8e6" href="#">About Us</a></li>
-                                    <li><a style="color: #fff8e6" href="#">Contact Us</a></li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
+                                    </li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>
