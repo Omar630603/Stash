@@ -961,17 +961,70 @@
                             @foreach ($orders as $order)
                             <tr>
                                 <td data-label="Status" class="column">
-                                    @if ($order->order_status == 0)
-                                    <p class="btn-sm btn-info">With Customer</p>
-                                    @elseif($order->order_status == 1)
-                                    <p class="btn-sm btn-light">Waiting for Payment</p>
-                                    @elseif($order->order_status == 2)
-                                    <p class="btn-sm btn-warning">Delivery</p>
-                                    @elseif($order->order_status == 3)
-                                    <p class="btn-sm btn-success">In Stash</p>
-                                    @elseif($order->order_status == 4)
-                                    <p class="btn-sm btn-secondary">Canceled</p>
+                                    @php
+                                    $status_unpaid = 0;
+                                    $status_paid = 0;
+                                    $status_disapproved = 0;
+                                    $status_approved = 0;
+                                    $amount=0;
+                                    @endphp
+                                    @foreach ($transactions as $transaction)
+                                    @if ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==0)
+                                    @php
+                                    $status_unpaid++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==1)
+                                    @php
+                                    $status_paid++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==2)
+                                    @php
+                                    $status_disapproved++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==3)
+                                    @php
+                                    $status_approved++;$amount++;
+                                    @endphp
                                     @endif
+                                    @endforeach
+
+                                    @if ($order->order_status == 0)
+                                    <div class="btn-sm btn-info">
+                                        <h6 class="mb-0">With Customer
+                                            @elseif($order->order_status == 1)
+                                            <div class="btn-sm btn-light">
+                                                <h6 class="mb-0">Waiting for Payment
+                                                    @elseif($order->order_status == 2)
+                                                    <div class="btn-sm btn-warning">
+                                                        <h6 class="mb-0">Delivery
+                                                            @elseif($order->order_status == 3)
+                                                            <div class="btn-sm btn-success">
+                                                                <h6 class="mb-0">In Stash
+                                                                    @elseif($order->order_status == 4)
+                                                                    <div class="btn-sm btn-secondary">
+                                                                        <h6 class="mb-0">Canceled
+                                                                            @endif
+                                                                            <i data-toggle="tooltip"
+                                                                                title="Order Transactions Details"
+                                                                                onclick="$('#orderTransactionsDetail{{$order->ID_Order}}').toggle('fast')"
+                                                                                class="fas fa-arrow-down float-right"></i>
+                                                                            <p class="mb-0"
+                                                                                style="display: none; width: max-content"
+                                                                                id="orderTransactionsDetail{{$order->ID_Order}}">
+                                                                                <small>Transactions: {{$amount}}
+                                                                                    <br>Unpaid: {{$status_unpaid}}
+                                                                                    <br>Paid: {{$status_paid}}
+                                                                                    <br>Disapproved:
+                                                                                    {{$status_disapproved}}
+                                                                                    <br>Approved: {{$status_approved}}
+                                                                                </small>
+                                                                            </p>
+                                                                        </h6>
+                                                                    </div>
                                 </td>
 
                                 <td data-label="Period" class="column">

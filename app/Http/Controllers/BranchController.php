@@ -423,6 +423,10 @@ class BranchController extends Controller
         $schedules = DeliverySchedule::select('ID_Order', 'schedule_status')
         ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
         ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $transactions = Transactions::select('transactions.ID_Order', 'transactions_status')
+        ->Join('orders', 'orders.ID_Order', '=', 'transactions.ID_Order')
+        ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+        ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         if($request->get('user')){
             $orders = Order::select('*')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
@@ -482,7 +486,8 @@ class BranchController extends Controller
         return view('branch.orders', ['users' => $users, 'orders' => $orders,
         'active' => $active, 'activeU' => $activeU, 'branch' => $branch, 'userProfile' => $userProfile
         , 'noUser' => $noUser, 'searchName' => $searchName, 'units' => $units,
-         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks, 'schedules' => $schedules]);
+         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks, 'schedules' => $schedules,
+        'transactions' => $transactions]);
     }
     public function addUser(Request $request)
     {
