@@ -133,6 +133,12 @@ class BranchController extends Controller
         );
     }
     public function deleteUnit(Unit $unit){
+        if ($unit->unit_status) {
+            $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
+            $user = User::where('ID_User', $order->ID_User)->first();
+            $user->ordered--;
+            $user->save();
+        }
         
         $unit->delete();
         return redirect()->back();
@@ -401,6 +407,9 @@ class BranchController extends Controller
        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
        $driver->vehicle_deliveries--;
        $driver->save();
+       $order = Order::where('ID_Order', $schedule->ID_Order)->first();
+       $order->order_deliveries--;
+       $order->save();
        $schedule->delete();
        return redirect()->back();
     }

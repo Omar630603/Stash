@@ -29,8 +29,8 @@
                                 $orderCheck = $date2->diff($today);
                                 @endphp
                                 @if ($orderCheck->invert)
-                                <div class="btn-sm btn-primary">Active: Left {{$orderCheck->days}}
-                                    @if($orderCheck->days <= 1) Day @else Days @endif<h6 class="mb-0">
+                                <div class="btn-sm btn-primary">Active: {{$orderCheck->days}}
+                                    @if($orderCheck->days <= 1) Day @else Days @endif Left<h6 class="mb-0">
                                         <strong>Period:
                                             {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif
                                                 </strong>
