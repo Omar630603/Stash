@@ -985,8 +985,8 @@
                                         @endphp
                                         @if ($orderCheck->invert)
                                         <div class="btn-sm btn-primary">
-                                            <h6 class="mb-0">Active: {{ $interval->days }} @if ($interval->days
-                                                <= 1) Day @else Days @endif Left <i data-toggle="tooltip"
+                                            <h6 class="mb-0">Active: {{ $orderCheck->days }} @if ($orderCheck->days
+                                                <= 1) Day @else Days @endif Left<i data-toggle="tooltip"
                                                     title="Order Date Details"
                                                     onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
                                                     class="fas fa-arrow-down float-right"></i>
@@ -1060,9 +1060,9 @@
                                         </div>
                                         @else
                                         <div class="btn-sm btn-danger">
-                                            <h6 class="mb-0">Expaired: {{ $interval->days }} @if ($interval->days
-                                                <= 1) Day @else Days @endif Exceeded <i data-toggle="tooltip"
-                                                    title="Order Date Details"
+                                            <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
+                                                @if($orderCheck->days<= 1) Day @else Days @endif <i
+                                                    data-toggle="tooltip" title="Order Date Details"
                                                     onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
                                                     class="fas fa-arrow-down float-right"></i>
 

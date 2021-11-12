@@ -596,8 +596,8 @@
                                     @if ($scheduleCheck->invert)
                                     <div class="btn-sm btn-primary">
                                         <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
-                                            {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Left
-                                                <i data-toggle="tooltip" title="Delivery Trip Details"
+                                            {{ $scheduleCheck->days }} @if ($scheduleCheck->days <= 1) Day @else Days
+                                                @endif Left <i data-toggle="tooltip" title="Delivery Trip Details"
                                                 onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                                 class="fas fa-arrow-down float-right"></i>
                                         </h6>
@@ -607,19 +607,20 @@
                                             <br>Destination: {{$schedule->deliveredTo}}
                                             <br>
                                             @if($interval->days == 0)
+
                                             <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                                 class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
                                                 <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
                                                     style="display: none">From:</small>
                                             </i>
-                                            {{$order->startsFrom}}
+                                            {{$schedule->pickedUp}}
                                             <br>
                                             <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                                 class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
                                                 <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
                                                     style="display: none">Until:</small>
                                             </i>
-                                            {{$order->endsAt}}
+                                            {{$schedule->delivered}}
                                             <small>(The same day)</small>
                                             @elseif($interval->m == 0 && $interval->y == 0)
                                             <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
@@ -676,9 +677,9 @@
                                     @else
                                     <div class="btn-sm btn-danger">
                                         <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
-                                            @endif:
-                                            {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif
-                                                Exceeded <i data-toggle="tooltip" title="Delivery Trip Details"
+                                            @endif: Exceeded
+                                            {{ $scheduleCheck->days+1 }} @if ($scheduleCheck->days <= 1) Day @else Days
+                                                @endif <i data-toggle="tooltip" title="Delivery Trip Details"
                                                 onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                                 class="fas fa-arrow-down float-right"></i>
                                         </h6>
@@ -693,14 +694,14 @@
                                                 <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
                                                     style="display: none">From:</small>
                                             </i>
-                                            {{$order->startsFrom}}
+                                            {{$schedule->pickedUp}}
                                             <br>
                                             <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                                 class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
                                                 <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
                                                     style="display: none">Until:</small>
                                             </i>
-                                            {{$order->endsAt}}
+                                            {{$schedule->delivered}}
                                             <small>(The same day)</small>
                                             @elseif($interval->m == 0 && $interval->y == 0)
                                             <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
