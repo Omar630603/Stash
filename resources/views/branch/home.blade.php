@@ -413,7 +413,7 @@
                                                                         style="padding: 10px; border-radius: 20px">
                                                                         <p>
                                                                             <center><strong>!! Are you sure you want to
-                                                                                    delete the {{$bank->bank_name}}
+                                                                                    delete the {{$bank->bank_name}} Bank
                                                                                     !!</strong>
                                                                                 <br>
                                                                                 This will delete all the transactions

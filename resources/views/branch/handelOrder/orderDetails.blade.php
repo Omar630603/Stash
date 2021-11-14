@@ -107,7 +107,7 @@
                                 @endif
                                 <form action="{{ route('branch.changeOrderStatus', $order) }}"
                                     id="changeOrderStatusForm" enctype="multipart/form-data" method="POST"
-                                    style="display: none">
+                                    style="display: none; width: max-content;">
                                     @csrf
                                     <p style="margin: 0">
                                         <small>Old Status:
@@ -136,7 +136,7 @@
                                     <small>When you choose a status, it will change immediately</small>
                                     </p>
                                 </form>
-                                <a onclick="$('#staticStatusOrder').toggle(''); $('#changeOrderStatusForm').toggle('slow');"
+                                <a onclick="$('#staticStatusOrder').toggle('fast'); $('#changeOrderStatusForm').toggle('slow');"
                                     style="text-decoration: none;cursor: pointer">
                                     <i data-toggle="tooltip" title="Change Status"
                                         class="refresh-hover fa fa-magic icons"></i>
@@ -355,30 +355,31 @@
             <div class="line" style="margin: 0 10px">||</div>
             <div class="headerS">
                 <div class="card" style="border-radius:20px;">
-                    <div class="card-body">
-                        <div class="float-right" style="margin-bottom: 100px">
-                            <a href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
-                                <p class="btn-sm btn-warning">Occupied</p>
-                            </a>
-                            <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
-                                <div class="progress mb-1" style="height: 5px" data-placement='left'
-                                    data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
-                                    @if ($unit->capacity >= 95)
-                                    <div class="progress-bar bg-danger" role="progressbar"
-                                        style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
-                                        aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                    @else
-                                    <div class="progress-bar bg-primary" role="progressbar"
-                                        style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
-                                        aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                    @endif
+                    <div class="card-header" style="display: flex; justify-content: space-between">
+                        <a href=" {{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
+                            <p class="btn-sm btn-warning mb-0">Occupied</p>
+                        </a>
+                        <h6 class="mb-0"><strong>Unit Details</strong></h6>
+                        <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
+                            <div class="progress mb-1" style="height: 5px" data-placement='left' data-toggle="tooltip"
+                                title="Capacity {{$unit->capacity}}%">
+                                @if ($unit->capacity >= 95)
+                                <div class="progress-bar bg-danger" role="progressbar"
+                                    style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
+                                    aria-valuemin="0" aria-valuemax="100">
                                 </div>
+                                @else
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                                @endif
                             </div>
                         </div>
-                        <h6 class="mb-0"><strong>Unit Details</strong></h6>
-                        <div class="row" style="margin-top: 35px">
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0"><strong>Unit Name</strong></h6>
                             </div>
@@ -409,7 +410,8 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Private Key</strong></h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary"
+                                style="display: flex; gap: 5px; justify-content: space-between; align-content: stretch">
                                 <div style="display: flex;gap: 10px">
                                     <input disabled style="width: 50%" type="password" value="{{$unit->privateKey}}"
                                         class="form-control" id="privateKey{{$unit->ID_Unit}}">
@@ -417,11 +419,64 @@
                                         <input class="form-check-input" style="margin-top: 5px" type="checkbox"
                                             onclick="showPrivateKey({{$unit->ID_Unit}})">
                                         <p class="form-check-label">Show Key</p>
+
+                                    </div>
+                                </div>
+                                <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
+                                    data-placement="top" style="text-decoration: none;cursor: pointer;"><i
+                                        data-toggle="tooltip" title="Change Private Key"
+                                        class="refresh-hover fas fa-sync icons"></i></a>
+                                <div class="modal fade" id="changePrivateKeyUnit{{$unit->ID_Unit}}" tabindex="-1"
+                                    role="dialog" aria-labelledby="changePrivateKeyUnit{{$unit->ID_Unit}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="changePrivateKeyUnit{{$unit->ID_Unit}}Title">
+                                                    Change Private Key
+                                                    {{$unit->unit_name}} Unit
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-danger" style="padding: 10px; border-radius: 20px">
+                                                    <p>
+                                                        <center><strong>!! This Unit is Occupied !!</strong>
+                                                        </center><br>
+                                                        Click Change to Continue the Process
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#changePrivateKeyUnitUnitForm{{$unit->ID_Unit}}').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-primary">Change</button>
+                                                <form method="post"
+                                                    action="{{route('branch.changePrivateKeyUnit', $unit)}}"
+                                                    enctype="multipart/form-data"
+                                                    id="changePrivateKeyUnitUnitForm{{$unit->ID_Unit}}">
+                                                    @csrf
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <hr>
+                        <div class="row" style="gap: 10px; justify-content: space-between">
+                            <div class="col-sm-5 text-secondary">
+                                <a href="" style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">
+                                    Change Unit Capacity</a>
+                            </div>
+                            <div class="col-sm-5 text-secondary">
+                                <a href="" style="background-color: #66377f;width: 100%"
+                                    class="btn btn-sm btn-dark">Change Order Unit</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

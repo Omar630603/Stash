@@ -1,6 +1,11 @@
 @extends('layouts.appBranch')
 
 @section('content')
+<style>
+    table tr td {
+        vertical-align: top;
+    }
+</style>
 <div class="container-fluid">
     <div>
         @if ($message = Session::get('fail'))
@@ -154,34 +159,45 @@
                                 @if ($unit->ID_Category == $category->ID_Category)
                                 <tr>
                                     <td data-label="Status" class="column">
-                                        @if ($unit->unit_status)
-                                        <a href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
-                                            <p class="btn-sm btn-warning">Occupied</p>
-                                        </a>
-                                        @else
-                                        <p class="btn-sm btn-secondary">Unoccupied</p>
-                                        @endif
-                                        <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
-                                            <div class="progress mb-1" style="height: 5px" data-placement='left'
-                                                data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
-                                                @if ($unit->capacity >= 95)
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: {{$unit->capacity}}%"
-                                                    aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
-                                                    aria-valuemax="100">
+                                        <div style="display: flex; justify-content: space-between">
+                                            @if ($unit->unit_status)
+                                            <p class="btn-sm btn-warning mb-0" style="width:40%">
+                                                <a data-toggle="tooltip" title="Order Details" class="mb-0"
+                                                    style="color: #000000;"
+                                                    href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
+                                                    Occupied
+                                                </a>
+                                            </p>
+
+                                            @else
+                                            <p class="btn-sm btn-secondary mb-0" style="width:40%">Unoccupied
+                                            </p>
+                                            @endif
+                                            <div class="btn-sm btn-success"
+                                                style="background-color: #66377f; width: 50%">Capacity
+                                                <div class="progress mb-1" style="height: 5px" data-placement='left'
+                                                    data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
+                                                    @if ($unit->capacity >= 95)
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: {{$unit->capacity}}%"
+                                                        aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                    @else
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: {{$unit->capacity}}%"
+                                                        aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                    @endif
                                                 </div>
-                                                @else
-                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                    style="width: {{$unit->capacity}}%"
-                                                    aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
-                                                    aria-valuemax="100">
-                                                </div>
-                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                     <td data-label="Code Name" class="column">
-                                        <p>{{$unit->unit_name}}</p>
+                                        <p class="btn-sm btn-light mb-0" style="padding-bottom: 13px">
+                                            {{$unit->unit_name}}
+                                        </p>
                                     </td>
                                     <td data-label="Private Key" class="column">
                                         <div style="display: flex;gap: 10px">
