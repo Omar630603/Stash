@@ -42,10 +42,10 @@
             <div class="btn-group">
                 <a href="{{ route('branch.transactions') }}" class="btn btn-info">Transactions</a>
                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu mr-2">
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 0]) }}">Unpaid</a>
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 1]) }}">Paid</a>
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 2]) }}">Disapproved</a>

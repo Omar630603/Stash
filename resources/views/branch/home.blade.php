@@ -1,6 +1,11 @@
 @extends('layouts.appBranch')
 
 @section('content')
+<style>
+    table tr td {
+        vertical-align: top;
+    }
+</style>
 <div class="container-fluid">
     <div>
         @if ($message = Session::get('fail'))
@@ -354,7 +359,7 @@
                                                             id="bank-name-text{{$bank->ID_Bank}}">
                                                             {{$bank->bank_name}}
                                                         </p>
-                                                        <input style="display: none; width: max-content"
+                                                        <input style="display: none; width: 100%"
                                                             id="bank-name{{$bank->ID_Bank}}" name="bank_name"
                                                             type="text" class="form-control"
                                                             value="{{ $bank->bank_name }}"
@@ -469,10 +474,11 @@
                             <div class="btn-group" style="width: 100%">
                                 <a href="{{ route('branch.transactions') }}" class="btn btn-info">Transactions</a>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    data-reference="parent">
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu" style="width: 100%">
                                     <a class="dropdown-item"
                                         href="{{ route('branch.transactions', ['status' => 0]) }}">Unpaid</a>
                                     <a class="dropdown-item"
