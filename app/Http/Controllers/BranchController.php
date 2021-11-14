@@ -790,32 +790,60 @@ class BranchController extends Controller
     }
     public function extendOrder(Request $request, Order $order)
     {
-        $date1 = new DateTime($order->endsAt);
-        $date2 = new DateTime($request->get('extendEndsAt'));
-        $interval = $date1->diff($date2);
-
-        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
-        $category = Category::find($unit->ID_Category)->first();
-        
-        $extentionPrice = 0;
-        if ($interval->d <= 0 && $interval->m <= 0 && $interval->y <= 0 && $interval->h > 0) {
-            $order->order_totalPrice += $category->pricePerDay;
-            $extentionPrice= $category->pricePerDay;
-        }else{
-            $order->order_totalPrice += $category->pricePerDay * $interval->days;
-            $extentionPrice= $category->pricePerDay * $interval->days;
-        }
+        echo $request->get('expandPrice');
+        $request->validate([
+            'expandPrice' => 'required',
+            'extendEndsAt' => 'required',
+        ]);
+        $order->order_totalPrice += $request->get('expandPrice');
+        $order->expandPrice += $request->get('expandPrice');
         $order->endsAt= $request->get('extendEndsAt');
-        $order->expandPrice = $extentionPrice;
+        $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
+        $transaction->transactions_totalPrice = $request->get('expandPrice');
+        $transaction->transactions_description = 'Extension Fees';
+            if ($request->get('transaction') == 1) {
+                if ($request->get('ID_Bank') == 0) {
+                    $message = 'Select Bank';
+                    return redirect()->back()->with('fail', $message);
+                }else{
+                    $transaction->ID_Bank = $request->get('ID_Bank');
+                }
+                $transaction->transactions_status = 1;
+                if ($request->file('proof')) {
+                    $image_name = $request->file('proof')->store('transactions_images', 'public');
+                    $transaction->proof = $image_name;
+                }else{
+                    $message = 'Add Proof';
+                    return redirect()->back()->with('fail', $message);
+                }
+            }else{
+                $transaction->transactions_status = 0;
+                $transaction->proof = 'Waiting for Payment';
+            }
+        $transaction->save();
         $order->save();
-        return redirect()->back();
+        $message ='Order has been extended successfuly';
+        return redirect()->back()->with('success', $message);
     }
     public function changeOrderStatus(Request $request, Order $order)
     {
        $order->order_status = $request->get('status');
        $order->save();
-       return redirect()->back();
+       $message ='Order status has been changed successfuly';
+        return redirect()->back()->with('success', $message);
     }
+    public function changeOrderDescription(Request $request, Order $order)
+    {
+        $request->validate([
+            'order_description'=> 'required',
+        ]);
+       $order->order_description = $request->get('order_description');
+       $order->save();
+       $message ='Order description has been changed successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    
 
 //Banks & Transactions
     public function addBank(Request $request){

@@ -66,6 +66,7 @@ Route::delete('/branch/user/deleteUser/{user}', [BranchController::class, 'delet
 Route::post('/branch/user/addOrder', [BranchController::class, 'addOrder'])->name('branch.addOrder')->middleware('BranchAccess');
 Route::get('/branch/order/details/{order}', [BranchController::class, 'branchOrderDetails'])->name('branch.orderDetails')->middleware('BranchAccess');
 Route::post('/branch/driver/changeOrderStatus/{order}', [BranchController::class, 'changeOrderStatus'])->name('branch.changeOrderStatus')->middleware('BranchAccess');
+Route::post('/branch/driver/changeOrderDescription/{order}', [BranchController::class, 'changeOrderDescription'])->name('branch.changeOrderDescription')->middleware('BranchAccess');
 
 //Branch bank routes
 Route::post('/branch/AddBank', [BranchController::class, 'addBank'])->name('branch.addBank')->middleware('BranchAccess');

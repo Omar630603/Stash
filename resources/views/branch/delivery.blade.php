@@ -784,7 +784,7 @@
                                     <p class="btn-sm btn-light">{{$schedule->username}}</p>
                                 </a>
                             </td>
-                            <td data-label="Action" class="column">
+                            <td style="text-align: right" data-label="Action" class="column">
                                 <div style="display: flex; justify-content:space-around">
                                     <a href="{{ route('branch.orderDetails', ['order'=>$schedule->ID_Order]) }}"
                                         data-toggle="tooltip" title="Detials"

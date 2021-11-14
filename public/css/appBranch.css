@@ -166,16 +166,17 @@ tbody tr:hover {
     }
     .headerO {
         flex-wrap: wrap;
+        flex-direction: column;
     }
     .widthHeader {
-        width: 100%;
+        width: 100% !important;
     }
 }
 .headerO {
     padding: 0;
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 img {
     max-width: 100%;

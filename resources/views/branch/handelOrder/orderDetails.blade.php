@@ -47,12 +47,11 @@
     </nav>
     <div class="container-fluid" id="deliveryContainer" style="flex-wrap: wrap; flex-direction: column">
         <div class="headerO">
-            <h1 style="margin-right: 10px">ORDER</h1>
-            <div class="headerS">
+            <div class="headerS widthHeader" style="width: 70%">
                 <div class="card" style="border-radius:20px;">
                     <div class="card-body">
                         <h6 class="mb-0"><strong>Order Details</strong></h6>
-                        <div class="row" style="margin-top: 35px">
+                        <div class="row" style="margin-top: 5px">
                             <div class="col-sm-3">
                                 @php
                                 $date1 = new DateTime($order->startsFrom);
@@ -107,10 +106,19 @@
                                 @endif
                                 <form action="{{ route('branch.changeOrderStatus', $order) }}"
                                     id="changeOrderStatusForm" enctype="multipart/form-data" method="POST"
-                                    style="display: none; width: max-content;">
+                                    style="display: none; width: 70%">
                                     @csrf
                                     <p style="margin: 0">
-                                        <small>Old Status:
+                                    <div style="display: flex; gap: 5px">
+                                        <select class="form-select form-select-sm" name="status" id="editStatusOrder">
+                                            <option class="btn-info" value="0">With Customer</option>
+                                            <option class="btn-light" value="1">Waiting for Payment</option>
+                                            <option class="btn-warning" value="2">Delivery</option>
+                                            <option class="btn-success" value="3">In Stash</option>
+                                            <option class="btn-secondary" value="4">Canceled</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change</button>
+                                        <small>Current Status:
                                             @if ($order->order_status == 0)
                                             With Customer
                                             @elseif($order->order_status == 1)
@@ -123,20 +131,10 @@
                                             Canceled
                                             @endif
                                         </small>
-                                    <div style="display: flex; gap: 5px">
-                                        <select class="form-select form-select-sm" name="status" id="editStatusOrder">
-                                            <option class="btn-sm btn-info" value="0">With Customer</option>
-                                            <option class="btn-sm btn-light" value="1">Waiting for Payment</option>
-                                            <option class="btn-sm btn-warning" value="2">Delivery</option>
-                                            <option class="btn-sm btn-success" value="3">In Stash</option>
-                                            <option class="btn-sm btn-secondary" value="4">Canceled</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change</button>
                                     </div>
-                                    <small>When you choose a status, it will change immediately</small>
                                     </p>
                                 </form>
-                                <a onclick="$('#staticStatusOrder').toggle('fast'); $('#changeOrderStatusForm').toggle('slow');"
+                                <a onclick="$('#staticStatusOrder').toggle('fast'); $('#changeOrderStatusForm').toggle('fast');"
                                     style="text-decoration: none;cursor: pointer">
                                     <i data-toggle="tooltip" title="Change Status"
                                         class="refresh-hover fa fa-magic icons"></i>
@@ -206,7 +204,7 @@
                                     @else
                                     <p style="width: 70%" class="btn-sm btn-success">{{ $order->expandPrice }}</p>
                                     @endif
-                                    <div>
+                                    <div style="text-align: right; width: 28%">
                                         <a data-toggle="modal" data-target="#extendTimeOrder"
                                             style="text-decoration: none;cursor: pointer;">
                                             <i data-toggle="tooltip" title="Extend Time"
@@ -228,17 +226,108 @@
                                                                 id="extendOrderForm" enctype="multipart/form-data"
                                                                 method="POST">
                                                                 @csrf
+                                                                <p id="orderPeriodExtendDiff"></p>
                                                                 <p>
                                                                     <center><strong>!! This Will Extend The Order
                                                                             Time!!</strong>
                                                                         <label for="endsAt">Extend Until</label>
-                                                                        <input class="form-control"
+                                                                        <input onchange="checkExtendOrder()"
+                                                                            id="extendOrderTimeNew" class="form-control"
                                                                             type="datetime-local" name="extendEndsAt">
+                                                                        <input id="extendOrderTimeOld" hidden
+                                                                            value="{{$order->endsAt}}">
+                                                                        <input id="unitPricePerDay" hidden
+                                                                            value="{{$category->pricePerDay}}">
                                                                         <small>Old:{{$order->endsAt}}</small>
                                                                         <br>
                                                                         Click Extend to Continue the Process
                                                                     </center>
                                                                 </p>
+
+                                                                <div class="container headerOrder">
+                                                                    <div class="container">
+                                                                        <input name="expandPrice" style="margin: 5px"
+                                                                            readonly type="text" class="form-control"
+                                                                            id="orderExtendPayment" value="0">
+                                                                        <div>
+                                                                            <label for="capacity"><strong>Extend Order
+                                                                                    Time Payment
+                                                                                    <small>(This will add the
+                                                                                        payment details for
+                                                                                        the
+                                                                                        extension transaction with
+                                                                                        price: <small
+                                                                                            id="finallExtendPrice"></small>)</small>
+                                                                                </strong></label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="form-check"
+                                                                                style="margin-bottom: 10px">
+                                                                                <div>
+                                                                                    <input
+                                                                                        onclick="$('#addPayment').show('fast');"
+                                                                                        name="transaction"
+                                                                                        class="checkPayment form-check-input"
+                                                                                        type="checkbox" value="1">
+                                                                                    <label class="form-check-label"
+                                                                                        for="flexCheckDefault">
+                                                                                        Include
+                                                                                        Payment
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <input
+                                                                                        onclick="$('#addPayment').hide('fast');"
+                                                                                        checked name="transaction"
+                                                                                        class="checkPayment form-check-input"
+                                                                                        type="checkbox" value="0">
+                                                                                    <label class="form-check-label"
+                                                                                        for="flexCheckDefault">
+                                                                                        Exclude
+                                                                                        Payment
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="container"
+                                                                    style="display: none;padding: 10px 15px"
+                                                                    id="addPayment">
+                                                                    <div class="headerOrder row">
+                                                                        <div class="form-group" style="margin: 10px 0">
+                                                                            <select name="ID_Bank" style="width: 100%"
+                                                                                class="select2">
+                                                                                <option value="0">Select Bank
+                                                                                </option>
+                                                                                @php
+                                                                                $bankNo = 1;
+                                                                                @endphp
+                                                                                @foreach ($banks as $bank)
+                                                                                <option value="{{$bank->ID_Bank}}">
+                                                                                    {{$bankNo++}}- (
+                                                                                    {{$bank->bank_name}} )
+                                                                                    -
+                                                                                    @ {{$bank->accountNo}}
+                                                                                </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div style="margin: 10px 0">
+                                                                            <a style="width: 100%;"
+                                                                                onclick="$('#proofInputImage').click(); return false;"
+                                                                                class="btn btn-sm btn-outline-light">Add
+                                                                                Payment Proof</a>
+                                                                            <input id="proofInputImage"
+                                                                                style="display: none;" type="file"
+                                                                                name="proof">
+                                                                            <input
+                                                                                style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                                                disabled style="display: none"
+                                                                                id="proofPhoto">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -253,7 +342,7 @@
                                         </div>
                                         <a data-toggle="modal" data-target="#deleteOrder"
                                             style="text-decoration: none;cursor: pointer">
-                                            <i data-toggle="tooltip" title="Delete Record"
+                                            <i data-toggle="tooltip" title="Delete Order"
                                                 class="delete-hover far fa-trash-alt icons"></i>
                                         </a>
                                         <div class="modal fade" id="deleteOrder" tabindex="-1" role="dialog"
@@ -301,16 +390,36 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Order Description</strong></h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <p style="width: 70%" class="btn-sm btn-light">{{$order->order_description}}</p>
+                            <div class="col-sm-9 text-secondary"
+                                style="display: flex; gap: 5px; justify-content: space-between">
+                                <p id="orderDescriptionText" style="width: 70%" class="btn-sm btn-light">
+                                    {{$order->order_description}}
+                                </p>
+                                <form action="{{ route('branch.changeOrderDescription', $order) }}"
+                                    id="order_description_form" enctype="multipart/form-data" method="POST"
+                                    style="display: none; width: 70%">
+                                    @csrf
+                                    <div class="input-group">
+                                        <textarea name="order_description" class="form-control"
+                                            rows="3">{{$order->order_description}}</textarea>
+                                        <div class="input-group-prepend">
+                                            <button type="submit"
+                                                class=" btn btn-sm btn-outline-primary">Change</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <a style="text-decoration: none ;cursor: pointer"
+                                    onclick="$('#order_description_form').toggle('fast'); $('#orderDescriptionText').toggle('fast');">
+                                    <i data-toggle="tooltip" title="Edit Order Description"
+                                        class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="line" style="margin: 0 10px">||</div>
-            <h1 style="margin-right: 10px">USER </h1>
-            <div class="headerVehiclesSchedules widthHeader" style="text-align: center">
+            <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%">
+                <h1 style="">USER</h1>
                 <div class="card-body" style="background: #9D3488;border-radius:20px">
                     <a href="{{route('branch.orders', ['user' => $customer->ID_User])}}"
                         style="text-decoration: none;cursor: pointer" data-toggle="tooltip" title="View Profile">
@@ -335,11 +444,10 @@
             </div>
         </div>
         <div class="headerO">
-
-            <div class="headerVehiclesSchedules widthHeader" style="text-align: center;">
+            <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%;">
                 <div>
-                    <h5 style="margin: 5px 0 25px 0">
-                        {{$category->name}} Category
+                    <h5 style="margin: 5px 0 5px 0">
+                        {{$category->category_name}} Category
                     </h5>
                     <div>
                         <img class="img-fluid" style="border-radius: 50%;" width="200px"
@@ -347,13 +455,8 @@
                     </div>
                 </div>
             </div>
-            <div style="text-align: center; margin: 0 5px">
-                <h4>CATEGORY</h4>
-                <h4>&</h4>
-                <h4>UNIT</h4>
-            </div>
             <div class="line" style="margin: 0 10px">||</div>
-            <div class="headerS">
+            <div class="headerS widthHeader" style="width: 70%">
                 <div class="card" style="border-radius:20px;">
                     <div class="card-header" style="display: flex; justify-content: space-between">
                         <a href=" {{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
@@ -529,7 +632,7 @@
                             <p class="btn-sm btn-success">Approved</p>
                             @endif
                         </td>
-                        <td data-label="Action" class="column">
+                        <td style="text-align: right" data-label="Action" class="column">
                             @if ($transaction->transactions_status == 0)
                             <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
                                 <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
@@ -914,7 +1017,7 @@
                         <td data-label="Description" class="column">
                             <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
                         </td>
-                        <td data-label="Action" class="column">
+                        <td style="text-align: right" data-label="Action" class="column">
                             <div style="display: flex; justify-content:space-around">
                                 <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
                                     data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
@@ -1066,6 +1169,34 @@
         x.type = "password";
       }
     }
+    function checkExtendOrder() {
+        var orderEndDate = new Date($('#extendOrderTimeOld').val()); 
+        var orderNewDate = new Date($('#extendOrderTimeNew').val());
+        var today = new Date();
+        if (orderNewDate < orderEndDate || orderNewDate == today) {
+            alert('Dates are Invalid')
+            $('#extendOrderTimeNew').val(null)
+        } else {
+            dateDif = Math.round((orderNewDate-orderEndDate)/(1000*60*60*24));
+            if (dateDif == 0) {
+                alert('Dates are Invalid')
+                $('#extendOrderTimeNew').val(null)
+            } else {
+                $('#orderPeriodExtendDiff').text('Extend Period: '+dateDif + ' Days');
+                pricePerDay = document.getElementById('unitPricePerDay')
+                $('#orderExtendPayment').val(pricePerDay.value * dateDif)
+                finallPrice = document.getElementById('finallExtendPrice');
+                finallPrice.textContent = $('#orderExtendPayment').val(); 
+            }
+            
+
+        }
+    }
+    $(document).ready(function(){
+        $('.checkPayment').click(function() {
+            $('.checkPayment').not(this).prop('checked', false);
+        });
+    });
 </script>
 <script>
     $(".select2").select2({
@@ -1073,5 +1204,16 @@
         selectionCssClass: "select2--small", // For Select2 v4.1
         dropdownCssClass: "select2--small",
     });
+</script>
+<script>
+    + function($) {
+    'use strict';
+    var proofInputImage = document.getElementById('proofInputImage');
+    var p = document.getElementById('proofPhoto');
+    proofInputImage.onchange = function() {
+        p.style.display = '';
+        p.value = 'File Name:' + proofInputImage.files[0].name;
+    }
+    }(jQuery);
 </script>
 @endsection

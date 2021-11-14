@@ -104,7 +104,7 @@
                         <p class="btn-sm btn-success">Approved</p>
                         @endif
                     </td>
-                    <td data-label="Action" class="column">
+                    <td style="text-align: right" data-label="Action" class="column">
                         @if ($transaction->transactions_status == 0)
                         <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
                             <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>

@@ -211,7 +211,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td data-label="Action" class="column">
+                                    <td style="text-align: right" data-label="Action" class="column">
                                         <div style="display: flex;gap: 10px">
                                             <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
                                                 data-placement="top" style="text-decoration: none;cursor: pointer"><i
