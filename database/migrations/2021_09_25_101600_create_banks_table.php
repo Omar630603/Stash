@@ -18,7 +18,7 @@ class CreateBanksTable extends Migration
             $table->unsignedBigInteger('ID_Branch');
             $table->foreign('ID_Branch')->references('ID_Branch')->on('branches')->onDelete('cascade')->onUpdate('cascade');
             $table->string('bank_name');
-            $table->string('accountNo');
+            $table->string('accountNo')->unique();
             $table->timestamps();
         });
     }

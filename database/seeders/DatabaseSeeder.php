@@ -37,8 +37,8 @@ class DatabaseSeeder extends Seeder
         $banks = [
             ['ID_Branch' => 1, 'bank_name' => 'BCA', 'accountNo'=> '09582142301'],
             ['ID_Branch' => 1, 'bank_name' => 'BNI', 'accountNo'=> '08221485655'],
-            ['ID_Branch' => 2, 'bank_name' => 'BCA', 'accountNo'=> '09582142301'],
-            ['ID_Branch' => 2, 'bank_name' => 'BNI', 'accountNo'=> '08221485655'],
+            ['ID_Branch' => 2, 'bank_name' => 'BCA', 'accountNo'=> '09512554125'],
+            ['ID_Branch' => 2, 'bank_name' => 'BNI', 'accountNo'=> '08565856655'],
         ];
         Bank::insert($banks);
     }

@@ -67,5 +67,11 @@ Route::post('/branch/user/addOrder', [BranchController::class, 'addOrder'])->nam
 Route::get('/branch/order/details/{order}', [BranchController::class, 'branchOrderDetails'])->name('branch.orderDetails')->middleware('BranchAccess');
 Route::post('/branch/driver/changeOrderStatus/{order}', [BranchController::class, 'changeOrderStatus'])->name('branch.changeOrderStatus')->middleware('BranchAccess');
 
+//Branch bank routes
+Route::post('/branch/AddBank', [BranchController::class, 'addBank'])->name('branch.addBank')->middleware('BranchAccess');
+Route::post('/branch/editBranchBank/{bank}', [BranchController::class, 'editBranchBank'])->name('branch.editBranchBank')->middleware('BranchAccess');
+Route::delete('/branch/deleteBank/{bank}', [BranchController::class, 'deleteBank'])->name('branch.deleteBank')->middleware('BranchAccess');
+Route::get('/branch/Transactions', [BranchController::class, 'branchTransactions'])->name('branch.transactions')->middleware('BranchAccess');
+
 Auth::routes();
 

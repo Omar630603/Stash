@@ -26,7 +26,8 @@ class BranchController extends Controller
     {
         $branchEmployee = Auth::user();
         $branch = Branch::where('ID_User', 'like', '%' . $branchEmployee->ID_User . '%')->first();
-        return view('branch.home', ['branchEmployee' => $branchEmployee, 'branch' => $branch]);
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        return view('branch.home', ['branchEmployee' => $branchEmployee, 'branch' => $branch, 'banks' => $banks]);
     }
     public function editBranchEmployee(Request $request, User $branchEmployee)
     {
@@ -802,7 +803,7 @@ class BranchController extends Controller
             $extentionPrice= $category->pricePerDay;
         }else{
             $order->order_totalPrice += $category->pricePerDay * $interval->days;
-            $extentionPrice= $category->pricePerDay * $interval->days;;
+            $extentionPrice= $category->pricePerDay * $interval->days;
         }
         $order->endsAt= $request->get('extendEndsAt');
         $order->expandPrice = $extentionPrice;
@@ -814,5 +815,73 @@ class BranchController extends Controller
        $order->order_status = $request->get('status');
        $order->save();
        return redirect()->back();
+    }
+
+//Banks & Transactions
+    public function addBank(Request $request){
+        $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $request->validate([
+            'bank_name' => 'required',
+            'accountNo' => 'required',
+        ]);
+        $bank = new Bank;
+        $bank->ID_Branch = $branch->ID_Branch;
+        $bank->bank_name = $request->get('bank_name');
+        $bank->accountNo = $request->get('accountNo');
+        $bank->save();
+        $message ='Bank '.$request->get('bank_name').' has been added to you branch successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function editBranchBank(Request $request, Bank $bank)
+    {
+        $request->validate([
+            'bank_name' => 'required',
+            'accountNo' => 'required',
+        ]);
+        $bank->bank_name = $request->get('bank_name');
+        $bank->accountNo = $request->get('accountNo');
+        $bank->save();
+        $message ='Bank '.$request->get('bank_name').' has been edited successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteBank(Bank $bank = null)
+    {
+        $oldBnankName = $bank->bank_name;
+        $bank->delete();
+        $message ='Bank '.$oldBnankName.' has been deleted from you branch successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function branchTransactions(Request $request)
+    {
+        $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $msg = 'All';
+        if($request->get('status') != null){
+            $transactions = Transactions::select('*')
+            ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+            ->where('transactions.transactions_status', $request->get('status'))
+            ->orderBy('transactions.created_at', 'desc')->get();
+            
+            if ($request->get('status') == 0) {
+                $msg = 'Unpaid';
+            }else if ($request->get('status') == 1) {
+                $msg = 'Paid';
+            }
+            else if ($request->get('status') == 2) {
+                $msg = 'Disapproved';
+            }
+            else if ($request->get('status') == 3) {
+                $msg = 'Approved';
+            }
+        }else{
+            $transactions = Transactions::select('*')
+            ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+            ->orderBy('transactions.created_at', 'desc')->get();
+        }
+        return view('branch.transactions', ['transactions' => $transactions, 'branch' => $branch, 'banks' => $banks ,'msg' => $msg]);
     }
 }
