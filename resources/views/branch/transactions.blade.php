@@ -40,8 +40,7 @@
             <h3>{{$msg}} Transactions in {{$branch->branch_name}} branch
             </h3>
             <div class="btn-group">
-                <a href="{{ route('branch.transactions') }}" class="btn btn-info">View
-                    Transactions</a>
+                <a href="{{ route('branch.transactions') }}" class="btn btn-info">Transactions</a>
                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="sr-only">Toggle Dropdown</span>

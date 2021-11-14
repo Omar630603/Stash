@@ -467,8 +467,7 @@
                     <div class="card mb-3" style="border-radius:20px;">
                         <div class="card-body">
                             <div class="btn-group" style="width: 100%">
-                                <a href="{{ route('branch.transactions') }}" class="btn btn-info">View
-                                    Transactions</a>
+                                <a href="{{ route('branch.transactions') }}" class="btn btn-info">Transactions</a>
                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
