@@ -625,6 +625,12 @@ class BranchController extends Controller
     }
     public function addOrder(Request $request)
     {
+        $request->validate([
+            'transaction' => 'required',
+            'delivery' => 'required',
+            'order_status' => 'required',
+            'Idunit' => 'required',
+        ]);
         $user = null;
         $order = new Order;
         if ($request->get('userNew') == "on") {
@@ -723,9 +729,6 @@ class BranchController extends Controller
                 $transaction->transactions_status = 0;
                 $transaction->proof = 'Waiting for Payment';
                 $transaction->save();
-            }else{
-                $message = 'Select Payment Method';
-                return redirect()->back()->with('fail', $message);
             }
             
             if ($request->get('delivery') == 1) {
