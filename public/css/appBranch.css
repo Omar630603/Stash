@@ -167,6 +167,7 @@ tbody tr:hover {
     .headerO {
         flex-wrap: wrap;
         flex-direction: column;
+        gap: 10px;
     }
     .widthHeader {
         width: 100% !important;

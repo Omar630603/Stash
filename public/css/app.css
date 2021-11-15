@@ -10479,12 +10479,17 @@ a.text-dark:focus {
     color: #999999;
 }
 ::-webkit-scrollbar {
-    width: 3px;
+    width: 10px;
     scroll-behavior: smooth;
-    background: transparent;
+    background: #fff;
 }
 ::-webkit-scrollbar-thumb {
-    background: #fff8e6;
+    background: linear-gradient(
+        0deg,
+        rgba(63, 22, 82, 1) 10%,
+        rgba(157, 52, 136, 1) 40%,
+        rgba(248, 159, 91, 1) 80%
+    );
 }
 a {
     -webkit-transition: 0.2s all ease;
