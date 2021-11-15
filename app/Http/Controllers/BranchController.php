@@ -716,13 +716,16 @@ class BranchController extends Controller
                     return redirect()->back()->with('fail', $message);
                 }
                 $transaction->save();
-            }else{
+            }else if($request->get('transaction') == 2){
                 $transaction->ID_Order = $order->ID_Order;
                 $transaction->transactions_description = 'Entry Transaction';
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
                 $transaction->transactions_status = 0;
                 $transaction->proof = 'Waiting for Payment';
                 $transaction->save();
+            }else{
+                $message = 'Select Payment Method';
+                return redirect()->back()->with('fail', $message);
             }
             
             if ($request->get('delivery') == 1) {

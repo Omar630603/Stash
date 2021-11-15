@@ -479,8 +479,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="startsFrom">From</label>
-                                                <input id="orderStartDate" class="form-control" type="datetime-local"
-                                                    name="startsFrom">
+                                                <input id="orderStartDate" onchange="showPrice()" class="form-control"
+                                                    type="datetime-local" name="startsFrom">
                                                 <label for="endsAt">Until</label>
                                                 <input id="orderEndDate" onchange="showPrice()" class="form-control"
                                                     type="datetime-local" name="endsAt">
@@ -681,7 +681,7 @@
                                                     <div>
                                                         <input onclick="$('#addPayment').hide('fast');" checked
                                                             name="transaction" class="checkPayment form-check-input"
-                                                            type="checkbox" value="0">
+                                                            type="checkbox" value="2">
                                                         <label class="form-check-label" for="flexCheckDefault"> Exclude
                                                             Payment
                                                         </label>
@@ -1327,7 +1327,7 @@
             $('#orderStartDate').val(null)
             $('#orderEndDate').val(null)
         } else {
-            if(today < orderEndDate)
+            if(today < orderEndDate )
             {
             dateDif = Math.round((orderEndDate-orderStartDate)/(1000*60*60*24));
             $('#orderPeriodDiff').text(': '+dateDif + ' Days');
