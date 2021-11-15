@@ -1,6 +1,44 @@
 @extends('layouts.appBranch')
 
 @section('content')
+<style>
+    table tr td {
+        vertical-align: top;
+    }
+</style>
+<div class="container-fluid">
+    <div>
+        @if ($message = Session::get('fail'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @elseif ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style=" text-align: center; border-radius: 20px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @endif
+    </div>
+</div>
+<div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px">
+        <strong>Whoops!</strong> There were some problems with your input.<br>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+</div>
 <div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
@@ -100,9 +138,9 @@
         </div>
         <div class="card-body" style="padding: 10px;">
             <div class="categories" style="display: flex; justify-content: flex-end; gap: 20px">
-                <div>
+                <div style="text-align: center">
                     <img width="200px" class="img-fluid" style="border-radius: 10px;"
-                        src="{{ asset('storage/' . $category->img) }}" alt="">
+                        src="{{ asset('storage/' . $category->category_img) }}" alt="">
                 </div>
                 <div style="flex: 1">
                     <div class="table100">
@@ -121,34 +159,45 @@
                                 @if ($unit->ID_Category == $category->ID_Category)
                                 <tr>
                                     <td data-label="Status" class="column">
-                                        @if ($unit->unit_status)
-                                        <a href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
-                                            <p class="btn-sm btn-warning">Occupied</p>
-                                        </a>
-                                        @else
-                                        <p class="btn-sm btn-secondary">Unoccupied</p>
-                                        @endif
-                                        <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
-                                            <div class="progress mb-1" style="height: 5px" data-placement='left'
-                                                data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
-                                                @if ($unit->capacity >= 95)
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: {{$unit->capacity}}%"
-                                                    aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
-                                                    aria-valuemax="100">
+                                        <div style="display: flex; justify-content: space-between">
+                                            @if ($unit->unit_status)
+                                            <p class="btn-sm btn-warning mb-0" style="width:40%">
+                                                <a data-toggle="tooltip" title="Order Details" class="mb-0"
+                                                    style="color: #000000;"
+                                                    href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
+                                                    Occupied
+                                                </a>
+                                            </p>
+
+                                            @else
+                                            <p class="btn-sm btn-secondary mb-0" style="width:40%">Unoccupied
+                                            </p>
+                                            @endif
+                                            <div class="btn-sm btn-success"
+                                                style="background-color: #66377f; width: 50%">Capacity
+                                                <div class="progress mb-1" style="height: 5px" data-placement='left'
+                                                    data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
+                                                    @if ($unit->capacity >= 95)
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: {{$unit->capacity}}%"
+                                                        aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                    @else
+                                                    <div class="progress-bar bg-primary" role="progressbar"
+                                                        style="width: {{$unit->capacity}}%"
+                                                        aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                    @endif
                                                 </div>
-                                                @else
-                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                    style="width: {{$unit->capacity}}%"
-                                                    aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
-                                                    aria-valuemax="100">
-                                                </div>
-                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                     <td data-label="Code Name" class="column">
-                                        <p>{{$unit->unit_name}}</p>
+                                        <p class="btn-sm btn-light mb-0" style="padding-bottom: 13px">
+                                            {{$unit->unit_name}}
+                                        </p>
                                     </td>
                                     <td data-label="Private Key" class="column">
                                         <div style="display: flex;gap: 10px">
@@ -162,7 +211,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td data-label="Action" class="column">
+                                    <td style="text-align: right" data-label="Action" class="column">
                                         <div style="display: flex;gap: 10px">
                                             <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
                                                 data-placement="top" style="text-decoration: none;cursor: pointer"><i

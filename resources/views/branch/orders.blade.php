@@ -479,8 +479,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="startsFrom">From</label>
-                                                <input id="orderStartDate" class="form-control" type="datetime-local"
-                                                    name="startsFrom">
+                                                <input id="orderStartDate" onchange="showPrice()" class="form-control"
+                                                    type="datetime-local" name="startsFrom">
                                                 <label for="endsAt">Until</label>
                                                 <input id="orderEndDate" onchange="showPrice()" class="form-control"
                                                     type="datetime-local" name="endsAt">
@@ -681,7 +681,7 @@
                                                     <div>
                                                         <input onclick="$('#addPayment').hide('fast');" checked
                                                             name="transaction" class="checkPayment form-check-input"
-                                                            type="checkbox" value="0">
+                                                            type="checkbox" value="2">
                                                         <label class="form-check-label" for="flexCheckDefault"> Exclude
                                                             Payment
                                                         </label>
@@ -961,17 +961,70 @@
                             @foreach ($orders as $order)
                             <tr>
                                 <td data-label="Status" class="column">
-                                    @if ($order->order_status == 0)
-                                    <p class="btn-sm btn-info">With Customer</p>
-                                    @elseif($order->order_status == 1)
-                                    <p class="btn-sm btn-light">Waiting for Payment</p>
-                                    @elseif($order->order_status == 2)
-                                    <p class="btn-sm btn-warning">Delivery</p>
-                                    @elseif($order->order_status == 3)
-                                    <p class="btn-sm btn-success">In Stash</p>
-                                    @elseif($order->order_status == 4)
-                                    <p class="btn-sm btn-secondary">Canceled</p>
+                                    @php
+                                    $status_unpaid = 0;
+                                    $status_paid = 0;
+                                    $status_disapproved = 0;
+                                    $status_approved = 0;
+                                    $amount=0;
+                                    @endphp
+                                    @foreach ($transactions as $transaction)
+                                    @if ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==0)
+                                    @php
+                                    $status_unpaid++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==1)
+                                    @php
+                                    $status_paid++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==2)
+                                    @php
+                                    $status_disapproved++;$amount++;
+                                    @endphp
+                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                    $transaction->transactions_status==3)
+                                    @php
+                                    $status_approved++;$amount++;
+                                    @endphp
                                     @endif
+                                    @endforeach
+
+                                    @if ($order->order_status == 0)
+                                    <div class="btn-sm btn-info">
+                                        <h6 class="mb-0">With Customer
+                                            @elseif($order->order_status == 1)
+                                            <div class="btn-sm btn-light">
+                                                <h6 class="mb-0">Waiting for Payment
+                                                    @elseif($order->order_status == 2)
+                                                    <div class="btn-sm btn-warning">
+                                                        <h6 class="mb-0">Delivery
+                                                            @elseif($order->order_status == 3)
+                                                            <div class="btn-sm btn-success">
+                                                                <h6 class="mb-0">In Stash
+                                                                    @elseif($order->order_status == 4)
+                                                                    <div class="btn-sm btn-secondary">
+                                                                        <h6 class="mb-0">Canceled
+                                                                            @endif
+                                                                            <i data-toggle="tooltip"
+                                                                                title="Order Transactions Details"
+                                                                                onclick="$('#orderTransactionsDetail{{$order->ID_Order}}').toggle('fast')"
+                                                                                class="fas fa-arrow-down float-right"></i>
+                                                                            <p class="mb-0"
+                                                                                style="display: none; width: max-content"
+                                                                                id="orderTransactionsDetail{{$order->ID_Order}}">
+                                                                                <small>Transactions: {{$amount}}
+                                                                                    <br>Unpaid: {{$status_unpaid}}
+                                                                                    <br>Paid: {{$status_paid}}
+                                                                                    <br>Disapproved:
+                                                                                    {{$status_disapproved}}
+                                                                                    <br>Approved: {{$status_approved}}
+                                                                                </small>
+                                                                            </p>
+                                                                        </h6>
+                                                                    </div>
                                 </td>
 
                                 <td data-label="Period" class="column">
@@ -985,8 +1038,8 @@
                                         @endphp
                                         @if ($orderCheck->invert)
                                         <div class="btn-sm btn-primary">
-                                            <h6 class="mb-0">Active: {{ $interval->days }} @if ($interval->days
-                                                <= 1) Day @else Days @endif Left <i data-toggle="tooltip"
+                                            <h6 class="mb-0">Active: {{ $orderCheck->days }} @if ($orderCheck->days
+                                                <= 1) Day @else Days @endif Left<i data-toggle="tooltip"
                                                     title="Order Date Details"
                                                     onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
                                                     class="fas fa-arrow-down float-right"></i>
@@ -1060,9 +1113,9 @@
                                         </div>
                                         @else
                                         <div class="btn-sm btn-danger">
-                                            <h6 class="mb-0">Expaired: {{ $interval->days }} @if ($interval->days
-                                                <= 1) Day @else Days @endif Exceeded <i data-toggle="tooltip"
-                                                    title="Order Date Details"
+                                            <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
+                                                @if($orderCheck->days<= 1) Day @else Days @endif <i
+                                                    data-toggle="tooltip" title="Order Date Details"
                                                     onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
                                                     class="fas fa-arrow-down float-right"></i>
 
@@ -1191,7 +1244,7 @@
                                         <p class="btn-sm btn-light">{{$order->username}}</p>
                                     </a>
                                 </td>
-                                <td data-label="Status" class="column">
+                                <td data-label="Made by" class="column">
                                     @if ($order->madeBy)
                                     <p class="btn-sm btn-success">Branch</p>
                                     @else
@@ -1199,7 +1252,7 @@
                                     @endif
 
                                 </td>
-                                <td data-label="Action" class="column">
+                                <td style="text-align: right" data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
                                         <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}"
                                             data-toggle="tooltip" title="Detials"
@@ -1274,7 +1327,7 @@
             $('#orderStartDate').val(null)
             $('#orderEndDate').val(null)
         } else {
-            if(today < orderEndDate)
+            if(today < orderEndDate )
             {
             dateDif = Math.round((orderEndDate-orderStartDate)/(1000*60*60*24));
             $('#orderPeriodDiff').text(': '+dateDif + ' Days');

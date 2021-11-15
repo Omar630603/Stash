@@ -26,7 +26,8 @@ class BranchController extends Controller
     {
         $branchEmployee = Auth::user();
         $branch = Branch::where('ID_User', 'like', '%' . $branchEmployee->ID_User . '%')->first();
-        return view('branch.home', ['branchEmployee' => $branchEmployee, 'branch' => $branch]);
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        return view('branch.home', ['branchEmployee' => $branchEmployee, 'branch' => $branch, 'banks' => $banks]);
     }
     public function editBranchEmployee(Request $request, User $branchEmployee)
     {
@@ -133,6 +134,12 @@ class BranchController extends Controller
         );
     }
     public function deleteUnit(Unit $unit){
+        if ($unit->unit_status) {
+            $order = Order::where('ID_Unit', $unit->ID_Unit)->first();
+            $user = User::where('ID_User', $order->ID_User)->first();
+            $user->ordered--;
+            $user->save();
+        }
         
         $unit->delete();
         return redirect()->back();
@@ -401,6 +408,9 @@ class BranchController extends Controller
        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
        $driver->vehicle_deliveries--;
        $driver->save();
+       $order = Order::where('ID_Order', $schedule->ID_Order)->first();
+       $order->order_deliveries--;
+       $order->save();
        $schedule->delete();
        return redirect()->back();
     }
@@ -423,6 +433,10 @@ class BranchController extends Controller
         $schedules = DeliverySchedule::select('ID_Order', 'schedule_status')
         ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
         ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $transactions = Transactions::select('transactions.ID_Order', 'transactions_status')
+        ->Join('orders', 'orders.ID_Order', '=', 'transactions.ID_Order')
+        ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+        ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         if($request->get('user')){
             $orders = Order::select('*')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
@@ -482,7 +496,8 @@ class BranchController extends Controller
         return view('branch.orders', ['users' => $users, 'orders' => $orders,
         'active' => $active, 'activeU' => $activeU, 'branch' => $branch, 'userProfile' => $userProfile
         , 'noUser' => $noUser, 'searchName' => $searchName, 'units' => $units,
-         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks, 'schedules' => $schedules]);
+         'categories' => $categories, 'vehicles' => $vehicles, 'banks'=> $banks, 'schedules' => $schedules,
+        'transactions' => $transactions]);
     }
     public function addUser(Request $request)
     {
@@ -610,6 +625,12 @@ class BranchController extends Controller
     }
     public function addOrder(Request $request)
     {
+        $request->validate([
+            'transaction' => 'required',
+            'delivery' => 'required',
+            'order_status' => 'required',
+            'Idunit' => 'required',
+        ]);
         $user = null;
         $order = new Order;
         if ($request->get('userNew') == "on") {
@@ -701,7 +722,7 @@ class BranchController extends Controller
                     return redirect()->back()->with('fail', $message);
                 }
                 $transaction->save();
-            }else{
+            }else if($request->get('transaction') == 2){
                 $transaction->ID_Order = $order->ID_Order;
                 $transaction->transactions_description = 'Entry Transaction';
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
@@ -775,30 +796,126 @@ class BranchController extends Controller
     }
     public function extendOrder(Request $request, Order $order)
     {
-        $date1 = new DateTime($order->endsAt);
-        $date2 = new DateTime($request->get('extendEndsAt'));
-        $interval = $date1->diff($date2);
-
-        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
-        $category = Category::find($unit->ID_Category)->first();
-        
-        $extentionPrice = 0;
-        if ($interval->d <= 0 && $interval->m <= 0 && $interval->y <= 0 && $interval->h > 0) {
-            $order->order_totalPrice += $category->pricePerDay;
-            $extentionPrice= $category->pricePerDay;
-        }else{
-            $order->order_totalPrice += $category->pricePerDay * $interval->days;
-            $extentionPrice= $category->pricePerDay * $interval->days;;
-        }
+        echo $request->get('expandPrice');
+        $request->validate([
+            'expandPrice' => 'required',
+            'extendEndsAt' => 'required',
+        ]);
+        $order->order_totalPrice += $request->get('expandPrice');
+        $order->expandPrice += $request->get('expandPrice');
         $order->endsAt= $request->get('extendEndsAt');
-        $order->expandPrice = $extentionPrice;
+        $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
+        $transaction->transactions_totalPrice = $request->get('expandPrice');
+        $transaction->transactions_description = 'Extension Fees';
+            if ($request->get('transaction') == 1) {
+                if ($request->get('ID_Bank') == 0) {
+                    $message = 'Select Bank';
+                    return redirect()->back()->with('fail', $message);
+                }else{
+                    $transaction->ID_Bank = $request->get('ID_Bank');
+                }
+                $transaction->transactions_status = 1;
+                if ($request->file('proof')) {
+                    $image_name = $request->file('proof')->store('transactions_images', 'public');
+                    $transaction->proof = $image_name;
+                }else{
+                    $message = 'Add Proof';
+                    return redirect()->back()->with('fail', $message);
+                }
+            }else{
+                $transaction->transactions_status = 0;
+                $transaction->proof = 'Waiting for Payment';
+            }
+        $transaction->save();
         $order->save();
-        return redirect()->back();
+        $message ='Order has been extended successfuly';
+        return redirect()->back()->with('success', $message);
     }
     public function changeOrderStatus(Request $request, Order $order)
     {
        $order->order_status = $request->get('status');
        $order->save();
-       return redirect()->back();
+       $message ='Order status has been changed successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function changeOrderDescription(Request $request, Order $order)
+    {
+        $request->validate([
+            'order_description'=> 'required',
+        ]);
+       $order->order_description = $request->get('order_description');
+       $order->save();
+       $message ='Order description has been changed successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    
+
+//Banks & Transactions
+    public function addBank(Request $request){
+        $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $request->validate([
+            'bank_name' => 'required',
+            'accountNo' => 'required',
+        ]);
+        $bank = new Bank;
+        $bank->ID_Branch = $branch->ID_Branch;
+        $bank->bank_name = $request->get('bank_name');
+        $bank->accountNo = $request->get('accountNo');
+        $bank->save();
+        $message ='Bank '.$request->get('bank_name').' has been added to you branch successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function editBranchBank(Request $request, Bank $bank)
+    {
+        $request->validate([
+            'bank_name' => 'required',
+            'accountNo' => 'required',
+        ]);
+        $bank->bank_name = $request->get('bank_name');
+        $bank->accountNo = $request->get('accountNo');
+        $bank->save();
+        $message ='Bank '.$request->get('bank_name').' has been edited successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteBank(Bank $bank = null)
+    {
+        $oldBnankName = $bank->bank_name;
+        $bank->delete();
+        $message ='Bank '.$oldBnankName.' has been deleted from you branch successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function branchTransactions(Request $request)
+    {
+        $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
+        $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+        $msg = 'All';
+        if($request->get('status') != null){
+            $transactions = Transactions::select('*')
+            ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+            ->where('transactions.transactions_status', $request->get('status'))
+            ->orderBy('transactions.created_at', 'desc')->get();
+            
+            if ($request->get('status') == 0) {
+                $msg = 'Unpaid';
+            }else if ($request->get('status') == 1) {
+                $msg = 'Paid';
+            }
+            else if ($request->get('status') == 2) {
+                $msg = 'Disapproved';
+            }
+            else if ($request->get('status') == 3) {
+                $msg = 'Approved';
+            }
+        }else{
+            $transactions = Transactions::select('*')
+            ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
+            ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+            ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+            ->orderBy('transactions.created_at', 'desc')->get();
+        }
+        return view('branch.transactions', ['transactions' => $transactions, 'branch' => $branch, 'banks' => $banks ,'msg' => $msg]);
     }
 }

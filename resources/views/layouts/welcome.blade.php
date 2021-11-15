@@ -44,7 +44,7 @@
         </div>
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="padding: 0">
-                <div class="container">
+                <div class="container-fluid">
                     <a class="navbar-brand" style="padding-top: 0; font-size: 0" href="{{ url('/') }}">
                         <img align="center" width="90" src="{{ asset('storage/images/Logo with Name H.png') }}" alt="">
                         {{-- {{ config('app.name', 'Laravel') }} --}}
@@ -55,7 +55,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse pl-2 pr-2 pb-1" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
 
@@ -65,23 +65,28 @@
                             <ul class="navbar-nav m-auto">
                                 <li><a href="/">Home</a></li>
                                 <li><a href="{{ route('welcome.services') }}">Services</a></li>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">ContactS Us</a></li>
+                                <li><a href="{{ route('welcome.aboutus') }}">About Us</a></li>
+                                <li><a href="{{ route('welcome.contactus') }}">ContactS Us</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <ul class="navbar-nav ml-auto gap-1">
                             <!-- Authentication Links -->
                             @guest
                             @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link btn btn-sm btn-dark signupsingin-btn" href="{{ route('login') }}">
+                                    <p>{{ __('Login') }}</p><i class="fas fa-sign-in-alt"></i>
+                                </a>
                             </li>
                             @endif
 
                             @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="nav-link btn btn-sm btn-dark signupsingin-btn" href="{{ route('register') }}">
+                                    <p>{{ __('Register') }}</p>
+                                    <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                                </a>
                             </li>
                             @endif
                             @else
@@ -134,8 +139,10 @@
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
                                     <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
                                     </li>
-                                    <li><a style="color: #fff8e6" href="#">About Us</a></li>
-                                    <li><a style="color: #fff8e6" href="#">Contact Us</a></li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
+                                    </li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>

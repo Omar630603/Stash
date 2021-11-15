@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 Route::get('/', [WelcomeController::class, 'welcome']);
 Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.services');
+Route::get('/contactUs', [WelcomeController::class, 'contactUs'])->name('welcome.contactus');
+Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.aboutus');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
@@ -64,6 +66,13 @@ Route::delete('/branch/user/deleteUser/{user}', [BranchController::class, 'delet
 Route::post('/branch/user/addOrder', [BranchController::class, 'addOrder'])->name('branch.addOrder')->middleware('BranchAccess');
 Route::get('/branch/order/details/{order}', [BranchController::class, 'branchOrderDetails'])->name('branch.orderDetails')->middleware('BranchAccess');
 Route::post('/branch/driver/changeOrderStatus/{order}', [BranchController::class, 'changeOrderStatus'])->name('branch.changeOrderStatus')->middleware('BranchAccess');
+Route::post('/branch/driver/changeOrderDescription/{order}', [BranchController::class, 'changeOrderDescription'])->name('branch.changeOrderDescription')->middleware('BranchAccess');
+
+//Branch bank routes
+Route::post('/branch/AddBank', [BranchController::class, 'addBank'])->name('branch.addBank')->middleware('BranchAccess');
+Route::post('/branch/editBranchBank/{bank}', [BranchController::class, 'editBranchBank'])->name('branch.editBranchBank')->middleware('BranchAccess');
+Route::delete('/branch/deleteBank/{bank}', [BranchController::class, 'deleteBank'])->name('branch.deleteBank')->middleware('BranchAccess');
+Route::get('/branch/Transactions', [BranchController::class, 'branchTransactions'])->name('branch.transactions')->middleware('BranchAccess');
 
 Auth::routes();
 

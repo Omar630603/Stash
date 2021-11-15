@@ -10479,12 +10479,17 @@ a.text-dark:focus {
     color: #999999;
 }
 ::-webkit-scrollbar {
-    width: 3px;
+    width: 10px;
     scroll-behavior: smooth;
-    background: transparent;
+    background: #fff;
 }
 ::-webkit-scrollbar-thumb {
-    background: #fff8e6;
+    background: linear-gradient(
+        0deg,
+        rgba(63, 22, 82, 1) 10%,
+        rgba(157, 52, 136, 1) 40%,
+        rgba(248, 159, 91, 1) 80%
+    );
 }
 a {
     -webkit-transition: 0.2s all ease;
@@ -10560,7 +10565,7 @@ nav.shift ul li a:hover:after {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 6%;
+    height: 6.5%;
     top: 0;
     left: 0;
     opacity: 1;
@@ -10597,4 +10602,26 @@ nav.shift ul li a:hover:after {
     100% {
         transform: rotate(360deg);
     }
+}
+.signupsingin-btn {
+    background-color: #3f1652;
+    border: 0;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.signupsingin-btn p {
+    color: #fff;
+    margin: 0;
+    padding-left: 7px;
+    text-align: center;
+    margin-top: 2px;
+    font-size: 0.65rem;
+}
+.signupsingin-btn i {
+    color: #f89f5b;
+    vertical-align: baseline;
+    padding-right: 5px;
+    font-size: 20px;
 }

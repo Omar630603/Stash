@@ -3,6 +3,39 @@
 
 @section('content')
 <div class="container-fluid">
+    <div>
+        @if ($message = Session::get('fail'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @elseif ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style=" text-align: center; border-radius: 20px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @endif
+    </div>
+</div>
+<div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px">
+        <strong>Whoops!</strong> There were some problems with your input.<br>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+</div>
+<div class="container-fluid">
     <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
@@ -14,12 +47,11 @@
     </nav>
     <div class="container-fluid" id="deliveryContainer" style="flex-wrap: wrap; flex-direction: column">
         <div class="headerO">
-            <h1 style="margin-right: 10px">ORDER</h1>
-            <div class="headerS">
+            <div class="headerS widthHeader" style="width: 70%">
                 <div class="card" style="border-radius:20px;">
                     <div class="card-body">
                         <h6 class="mb-0"><strong>Order Details</strong></h6>
-                        <div class="row" style="margin-top: 35px">
+                        <div class="row" style="margin-top: 5px">
                             <div class="col-sm-3">
                                 @php
                                 $date1 = new DateTime($order->startsFrom);
@@ -29,16 +61,19 @@
                                 $orderCheck = $date2->diff($today);
                                 @endphp
                                 @if ($orderCheck->invert)
-                                <div class="btn-sm btn-primary">Active
-                                    <h6 class="mb-0"><strong>Period: {{ $interval->days }} @if ($interval->days <= 1)
-                                                Day @else Days @endif Left </strong>
-                                    </h6>
+                                <div class="btn-sm btn-primary">Active: {{$orderCheck->days}}
+                                    @if($orderCheck->days <= 1) Day @else Days @endif Left<h6 class="mb-0">
+                                        <strong>Period:
+                                            {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif
+                                                </strong>
+                                                </h6>
                                 </div>
                                 @else
-                                <div class="btn-sm btn-danger">Expaired
-                                    <h6 class="mb-0"><strong>Period: {{ $interval->days }} @if ($interval->days <= 1)
-                                                Day @else Days @endif Exceeded </strong>
-                                    </h6>
+                                <div class="btn-sm btn-danger">Expaired: Exceeded {{$orderCheck->days+1}}
+                                    @if($orderCheck->days <= 1) Day @else Days @endif <h6 class="mb-0">
+                                        <strong>Period: {{ $interval->days }} @if ($interval->days <= 1) Day @else Days
+                                                @endif </strong>
+                                                </h6>
                                 </div>
                                 @endif
 
@@ -71,10 +106,19 @@
                                 @endif
                                 <form action="{{ route('branch.changeOrderStatus', $order) }}"
                                     id="changeOrderStatusForm" enctype="multipart/form-data" method="POST"
-                                    style="display: none">
+                                    style="display: none; width: 70%">
                                     @csrf
                                     <p style="margin: 0">
-                                        <small>Old Status:
+                                    <div style="display: flex; gap: 5px">
+                                        <select class="form-select form-select-sm" name="status" id="editStatusOrder">
+                                            <option class="btn-info" value="0">With Customer</option>
+                                            <option class="btn-light" value="1">Waiting for Payment</option>
+                                            <option class="btn-warning" value="2">Delivery</option>
+                                            <option class="btn-success" value="3">In Stash</option>
+                                            <option class="btn-secondary" value="4">Canceled</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change</button>
+                                        <small>Current Status:
                                             @if ($order->order_status == 0)
                                             With Customer
                                             @elseif($order->order_status == 1)
@@ -87,20 +131,10 @@
                                             Canceled
                                             @endif
                                         </small>
-                                    <div style="display: flex; gap: 5px">
-                                        <select class="form-select form-select-sm" name="status" id="editStatusOrder">
-                                            <option class="btn-sm btn-info" value="0">With Customer</option>
-                                            <option class="btn-sm btn-light" value="1">Waiting for Payment</option>
-                                            <option class="btn-sm btn-warning" value="2">Delivery</option>
-                                            <option class="btn-sm btn-success" value="3">In Stash</option>
-                                            <option class="btn-sm btn-secondary" value="4">Canceled</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change</button>
                                     </div>
-                                    <small>When you choose a status, it will change immediately</small>
                                     </p>
                                 </form>
-                                <a onclick="$('#staticStatusOrder').toggle(''); $('#changeOrderStatusForm').toggle('slow');"
+                                <a onclick="$('#staticStatusOrder').toggle('fast'); $('#changeOrderStatusForm').toggle('fast');"
                                     style="text-decoration: none;cursor: pointer">
                                     <i data-toggle="tooltip" title="Change Status"
                                         class="refresh-hover fa fa-magic icons"></i>
@@ -170,7 +204,7 @@
                                     @else
                                     <p style="width: 70%" class="btn-sm btn-success">{{ $order->expandPrice }}</p>
                                     @endif
-                                    <div>
+                                    <div style="text-align: right; width: 28%">
                                         <a data-toggle="modal" data-target="#extendTimeOrder"
                                             style="text-decoration: none;cursor: pointer;">
                                             <i data-toggle="tooltip" title="Extend Time"
@@ -192,17 +226,108 @@
                                                                 id="extendOrderForm" enctype="multipart/form-data"
                                                                 method="POST">
                                                                 @csrf
+                                                                <p id="orderPeriodExtendDiff"></p>
                                                                 <p>
                                                                     <center><strong>!! This Will Extend The Order
                                                                             Time!!</strong>
                                                                         <label for="endsAt">Extend Until</label>
-                                                                        <input class="form-control"
+                                                                        <input onchange="checkExtendOrder()"
+                                                                            id="extendOrderTimeNew" class="form-control"
                                                                             type="datetime-local" name="extendEndsAt">
+                                                                        <input id="extendOrderTimeOld" hidden
+                                                                            value="{{$order->endsAt}}">
+                                                                        <input id="unitPricePerDay" hidden
+                                                                            value="{{$category->pricePerDay}}">
                                                                         <small>Old:{{$order->endsAt}}</small>
                                                                         <br>
                                                                         Click Extend to Continue the Process
                                                                     </center>
                                                                 </p>
+
+                                                                <div class="container headerOrder">
+                                                                    <div class="container">
+                                                                        <input name="expandPrice" style="margin: 5px"
+                                                                            readonly type="text" class="form-control"
+                                                                            id="orderExtendPayment" value="0">
+                                                                        <div>
+                                                                            <label for="capacity"><strong>Extend Order
+                                                                                    Time Payment
+                                                                                    <small>(This will add the
+                                                                                        payment details for
+                                                                                        the
+                                                                                        extension transaction with
+                                                                                        price: <small
+                                                                                            id="finallExtendPrice"></small>)</small>
+                                                                                </strong></label>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div class="form-check"
+                                                                                style="margin-bottom: 10px">
+                                                                                <div>
+                                                                                    <input
+                                                                                        onclick="$('#addPayment').show('fast');"
+                                                                                        name="transaction"
+                                                                                        class="checkPayment form-check-input"
+                                                                                        type="checkbox" value="1">
+                                                                                    <label class="form-check-label"
+                                                                                        for="flexCheckDefault">
+                                                                                        Include
+                                                                                        Payment
+                                                                                    </label>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <input
+                                                                                        onclick="$('#addPayment').hide('fast');"
+                                                                                        checked name="transaction"
+                                                                                        class="checkPayment form-check-input"
+                                                                                        type="checkbox" value="0">
+                                                                                    <label class="form-check-label"
+                                                                                        for="flexCheckDefault">
+                                                                                        Exclude
+                                                                                        Payment
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="container"
+                                                                    style="display: none;padding: 10px 15px"
+                                                                    id="addPayment">
+                                                                    <div class="headerOrder row">
+                                                                        <div class="form-group" style="margin: 10px 0">
+                                                                            <select name="ID_Bank" style="width: 100%"
+                                                                                class="select2">
+                                                                                <option value="0">Select Bank
+                                                                                </option>
+                                                                                @php
+                                                                                $bankNo = 1;
+                                                                                @endphp
+                                                                                @foreach ($banks as $bank)
+                                                                                <option value="{{$bank->ID_Bank}}">
+                                                                                    {{$bankNo++}}- (
+                                                                                    {{$bank->bank_name}} )
+                                                                                    -
+                                                                                    @ {{$bank->accountNo}}
+                                                                                </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div style="margin: 10px 0">
+                                                                            <a style="width: 100%;"
+                                                                                onclick="$('#proofInputImage').click(); return false;"
+                                                                                class="btn btn-sm btn-outline-light">Add
+                                                                                Payment Proof</a>
+                                                                            <input id="proofInputImage"
+                                                                                style="display: none;" type="file"
+                                                                                name="proof">
+                                                                            <input
+                                                                                style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                                                disabled style="display: none"
+                                                                                id="proofPhoto">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </form>
                                                         </div>
                                                     </div>
@@ -217,7 +342,7 @@
                                         </div>
                                         <a data-toggle="modal" data-target="#deleteOrder"
                                             style="text-decoration: none;cursor: pointer">
-                                            <i data-toggle="tooltip" title="Delete Record"
+                                            <i data-toggle="tooltip" title="Delete Order"
                                                 class="delete-hover far fa-trash-alt icons"></i>
                                         </a>
                                         <div class="modal fade" id="deleteOrder" tabindex="-1" role="dialog"
@@ -265,16 +390,36 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Order Description</strong></h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <p style="width: 70%" class="btn-sm btn-light">{{$order->order_description}}</p>
+                            <div class="col-sm-9 text-secondary"
+                                style="display: flex; gap: 5px; justify-content: space-between">
+                                <p id="orderDescriptionText" style="width: 70%" class="btn-sm btn-light">
+                                    {{$order->order_description}}
+                                </p>
+                                <form action="{{ route('branch.changeOrderDescription', $order) }}"
+                                    id="order_description_form" enctype="multipart/form-data" method="POST"
+                                    style="display: none; width: 70%">
+                                    @csrf
+                                    <div class="input-group">
+                                        <textarea name="order_description" class="form-control"
+                                            rows="3">{{$order->order_description}}</textarea>
+                                        <div class="input-group-prepend">
+                                            <button type="submit"
+                                                class=" btn btn-sm btn-outline-primary">Change</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <a style="text-decoration: none ;cursor: pointer"
+                                    onclick="$('#order_description_form').toggle('fast'); $('#orderDescriptionText').toggle('fast');">
+                                    <i data-toggle="tooltip" title="Edit Order Description"
+                                        class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="line" style="margin: 0 10px">||</div>
-            <h1 style="margin-right: 10px">USER </h1>
-            <div class="headerVehiclesSchedules widthHeader" style="text-align: center">
+            <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%">
+                <h1 style="">USER</h1>
                 <div class="card-body" style="background: #9D3488;border-radius:20px">
                     <a href="{{route('branch.orders', ['user' => $customer->ID_User])}}"
                         style="text-decoration: none;cursor: pointer" data-toggle="tooltip" title="View Profile">
@@ -299,11 +444,10 @@
             </div>
         </div>
         <div class="headerO">
-
-            <div class="headerVehiclesSchedules widthHeader" style="text-align: center;">
+            <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%;">
                 <div>
-                    <h5 style="margin: 5px 0 25px 0">
-                        {{$category->name}} Category
+                    <h5 style="margin: 5px 0 5px 0">
+                        {{$category->category_name}} Category
                     </h5>
                     <div>
                         <img class="img-fluid" style="border-radius: 50%;" width="200px"
@@ -311,38 +455,34 @@
                     </div>
                 </div>
             </div>
-            <div style="text-align: center; margin: 0 5px">
-                <h4>CATEGORY</h4>
-                <h4>&</h4>
-                <h4>UNIT</h4>
-            </div>
             <div class="line" style="margin: 0 10px">||</div>
-            <div class="headerS">
+            <div class="headerS widthHeader" style="width: 70%">
                 <div class="card" style="border-radius:20px;">
-                    <div class="card-body">
-                        <div class="float-right" style="margin-bottom: 100px">
-                            <a href="{{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
-                                <p class="btn-sm btn-warning">Occupied</p>
-                            </a>
-                            <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
-                                <div class="progress mb-1" style="height: 5px" data-placement='left'
-                                    data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
-                                    @if ($unit->capacity >= 95)
-                                    <div class="progress-bar bg-danger" role="progressbar"
-                                        style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
-                                        aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                    @else
-                                    <div class="progress-bar bg-primary" role="progressbar"
-                                        style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
-                                        aria-valuemin="0" aria-valuemax="100">
-                                    </div>
-                                    @endif
+                    <div class="card-header" style="display: flex; justify-content: space-between">
+                        <a href=" {{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
+                            <p class="btn-sm btn-warning mb-0">Occupied</p>
+                        </a>
+                        <h6 class="mb-0"><strong>Unit Details</strong></h6>
+                        <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
+                            <div class="progress mb-1" style="height: 5px" data-placement='left' data-toggle="tooltip"
+                                title="Capacity {{$unit->capacity}}%">
+                                @if ($unit->capacity >= 95)
+                                <div class="progress-bar bg-danger" role="progressbar"
+                                    style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
+                                    aria-valuemin="0" aria-valuemax="100">
                                 </div>
+                                @else
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                    style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                                @endif
                             </div>
                         </div>
-                        <h6 class="mb-0"><strong>Unit Details</strong></h6>
-                        <div class="row" style="margin-top: 35px">
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0"><strong>Unit Name</strong></h6>
                             </div>
@@ -373,7 +513,8 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-2"><strong>Private Key</strong></h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary"
+                                style="display: flex; gap: 5px; justify-content: space-between; align-content: stretch">
                                 <div style="display: flex;gap: 10px">
                                     <input disabled style="width: 50%" type="password" value="{{$unit->privateKey}}"
                                         class="form-control" id="privateKey{{$unit->ID_Unit}}">
@@ -381,11 +522,64 @@
                                         <input class="form-check-input" style="margin-top: 5px" type="checkbox"
                                             onclick="showPrivateKey({{$unit->ID_Unit}})">
                                         <p class="form-check-label">Show Key</p>
+
+                                    </div>
+                                </div>
+                                <a data-toggle="modal" data-target="#changePrivateKeyUnit{{$unit->ID_Unit}}"
+                                    data-placement="top" style="text-decoration: none;cursor: pointer;"><i
+                                        data-toggle="tooltip" title="Change Private Key"
+                                        class="refresh-hover fas fa-sync icons"></i></a>
+                                <div class="modal fade" id="changePrivateKeyUnit{{$unit->ID_Unit}}" tabindex="-1"
+                                    role="dialog" aria-labelledby="changePrivateKeyUnit{{$unit->ID_Unit}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="changePrivateKeyUnit{{$unit->ID_Unit}}Title">
+                                                    Change Private Key
+                                                    {{$unit->unit_name}} Unit
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-danger" style="padding: 10px; border-radius: 20px">
+                                                    <p>
+                                                        <center><strong>!! This Unit is Occupied !!</strong>
+                                                        </center><br>
+                                                        Click Change to Continue the Process
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#changePrivateKeyUnitUnitForm{{$unit->ID_Unit}}').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-primary">Change</button>
+                                                <form method="post"
+                                                    action="{{route('branch.changePrivateKeyUnit', $unit)}}"
+                                                    enctype="multipart/form-data"
+                                                    id="changePrivateKeyUnitUnitForm{{$unit->ID_Unit}}">
+                                                    @csrf
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <hr>
+                        <div class="row" style="gap: 10px; justify-content: space-between">
+                            <div class="col-sm-5 text-secondary">
+                                <a href="" style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">
+                                    Change Unit Capacity</a>
+                            </div>
+                            <div class="col-sm-5 text-secondary">
+                                <a href="" style="background-color: #66377f;width: 100%"
+                                    class="btn btn-sm btn-dark">Change Order Unit</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -438,7 +632,7 @@
                             <p class="btn-sm btn-success">Approved</p>
                             @endif
                         </td>
-                        <td data-label="Action" class="column">
+                        <td style="text-align: right" data-label="Action" class="column">
                             @if ($transaction->transactions_status == 0)
                             <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
                                 <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
@@ -642,8 +836,8 @@
                                 @if ($scheduleCheck->invert)
                                 <div class="btn-sm btn-primary">
                                     <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
-                                        {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Left <i
-                                            data-toggle="tooltip" title="Delivery Trip Details"
+                                        {{ $scheduleCheck->days }} @if ($scheduleCheck->days <= 1) Day @else Days @endif
+                                            Left <i data-toggle="tooltip" title="Delivery Trip Details"
                                             onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                             class="fas fa-arrow-down float-right"></i>
                                     </h6>
@@ -653,19 +847,20 @@
                                         <br>Destination: {{$schedule->deliveredTo}}
                                         <br>
                                         @if($interval->days == 0)
+
                                         <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                             class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
                                             <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
                                                 style="display: none">From:</small>
                                         </i>
-                                        {{$order->startsFrom}}
+                                        {{$schedule->pickedUp}}
                                         <br>
                                         <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                             class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
                                             <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
                                                 style="display: none">Until:</small>
                                         </i>
-                                        {{$order->endsAt}}
+                                        {{$schedule->delivered}}
                                         <small>(The same day)</small>
                                         @elseif($interval->m == 0 && $interval->y == 0)
                                         <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
@@ -721,9 +916,9 @@
                                 @else
                                 <div class="btn-sm btn-danger">
                                     <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
-                                        @endif:
-                                        {{ $interval->days }} @if ($interval->days <= 1) Day @else Days @endif Exceeded
-                                            <i data-toggle="tooltip" title="Delivery Trip Details"
+                                        @endif: Exceeded
+                                        {{ $scheduleCheck->days+1 }} @if ($scheduleCheck->days <= 1) Day @else Days
+                                            @endif <i data-toggle="tooltip" title="Delivery Trip Details"
                                             onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
                                             class="fas fa-arrow-down float-right"></i>
                                     </h6>
@@ -738,14 +933,14 @@
                                             <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
                                                 style="display: none">From:</small>
                                         </i>
-                                        {{$order->startsFrom}}
+                                        {{$schedule->pickedUp}}
                                         <br>
                                         <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
                                             class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
                                             <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
                                                 style="display: none">Until:</small>
                                         </i>
-                                        {{$order->endsAt}}
+                                        {{$schedule->delivered}}
                                         <small>(The same day)</small>
                                         @elseif($interval->m == 0 && $interval->y == 0)
                                         <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
@@ -822,7 +1017,7 @@
                         <td data-label="Description" class="column">
                             <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
                         </td>
-                        <td data-label="Action" class="column">
+                        <td style="text-align: right" data-label="Action" class="column">
                             <div style="display: flex; justify-content:space-around">
                                 <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
                                     data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
@@ -974,6 +1169,34 @@
         x.type = "password";
       }
     }
+    function checkExtendOrder() {
+        var orderEndDate = new Date($('#extendOrderTimeOld').val()); 
+        var orderNewDate = new Date($('#extendOrderTimeNew').val());
+        var today = new Date();
+        if (orderNewDate < orderEndDate || orderNewDate == today) {
+            alert('Dates are Invalid')
+            $('#extendOrderTimeNew').val(null)
+        } else {
+            dateDif = Math.round((orderNewDate-orderEndDate)/(1000*60*60*24));
+            if (dateDif == 0) {
+                alert('Dates are Invalid')
+                $('#extendOrderTimeNew').val(null)
+            } else {
+                $('#orderPeriodExtendDiff').text('Extend Period: '+dateDif + ' Days');
+                pricePerDay = document.getElementById('unitPricePerDay')
+                $('#orderExtendPayment').val(pricePerDay.value * dateDif)
+                finallPrice = document.getElementById('finallExtendPrice');
+                finallPrice.textContent = $('#orderExtendPayment').val(); 
+            }
+            
+
+        }
+    }
+    $(document).ready(function(){
+        $('.checkPayment').click(function() {
+            $('.checkPayment').not(this).prop('checked', false);
+        });
+    });
 </script>
 <script>
     $(".select2").select2({
@@ -981,5 +1204,16 @@
         selectionCssClass: "select2--small", // For Select2 v4.1
         dropdownCssClass: "select2--small",
     });
+</script>
+<script>
+    + function($) {
+    'use strict';
+    var proofInputImage = document.getElementById('proofInputImage');
+    var p = document.getElementById('proofPhoto');
+    proofInputImage.onchange = function() {
+        p.style.display = '';
+        p.value = 'File Name:' + proofInputImage.files[0].name;
+    }
+    }(jQuery);
 </script>
 @endsection
