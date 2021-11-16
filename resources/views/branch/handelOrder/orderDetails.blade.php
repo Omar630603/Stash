@@ -248,7 +248,8 @@
                                                                     </center>
                                                                 </p>
 
-                                                                <div class="container headerOrder">
+                                                                <div class="container headerOrder"
+                                                                    style="text-align: left">
                                                                     <div class="container">
                                                                         <input name="expandPrice" style="margin: 5px"
                                                                             readonly type="text" class="form-control"
@@ -421,7 +422,8 @@
                     </div>
                 </div>
             </div>
-            <div class="line" style="margin: 0 10px">||</div>
+
+            <div class="line" style="margin: -10px 10px;">||</div>
             <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%">
                 <h1 style="">USER</h1>
                 <div class="card-body" style="background: #9D3488;border-radius:10px">
@@ -459,7 +461,7 @@
                     </div>
                 </div>
             </div>
-            <div class="line" style="margin: 0 10px">||</div>
+            <div class="line" style="margin: -10px 10px; transform: rotate(180deg);">||</div>
             <div class="headerS widthHeader" style="width: 70%">
                 <div class="card" style="border-radius:10px;">
                     <div class="card-header" style="display: flex; justify-content: space-between">

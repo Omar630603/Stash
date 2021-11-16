@@ -48,8 +48,8 @@
     </nav>
 
     <div class="container-fluid" id="deliveryContainer">
-        <div class="containerV container" style="padding: 0">
-            <div class="container headerVehiclesSchedules">
+        <div class="containerV container-fluid" style="padding: 0" id="usersPanel">
+            <div class="container-fluid headerVehiclesSchedules">
                 <h1>Users</h1>
                 <a data-toggle="modal" data-target="#addUser" class="btn btn-sm btn-success float-right"
                     style="border-radius: 10px; text-align: center; margin-top: -30px">Add
@@ -245,145 +245,153 @@
                 </div>
             </div>
         </div>
-        <div class="line">||</div>
-        <div class="container containerS" style="padding-right: 0">
-            <div class="container headerVehiclesSchedules">
+        <div class="m-0 bookmark">
+            <p class="mr-0">List of Users</p>
+        </div>
+        <div class="line" style="margin: -10px -10px -10px 10px; transform: rotate(180deg);">||
+        </div>
+        <div class="custom-menu">
+            <button onclick="$('#usersPanel').toggle('fast');$('.bookmark').toggle('fast')" type="button"
+                id="sidebarCollapse" class="btn btn-primary shadow-none">
+                <i data-toggle="tooltip" title="Users" class="fa fa-bars"></i>
+            </button>
+        </div>
+        <div class="containerS" style="padding-right: 0; width: 100%;">
+            <div class="headerVehiclesSchedules">
                 <h1>Orders</h1>
                 <a onclick="$('#addOrder').toggle('slow')" class="btn btn-sm btn-success float-right"
                     style="border-radius: 10px; text-align: center; margin-top: -30px">Add
                 </a>
             </div>
             <div style="display: none" id="addOrder">
-                <div class="container" style="display: flex; justify-content: center">
+                <div style="display: flex; justify-content: center">
                     <div class="headerAddS">
-                        <form method="POST" id="addOrderForm" class="row g-3" action="{{ route('branch.addOrder')}}"
+                        <form method="POST" id="addOrderForm" class="" action="{{ route('branch.addOrder')}}"
                             enctype="multipart/form-data">
                             @csrf
-                            <div class="container" id="userOption">
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div style="display: flex; gap: 60px;">
-                                            <label for="name"><strong>User </strong></label>
-                                            <div class="form-check form-switch">
-                                                <input
-                                                    onchange="$('#newCustomerData').toggle('slow'); $('#oldCustomerData').toggle('fast');"
-                                                    name="userNew" class="form-check-input" type="checkbox">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">New
-                                                    User</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style="display: none; margin-left: 20px" id="newCustomerData"
-                                        class="container">
-                                        <label for="name"><strong>Fill this data only for a new
-                                                customer</strong></label>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-user-plus" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="name">
-                                                        <label for="name">Customer's Full Name</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-user-circle-o" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="username">
-                                                        <label for="username">Customer's Username</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-envelope" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="email" class="form-control" name="email">
-                                                        <label for="email">Customer's Email</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-phone-square" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="phone">
-                                                        <label for="phone">Customer's Phone</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-location-arrow" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="address">
-                                                        <label for="address">Customer's Address</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-key" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" name="password">
-                                                        <label for="address">Customer's Password</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div id="oldCustomerData" class="container">
-                                        <label for="name"><strong>Find a Customer in Our Database</strong></label>
-                                        <div class="form-group">
-                                            <select name="userOld" style="width: 100%" class="select2">
-                                                <option value="0">Select User</option>
-                                                @php
-                                                $userNo = 1;
-                                                @endphp
-                                                @foreach ($users as $user)
-                                                @if($noUser)
-                                                <option value="{{$user->ID_User}}">{{$userNo++}}- {{$user->username}} /
-                                                    {{$user->name}}
-                                                </option>
-                                                @else
-                                                @if ($activeU == $user->ID_User)
-                                                <option selected value="{{$user->ID_User}}">{{$userNo++}}-
-                                                    {{$user->username}} /
-                                                    {{$user->name}}
-                                                </option>
-                                                @else
-                                                <option value="{{$user->ID_User}}">{{$userNo++}}- {{$user->username}} /
-                                                    {{$user->name}}
-                                                </option>
-                                                @endif
-                                                @endif
-                                                @endforeach
-                                            </select>
+                            <div class="container-fluid" id="userOption">
+                                <div class="container-fluid headerOrder">
+                                    <div class="container-fluid" style="display: flex; gap: 60px;">
+                                        <label for="name"><strong>User </strong></label>
+                                        <div class="form-check form-switch">
+                                            <input
+                                                onchange="$('#newCustomerData').toggle('slow'); $('#oldCustomerData').toggle('fast');"
+                                                name="userNew" class="form-check-input" type="checkbox">
+                                            <label class="form-check-label" for="flexSwitchCheckDefault">New
+                                                User</label>
                                         </div>
                                     </div>
                                 </div>
+                                <div style="display: none; margin-left: 20px" id="newCustomerData"
+                                    class="container-fluid">
+                                    <label for="name"><strong>Fill this data only for a new
+                                            customer</strong></label>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-user-plus" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" name="name">
+                                                    <label for="name">Customer's Full Name</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-user-circle-o" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" name="username">
+                                                    <label for="username">Customer's Username</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-envelope" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="email" class="form-control" name="email">
+                                                    <label for="email">Customer's Email</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-phone-square" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" name="phone">
+                                                    <label for="phone">Customer's Phone</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-location-arrow" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" name="address">
+                                                    <label for="address">Customer's Address</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icons fa fa-key" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating">
+                                                    <input type="password" class="form-control" name="password">
+                                                    <label for="address">Customer's Password</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="oldCustomerData" class="container-fluid">
+                                    <label for="name"><strong>Find a Customer in Our Database</strong></label>
+                                    <div class="form-group">
+                                        <select name="userOld" style="width: 100%" class="select2">
+                                            <option value="0">Select User</option>
+                                            @php
+                                            $userNo = 1;
+                                            @endphp
+                                            @foreach ($users as $user)
+                                            @if($noUser)
+                                            <option value="{{$user->ID_User}}">{{$userNo++}}- {{$user->username}} /
+                                                {{$user->name}}
+                                            </option>
+                                            @else
+                                            @if ($activeU == $user->ID_User)
+                                            <option selected value="{{$user->ID_User}}">{{$userNo++}}-
+                                                {{$user->username}} /
+                                                {{$user->name}}
+                                            </option>
+                                            @else
+                                            <option value="{{$user->ID_User}}">{{$userNo++}}- {{$user->username}} /
+                                                {{$user->name}}
+                                            </option>
+                                            @endif
+                                            @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="container" id="orderOptionAndStatusOption" style="display: flex">
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                            <div class="container-fluid" id="orderOptionAndStatusOption" style="display: flex">
+                                <div class="container-fluid">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div>
                                                 <label><strong>Category </strong></label>
                                             </div>
@@ -433,8 +441,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder">
-                                        <div class="container" style="margin-top: 15px">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid" style="margin-top: 15px">
                                             <div>
                                                 <label for="order_status"><strong>Status </strong></label>
                                             </div>
@@ -469,9 +477,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                                <div class="container-fluid">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div style="display: flex; gap: 4px">
                                                 <label style="white-space: nowrap" for="Period"><strong>Period</strong>
                                                 </label>
@@ -487,8 +495,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div>
                                                 <label for="capacity"><strong>Unit Capacity </strong></label>
                                             </div>
@@ -500,8 +508,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div>
                                                 <label for="status"><strong>Delivery </strong></label>
                                             </div>
@@ -523,8 +531,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div style="display: flex; gap:10px; padding:0 5px; margin-top: 3px">
                                                 <label style="vertical-align: bottom" for="status"><strong>Total Payment
                                                     </strong></label>
@@ -535,8 +543,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container" style="display: none" id="addDeliverySchedule">
-                                <div class="container" style="padding: 0 20px">
+                            <div class="container-fluid" style="display: none" id="addDeliverySchedule">
+                                <div class="container-fluid" style="padding: 0 20px">
                                     <div class="headerOrder"
                                         style="display: flex; justify-content: space-evenly; flex-wrap: wrap">
                                         <div class="col-md-6">
@@ -622,13 +630,14 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="pickedUp" class="form-label">Pick Up Date</label>
-                                            <input type="datetime-local" class="form-control" id="pickedUp"
-                                                name="pickedUp">
+                                            <input onchange="chackDeliveryDates()" type="datetime-local"
+                                                class="form-control" id="pickedUp" name="pickedUp">
+                                            <small id="deliveryCheck"></small>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="delivered" class="form-label">Deliver Date</label>
-                                            <input type="datetime-local" class="form-control" id="delivered"
-                                                name="delivered">
+                                            <input onchange="chackDeliveryDates()" type="datetime-local"
+                                                class="form-control" id="delivered" name="delivered">
                                         </div>
                                         <div class="col-md-4">
                                             <label for="totalPrice" class="form-label">Deliver Price</label>
@@ -639,10 +648,10 @@
                                 </div>
                             </div>
 
-                            <div class="container">
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                            <div class="container-fluid">
+                                <div class="container-fluid">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div>
                                                 <label for="order_description"><strong>Order Description
                                                         <small>(optional)</small> </strong></label>
@@ -656,10 +665,10 @@
                                 </div>
                             </div>
 
-                            <div class="container">
-                                <div class="container">
-                                    <div class="container headerOrder">
-                                        <div class="container">
+                            <div class="container-fluid">
+                                <div class="container-fluid">
+                                    <div class="container-fluid headerOrder">
+                                        <div class="container-fluid">
                                             <div>
                                                 <label for="capacity"><strong>Order Payment
                                                         <small>(This will add the payment details for
@@ -692,9 +701,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container">
-                                <div class="container" style="display: none" id="addPayment">
-                                    <div class="container" style="padding: 10px 15px">
+                            <div class="container-fluid">
+                                <div class="container-fluid" style="display: none" id="addPayment">
+                                    <div class="container-fluid" style="padding: 10px 15px">
                                         <div class="headerOrder row">
                                             <div class="form-group" style="margin: 10px 0">
                                                 <select name="ID_Bank" style="width: 100%" class="select2">
@@ -726,7 +735,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container" style="padding: 0 35px">
+                            <div class="container-fluid" style="padding: 0 30px">
                                 <button style="width: 100%" type="submit" class="btn btn-outline-dark">Order</button>
                             </div>
                         </form>
@@ -953,7 +962,6 @@
                                 <th class="column">Total Price</th>
                                 <th class="column">Unit</th>
                                 <th class="column">Customer</th>
-                                <th class="column">Made By</th>
                                 <th class="column">Action</th>
                             </tr>
                         </thead>
@@ -1286,17 +1294,16 @@
                                 </td>
                                 <td data-label="Customer" class="column">
                                     <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
-                                        <p class="btn-sm btn-light">{{$order->username}}</p>
+                                        <p class="btn-sm btn-light">{{$order->username}}
+                                            @if ($order->madeBy)
+                                            <i data-toggle="tooltip" title="Order Made By Branch"
+                                                class="noUse-hover float-right far fa-building"></i>
+                                            @else
+                                            <i data-toggle="tooltip" title="Order Made By Customer"
+                                                class="refresh-hover float-right fas fa-user-tag"></i>
+                                            @endif
+                                        </p>
                                     </a>
-                                </td>
-                                <td data-label="Made by" class="column">
-                                    @if ($order->madeBy) <a href="{{ route('home') }}">
-                                        <p class="btn-sm btn-success">Branch</p>
-                                    </a>
-                                    @else
-                                    <p class="btn-sm btn-secondary">Customer</p>
-                                    @endif
-
                                 </td>
                                 <td style="text-align: right" data-label="Action" class="column">
                                     <div style="display: flex; justify-content:space-around">
@@ -1369,7 +1376,7 @@
         var today = new Date();
 
         if (orderStartDate > orderEndDate) {
-            alert('Dates are Invalid')
+            alert('Order Dates Are Invalid')
             $('#orderStartDate').val(null)
             $('#orderEndDate').val(null)
         } else {
@@ -1389,8 +1396,20 @@
                 }
             }
         }
-    
     }
+    function chackDeliveryDates() {
+        var pickedUp = new Date($('#pickedUp').val()); 
+            var delivered = new Date($('#delivered').val());
+            var deliveryCheck = document.getElementById('deliveryCheck');
+            if (pickedUp > delivered) {
+                alert('Delivery Dates Are Invalid')
+                $('#pickedUp').val(null)
+                $('#delivered').val(null)
+            } else {
+                dateDif = Math.round((delivered-pickedUp)/(1000*60*60*24));
+                deliveryCheck.textContent =  'Delivery Period: '+dateDif+' days.';
+            }
+        }
     function updatePrice() {
         orderTotalPayment = $('#orderTotalPayment').val();
         totalPriceInput = $('#totalPriceInput').val();

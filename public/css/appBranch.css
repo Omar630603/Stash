@@ -122,11 +122,11 @@ tbody tr:hover {
     margin-bottom: 10px;
 }
 .containerV {
-    width: 30%;
+    width: 35%;
 }
 #deliveryContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     background-color: #fceabe;
     padding: 10px;
     border-radius: 10px;
@@ -171,6 +171,14 @@ tbody tr:hover {
     }
     .widthHeader {
         width: 100% !important;
+    }
+    .bookmark {
+        writing-mode: horizontal-tb !important;
+        text-align: left !important;
+        transform: rotate(0deg) !important;
+    }
+    #sidebarCollapse {
+        margin: -10px 0 !important;
     }
 }
 .headerO {
@@ -285,6 +293,44 @@ img {
     padding: 20px;
     background-color: #f8f8f8;
     width: 90%;
-    margin: 15px;
+    margin-bottom: 10px;
     border-radius: 10px;
+}
+#sidebarCollapse {
+    margin-top: 10px;
+    margin-right: -10px;
+    transition: 0.5s;
+    background-color: #3f1652;
+    border: 0;
+    transform: rotate(45deg);
+    position: relative;
+    right: 12px;
+}
+#sidebarCollapse i {
+    transition: 0.5s;
+    transform: rotate(-45deg);
+}
+#sidebarCollapse:hover {
+    border: 5px solid;
+    right: 0;
+    margin: 5px 5px 0 5px;
+    border-image: linear-gradient(
+            0deg,
+            rgba(63, 22, 82, 1) 10%,
+            rgba(157, 52, 136, 1) 40%,
+            rgba(248, 159, 91, 1) 80%
+        )
+        10;
+    transform: rotate(90deg);
+    border-radius: 10px;
+}
+#sidebarCollapse i:hover {
+    transform: rotate(180deg);
+}
+.bookmark {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-align: end;
+    text-orientation: sideways;
+    display: none;
 }
