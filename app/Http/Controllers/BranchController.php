@@ -150,6 +150,16 @@ class BranchController extends Controller
         $unit->save();
         return redirect()->back();
     }
+    public function changeUnitCapacity(Request $request, Unit $unit){
+        $request->validate([
+            'capacity' => 'required|integer|max:100'
+        ]);
+        $unit->capacity = $request->get('capacity');
+        $unit->save();
+        $message ='Unit Capacity has been changed successfully';
+        return redirect()->back()->with('success', $message);
+    }
+    
     public function branchOrderDetailsU(Unit $unit)
     {
         $order = Order::where('ID_Unit', $unit->ID_Unit)->first();

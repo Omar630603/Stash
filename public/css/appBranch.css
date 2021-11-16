@@ -117,7 +117,7 @@ tbody tr:hover {
 .headerOrder {
     background-color: #66377f;
     color: #e7e7e7;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -129,7 +129,7 @@ tbody tr:hover {
     justify-content: space-around;
     background-color: #fceabe;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     min-height: 300px;
 }
 .line {
@@ -187,7 +187,7 @@ img {
     background: #f8f8f8 none repeat scroll 0 0;
     float: left;
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .srch_bar {
@@ -207,6 +207,9 @@ img {
     width: 100%;
     padding: 2px 0 4px 6px;
     background: none;
+}
+.srch_bar input:focus {
+    outline: none;
 }
 .srch_bar .input-group-addon button {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
@@ -256,7 +259,7 @@ img {
     background-color: #ffbf8e;
     padding: 10px;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 .headerVehiclesSchedules h1 {
@@ -268,7 +271,7 @@ img {
     text-align: left;
     background-color: #66377f;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 .headerS h3 {
@@ -283,5 +286,5 @@ img {
     background-color: #f8f8f8;
     width: 90%;
     margin: 15px;
-    border-radius: 20px;
+    border-radius: 10px;
 }

@@ -12,7 +12,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
@@ -35,7 +35,7 @@
     @endif
 </div>
 <div class="container-fluid">
-    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
+    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee : {{ Auth::user()->username }}</a>
@@ -748,8 +748,8 @@
                 <div class="container">
                     <div class="row gutters-sm" id="info">
                         <div class="col-md-4 mb-3">
-                            <div class="card" style="border-radius:20px; padding: 5px">
-                                <div class="card-body" style="background: #9D3488;border-radius:20px;">
+                            <div class="card" style="border-radius: 10px; padding: 5px">
+                                <div class="card-body" style="background: #9D3488;border-radius: 10px;">
                                     <div class="d-flex flex-column align-items-center text-center">
                                         <img width="100px" src="{{ asset('storage/' . $userProfile->user_img) }}"
                                             alt="user{{ $userProfile->name }}" class="img-fluid rounded-circle"
@@ -766,7 +766,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="card mb-3" style="border-radius:20px;">
+                            <div class="card mb-3" style="border-radius: 10px;">
                                 <div class="card-body">
                                     <div class="float-right" style="cursor: pointer;">
                                         <a style="text-decoration: none;cursor: pointer"
@@ -815,8 +815,8 @@
                     </div>
                     <div class="row gutters-sm" id="edit" style="display: none">
                         <div class="col-md-4 mb-3">
-                            <div class="card" style="border-radius:20px;">
-                                <div class="card-body" style="background: #fff;border-radius:20px;">
+                            <div class="card" style="border-radius: 10px;">
+                                <div class="card-body" style="background: #fff;border-radius: 10px;">
                                     <div class="d-flex flex-column align-items-center text-center">
                                         <img src="{{ asset('storage/' . $userProfile->user_img) }}"
                                             alt="user{{ $userProfile->name }}" class="rounded-circle" width="150"
@@ -859,7 +859,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="card mb-3" style="border-radius:20px;">
+                            <div class="card mb-3" style="border-radius: 10px;">
                                 <form method="post"
                                     action="{{ route('branch.editBioDataUser', ['user'=>$userProfile]) }}"
                                     enctype="multipart/form-data">
@@ -1237,7 +1237,52 @@
                                     <p class="btn-sm btn-light">{{$order->order_totalPrice}}</p>
                                 </td>
                                 <td data-label="Unit" class="column">
-                                    <p class="btn-sm btn-light">{{$order->unit_name}}</p>
+                                    <div class="btn-sm btn-light">
+                                        <h6 class="mb-0">
+                                            {{$order->unit_name}}
+                                            <i data-toggle="tooltip" title="Unit Capacity Details"
+                                                onclick="$('#unitCapacityDetails{{$order->ID_Order}}').toggle('fast')"
+                                                class="fas fa-arrow-down float-right"></i>
+                                            <div class="mb-0" style="display: none; width: max-content;"
+                                                id="unitCapacityDetails{{$order->ID_Order}}">
+                                                <div class="btn-sm btn-dark mt-2"
+                                                    style="background-color: transparent; color: #66377f; width: 100%; text-align: left">
+                                                    <small> (@if ($order->capacity == 100)
+                                                        Full: Capacity {{$order->capacity}}%)
+                                                        @elseif($order->capacity >= 95)
+                                                        Almost Full: Capacity {{$order->capacity}}%)
+                                                        @elseif($order->capacity >= 80)
+                                                        Moderately Full: Capacity {{$order->capacity}}%)
+                                                        @else
+                                                        Normal: Capacity {{$order->capacity}}%)
+                                                        @endif
+                                                    </small>
+                                                    <div class="progress mb-1" style="height: 5px" data-placement='left'
+                                                        data-toggle="tooltip" title="Capacity {{$order->capacity}}%">
+                                                        @if ($order->capacity >= 95)
+                                                        <div class="progress-bar bg-danger" role="progressbar"
+                                                            style="width: {{$order->capacity}}%"
+                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                            aria-valuemax="100">
+                                                        </div>
+                                                        @elseif($order->capacity >= 80)
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: {{$order->capacity}}%"
+                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                            aria-valuemax="100">
+                                                        </div>
+                                                        @else
+                                                        <div class="progress-bar bg-primary" role="progressbar"
+                                                            style="width: {{$order->capacity}}%"
+                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                            aria-valuemax="100">
+                                                        </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h6>
+                                    </div>
                                 </td>
                                 <td data-label="Customer" class="column">
                                     <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
@@ -1245,8 +1290,9 @@
                                     </a>
                                 </td>
                                 <td data-label="Made by" class="column">
-                                    @if ($order->madeBy)
-                                    <p class="btn-sm btn-success">Branch</p>
+                                    @if ($order->madeBy) <a href="{{ route('home') }}">
+                                        <p class="btn-sm btn-success">Branch</p>
+                                    </a>
                                     @else
                                     <p class="btn-sm btn-secondary">Customer</p>
                                     @endif

@@ -12,7 +12,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>

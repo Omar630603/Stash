@@ -41,6 +41,7 @@ Route::post('/branch/categories/addUnit', [BranchController::class, 'addUnit'])-
 Route::delete('/branch/categories/DeleteUnit/{unit}', [BranchController::class, 'deleteUnit'])->name('branch.deleteUnit')->middleware('BranchAccess');
 Route::post('/branch/categories/changePrivateKeyUnit/{unit}', [BranchController::class, 'changePrivateKeyUnit'])->name('branch.changePrivateKeyUnit')->middleware('BranchAccess');
 Route::get('/branch/order/detailsU/{unit}', [BranchController::class, 'branchOrderDetailsU'])->name('branch.orderDetailsU')->middleware('BranchAccess');
+Route::post('/branch/unit/order/changeUnitCapacity/{unit}', [BranchController::class, 'changeUnitCapacity'])->name('branch.changeUnitCapacity')->middleware('BranchAccess');
 
 // //BranchAccess//Delivery&drivers
 Route::get('/branch/delivery', [BranchController::class, 'branchDelivery'])->name('branch.delivery')->middleware('BranchAccess');

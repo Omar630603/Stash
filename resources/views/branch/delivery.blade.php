@@ -12,7 +12,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
@@ -35,7 +35,7 @@
     @endif
 </div>
 <div class="container-fluid">
-    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
+    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee : {{ Auth::user()->username }}</a>
@@ -374,8 +374,8 @@
                 <div class="container">
                     <div class="row gutters-sm" id="info">
                         <div class="col-md-4 mb-3">
-                            <div class="card" style="border-radius:20px; padding: 5px">
-                                <div class="card-body" style="background: #9D3488;border-radius:20px;">
+                            <div class="card" style="border-radius: 10px; padding: 5px">
+                                <div class="card-body" style="background: #9D3488;border-radius: 10px;">
                                     <div class="d-flex flex-column align-items-center text-center">
                                         <img width="100px" src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
                                             alt="user{{ $vehicleDriver->vehicle_name }}"
@@ -393,7 +393,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="card mb-3" style="border-radius:20px;">
+                            <div class="card mb-3" style="border-radius: 10px;">
                                 <div class="card-body">
                                     <div class="float-right" style="cursor: pointer;">
                                         <a style="text-decoration: none;cursor: pointer"
@@ -442,8 +442,8 @@
                     </div>
                     <div class="row gutters-sm" id="edit" style="display: none">
                         <div class="col-md-4 mb-3">
-                            <div class="card" style="border-radius:20px;">
-                                <div class="card-body" style="background: #fff;border-radius:20px;">
+                            <div class="card" style="border-radius: 10px;">
+                                <div class="card-body" style="background: #fff;border-radius: 10px;">
                                     <div class="d-flex flex-column align-items-center text-center">
                                         <img src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
                                             alt="user{{ $vehicleDriver->vehicle_name }}" class="rounded-circle"
@@ -486,7 +486,7 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="card mb-3" style="border-radius:20px;">
+                            <div class="card mb-3" style="border-radius: 10px;">
                                 <form method="post"
                                     action="{{ route('branch.editBioDataDriver', ['driver'=>$vehicleDriver]) }}"
                                     enctype="multipart/form-data">

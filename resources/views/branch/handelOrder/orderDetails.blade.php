@@ -13,7 +13,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
@@ -36,7 +36,7 @@
     @endif
 </div>
 <div class="container-fluid">
-    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
+    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee: {{ Auth::user()->username }}</a>
@@ -48,7 +48,7 @@
     <div class="container-fluid" id="deliveryContainer" style="flex-wrap: wrap; flex-direction: column">
         <div class="headerO">
             <div class="headerS widthHeader" style="width: 70%">
-                <div class="card" style="border-radius:20px;">
+                <div class="card" style="border-radius:10px;">
                     <div class="card-body">
                         <h6 class="mb-0"><strong>Order Details</strong></h6>
                         <div class="row" style="margin-top: 5px">
@@ -78,11 +78,15 @@
                                 @endif
 
                             </div>
-                            <div class="col-sm-9 text-secondary" style="display: flex">
-                                <h6 class="mb-0"><strong>From</strong></h6><br>
-                                {{ $order->startsFrom }}
-                                <h6 class="mb-0"><strong>Until</strong></h6><br>
-                                {{ $order->endsAt }}
+                            <div class="col-sm-9 text-secondary" style="display: flex; gap: 70px;">
+                                <div class="mt-1">
+                                    <h6 style="color: #000" class="mb-0"><strong>From: </strong></h6>
+                                    <h6 class="mb-0">({{ $order->startsFrom }})</h6>
+                                </div>
+                                <div class="mt-1">
+                                    <h6 style="color: #000" class="mb-0"><strong>Until: </strong></h6>
+                                    <h6 class="mb-0">({{ $order->endsAt }})</h6>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -221,7 +225,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="alert-success"
-                                                            style="padding: 10px; border-radius: 20px">
+                                                            style="padding: 10px; border-radius: 10px">
                                                             <form action="{{ route('branch.extendOrder', $order) }}"
                                                                 id="extendOrderForm" enctype="multipart/form-data"
                                                                 method="POST">
@@ -356,7 +360,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="alert-danger"
-                                                            style="padding: 10px; border-radius: 20px">
+                                                            style="padding: 10px; border-radius: 10px">
                                                             <p>
                                                                 <center><strong>!! This Will Delete The Order!!</strong>
                                                                     <br>
@@ -420,7 +424,7 @@
             <div class="line" style="margin: 0 10px">||</div>
             <div class="headerVehiclesSchedules widthHeader mb-auto" style="text-align: center; width: 30%">
                 <h1 style="">USER</h1>
-                <div class="card-body" style="background: #9D3488;border-radius:20px">
+                <div class="card-body" style="background: #9D3488;border-radius:10px">
                     <a href="{{route('branch.orders', ['user' => $customer->ID_User])}}"
                         style="text-decoration: none;cursor: pointer" data-toggle="tooltip" title="View Profile">
                         <div class="d-flex flex-column align-items-center text-center">
@@ -457,17 +461,31 @@
             </div>
             <div class="line" style="margin: 0 10px">||</div>
             <div class="headerS widthHeader" style="width: 70%">
-                <div class="card" style="border-radius:20px;">
+                <div class="card" style="border-radius:10px;">
                     <div class="card-header" style="display: flex; justify-content: space-between">
                         <a href=" {{ route('branch.orderDetailsU', ['unit'=>$unit]) }}">
-                            <p class="btn-sm btn-warning mb-0">Occupied</p>
+                            <p class="btn-sm btn-warning mb-0" style="height: 35px">Occupied</p>
                         </a>
                         <h6 class="mb-0"><strong>Unit Details</strong></h6>
-                        <div class="btn-sm btn-success" style="background-color: #66377f">Capacity
+                        <div class="btn-sm btn-dark" style="background-color: #66377f; text-align: left">
+                            (@if ($unit->capacity == 100)
+                            Full: Capacity {{$unit->capacity}}%)
+                            @elseif($unit->capacity >= 95)
+                            Almost: Full Capacity {{$unit->capacity}}%)
+                            @elseif($unit->capacity >= 80)
+                            Moderately Full: Capacity {{$unit->capacity}}%)
+                            @else
+                            Normal: Capacity {{$unit->capacity}}%)
+                            @endif
                             <div class="progress mb-1" style="height: 5px" data-placement='left' data-toggle="tooltip"
                                 title="Capacity {{$unit->capacity}}%">
                                 @if ($unit->capacity >= 95)
                                 <div class="progress-bar bg-danger" role="progressbar"
+                                    style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
+                                    aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                                @elseif($unit->capacity >= 80)
+                                <div class="progress-bar bg-warning" role="progressbar"
                                     style="width: {{$unit->capacity}}%" aria-valuenow="{{$unit->capacity}}"
                                     aria-valuemin="0" aria-valuemax="100">
                                 </div>
@@ -542,7 +560,7 @@
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="alert-danger" style="padding: 10px; border-radius: 20px">
+                                                <div class="alert-danger" style="padding: 10px; border-radius: 10px">
                                                     <p>
                                                         <center><strong>!! This Unit is Occupied !!</strong>
                                                         </center><br>
@@ -572,8 +590,32 @@
                         <hr>
                         <div class="row" style="gap: 10px; justify-content: space-between">
                             <div class="col-sm-5 text-secondary">
-                                <a href="" style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">
+                                <a onclick="$('#unitCapacityDiv').toggle('slow');"
+                                    style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">
                                     Change Unit Capacity</a>
+                                <div id="unitCapacityDiv" class="headerS mt-1" id="changeUnitCapacity"
+                                    style="display: none; color: #fff">
+                                    <form action="{{ route('branch.changeUnitCapacity', $unit) }}"
+                                        id="changeUnitCapacityForm" enctype="multipart/form-data" method="POST">
+                                        @csrf
+                                        <div>
+                                            <label for="capacity">Capacity <br> (<small>Changing the capacity of the
+                                                    unit is
+                                                    a very serious
+                                                    action, make sure
+                                                    you are making the right option.</small>)</label>
+                                            <input class="form-control mb-0" name="capacity" type="number"
+                                                value="{{$unit->capacity}}" min="0" max="100" id="unitCapacityNewInput"
+                                                style="margin-bottom: 20px">
+                                            <small style="display: none" id="unitCapacityStatus">Old Capacity:
+                                                {{$unit->capacity}}% ->
+                                                <small id="unitCapacityNumber"></small>
+                                            </small>
+                                            <button class="btn btn-sm btn-light mt-2"
+                                                style="width: 100%">Change</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                             <div class="col-sm-5 text-secondary">
                                 <a href="" style="background-color: #66377f;width: 100%"
@@ -721,7 +763,7 @@
                             </h5>
                         </div>
                         <div class="modal-body">
-                            <div class="alert-success" style="padding: 10px; border-radius: 20px">
+                            <div class="alert-success" style="padding: 10px; border-radius: 10px">
                                 <p>
                                     Here you can change the trip and time of the delivery as well as
                                     the Vehicle and the total price of the delivery.
@@ -1035,7 +1077,7 @@
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="alert-success" style="padding: 10px; border-radius: 20px">
+                                                <div class="alert-success" style="padding: 10px; border-radius: 10px">
                                                     <p>
                                                         Here you can change the trip and time of the delivery as well as
                                                         the Vehicle and the total price of the delivery.
@@ -1196,16 +1238,37 @@
         $('.checkPayment').click(function() {
             $('.checkPayment').not(this).prop('checked', false);
         });
+        var unitCapacityNewInput = document.getElementById('unitCapacityNewInput');
+        var unitCapacityNumber = document.getElementById('unitCapacityNumber');
+        var color = '';
+        var text = '';
+        unitCapacityNewInput.onchange = function() {
+            var left = 100 - unitCapacityNewInput.value;
+            $('#unitCapacityStatus').show('fast');
+            if (unitCapacityNewInput.value >= 95) {
+                color = "#ff4242";
+                text = "New Capacity: " + unitCapacityNewInput.value + "% (Almost Full : Left Capacity = "+left+"%)";
+                if (unitCapacityNewInput.value == 100) {
+                    color = "#ff2424";
+                    text = "New Capacity: " + unitCapacityNewInput.value + " (Full : Left Capacity = "+left+"%)";
+                }
+            } else if(unitCapacityNewInput.value >= 80) {
+                color = "#e0d238";
+                text = "New Capacity: " + unitCapacityNewInput.value + " (Moderately Full : Left Capacity = "+left+"%)";
+            }else{
+                color = "#38b9e0";
+                text = "New Capacity: " + unitCapacityNewInput.value + " (Left Capacity = "+left+"%)";
+            }
+            unitCapacityNumber.textContent =  text;
+            unitCapacityNumber.style.color = color;
+
+        }
     });
-</script>
-<script>
     $(".select2").select2({
         theme: "bootstrap-5",
         selectionCssClass: "select2--small", // For Select2 v4.1
         dropdownCssClass: "select2--small",
     });
-</script>
-<script>
     + function($) {
     'use strict';
     var proofInputImage = document.getElementById('proofInputImage');

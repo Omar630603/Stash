@@ -17,7 +17,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
@@ -43,7 +43,7 @@
     <div class="main-body">
 
         <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
+        <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee :
@@ -55,8 +55,8 @@
 
         <div class="row gutters-sm" id="info">
             <div class="col-md-4 mb-3">
-                <div class="card" style="border-radius:20px; padding: 15px">
-                    <div class="card-body" style="background: #9D3488;border-radius:20px;">
+                <div class="card" style="border-radius: 10px; padding: 15px">
+                    <div class="card-body" style="background: #9D3488;border-radius: 10px;">
                         <div class="d-flex flex-column align-items-center text-center">
                             <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                 alt="user{{ Auth::user()->username }}" class="rounded-circle" width="160"
@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card mb-3" style="border-radius:20px;">
+                <div class="card mb-3" style="border-radius: 10px;">
                     <div class="card-body">
                         <div class="float-right" style="cursor: pointer;">
                             <a id="edit-profile-btn" style="text-decoration: none;cursor: pointer"
@@ -139,8 +139,8 @@
 
             <div class="row gutters-sm" id="edit" style="display: none">
                 <div class="col-md-4 mb-3">
-                    <div class="card" style="border-radius:20px;">
-                        <div class="card-body" style="background: #fff;border-radius:20px;">
+                    <div class="card" style="border-radius: 10px;">
+                        <div class="card-body" style="background: #fff;border-radius: 10px;">
                             <div class="d-flex flex-column align-items-center text-center">
                                 <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                     alt="user{{ Auth::user()->username }}" class="rounded-circle" width="150"
@@ -172,7 +172,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="card mb-3" style="border-radius:20px;">
+                    <div class="card mb-3" style="border-radius: 10px;">
                         <form method="post" action="{{ route('branch.editBioData', $branchEmployee) }}"
                             enctype="multipart/form-data">
                             @csrf
@@ -235,7 +235,7 @@
             </div>
             <div class="row gutters-sm">
                 <div class="col-md-8">
-                    <div class="card mb-3" style="border-radius:20px;">
+                    <div class="card mb-3" style="border-radius: 10px;">
                         <div class="card-body">
                             <div class="float-right" style="cursor: pointer;">
                                 <a style="text-decoration: none;cursor: pointer" onclick="$('#edit_loction').toggle('fast'); $('#branch-name-text').toggle('fast'); $('#branch-name').toggle('fast');
@@ -297,7 +297,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card mb-3" style="border-radius:20px; padding: 17px;">
+                    <div class="card mb-3" style="border-radius: 10px; padding: 17px;">
                         <div class="form-group" id="edit_loction"
                             style="display: none; text-align: center; padding: 5px">
                             <label for="address_address" style=""><strong>Address</strong></label>
@@ -305,8 +305,8 @@
                             <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
                             <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
                         </div>
-                        <div id="address-map-container" style="width:100%;height:280px;border-radius:20px;">
-                            <div style="width: 100%; height: 100%; border-radius:20px;" id="address-map"></div>
+                        <div id="address-map-container" style="width:100%;height:280px;border-radius: 10px;">
+                            <div style="width: 100%; height: 100%; border-radius: 10px;" id="address-map"></div>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
@@ -315,7 +315,7 @@
             </div>
             <div class="row gutters-sm">
                 <div class="col-md-8">
-                    <div class="card mb-3" style="border-radius:20px;">
+                    <div class="card mb-3" style="border-radius: 10px;">
                         <div class="card-body">
                             <div class="float-right" style="cursor: pointer;">
                                 <a style="text-decoration: none;cursor: pointer"
@@ -415,7 +415,7 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="alert-danger"
-                                                                        style="padding: 10px; border-radius: 20px">
+                                                                        style="padding: 10px; border-radius: 10px">
                                                                         <p>
                                                                             <center><strong>!! Are you sure you want to
                                                                                     delete the {{$bank->bank_name}} Bank
@@ -469,7 +469,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card mb-3" style="border-radius:20px;">
+                    <div class="card mb-3" style="border-radius: 10px;">
                         <div class="card-body">
                             <div class="btn-group" style="width: 100%">
                                 <a href="{{ route('branch.transactions') }}" class="btn btn-info">Transactions</a>
