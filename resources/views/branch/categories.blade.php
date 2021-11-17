@@ -83,6 +83,8 @@
                         <input hidden type="text" value="{{$category->ID_Category}}" name="ID_Category">
                         <input hidden type="text" value="{{$category->category_name}}" name="categoryName">
                         <input hidden type="text" value="{{$ind+1}}" name="ind">
+                        <input hidden name="amount" type="number" value="1" min="0" max="20"
+                            id="amountRequest{{$category->ID_Category}}">
                     </form>
                     <button type="submit" data-toggle="modal" data-target="#addCategory{{$category->ID_Category}}"
                         class="btn btn-sm btn-outline-success" style="border-radius: 10px; text-align: center;">Add
@@ -105,6 +107,13 @@
                                             Click Add to Proceed<br>
                                             The Private key will be generated automatically
                                         </p>
+                                        <label for="amount">Amount</label><br>
+                                        <small>This option is to add units according to the amount selected
+                                            <br> The default value is 1 and maximum value is 20.</small>
+                                        <input
+                                            onchange="$('#amountRequest{{$category->ID_Category}}').val($(this).val())"
+                                            class="form-control" name="amount" type="number" value="1" min="0" max="20"
+                                            id="amountInput{{$category->ID_Category}}">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
