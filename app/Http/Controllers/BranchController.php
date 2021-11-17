@@ -338,7 +338,8 @@ class BranchController extends Controller
 
         $transaction = new Transactions;
         $transaction->ID_Order = $order->ID_Order;
-                $transaction->transactions_description = 'Delivery: ' . $request->get('description_type');
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+                $transaction->transactions_description = 'Delivery: ' . $request->get('description_type'). '. For Unit ('.$unit->unit_name.')';
                 $transaction->transactions_totalPrice = $request->get('totalPrice');
             if ($request->get('transaction') == 1) {
                 if ($request->get('ID_Bank') == 0) {
@@ -713,7 +714,7 @@ class BranchController extends Controller
                 }else{
                     $transaction->ID_Bank = $request->get('ID_Bank');
                 }
-                $transaction->transactions_description = 'Entry Transaction';
+                $transaction->transactions_description = 'Entry Transaction For Unit ('.$unit->unit_name.')';
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
                 $transaction->transactions_status = 1;
                 if ($request->file('proof')) {
@@ -726,7 +727,7 @@ class BranchController extends Controller
                 $transaction->save();
             }else if($request->get('transaction') == 2){
                 $transaction->ID_Order = $order->ID_Order;
-                $transaction->transactions_description = 'Entry Transaction';
+                $transaction->transactions_description = 'Entry Transaction For Unit ('.$unit->unit_name.')';
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
                 $transaction->transactions_status = 0;
                 $transaction->proof = 'Waiting for Payment';
@@ -768,7 +769,7 @@ class BranchController extends Controller
                 $order->order_totalPrice += $request->get('totalPrice');
                 $order->save();
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_description = 'Entry Transaction + Delivery: ' . $request->get('description_type');
+                $transaction->transactions_description = 'Entry Transaction + Delivery: ' . $request->get('description_type').'. For Unit ('.$unit->unit_name.')';
                 $transaction->save();
                 $message ='Order has been made successfuly';
                 return redirect()->back()->with('success', $message);
@@ -799,7 +800,6 @@ class BranchController extends Controller
     }
     public function extendOrder(Request $request, Order $order)
     {
-        echo $request->get('expandPrice');
         $request->validate([
             'expandPrice' => 'required',
             'extendEndsAt' => 'required',
@@ -808,9 +808,10 @@ class BranchController extends Controller
         $order->expandPrice += $request->get('expandPrice');
         $order->endsAt= $request->get('extendEndsAt');
         $transaction = new Transactions;
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
         $transaction->ID_Order = $order->ID_Order;
         $transaction->transactions_totalPrice = $request->get('expandPrice');
-        $transaction->transactions_description = 'Extension Fees';
+        $transaction->transactions_description = 'Extension Fees For Unit ('.$unit->unit_name.')';
             if ($request->get('transaction') == 1) {
                 if ($request->get('ID_Bank') == 0) {
                     $message = 'Select Bank';
@@ -864,23 +865,18 @@ class BranchController extends Controller
     public function changeOrderUnit(Request $request, Unit $unit, Order $order)
     {
         $transaction = new Transactions;
+        $newUnit = Unit::where('ID_Unit', $request->get('new_ID_Unit'))->first();
         $transaction->ID_Order = $order->ID_Order;
         if ($request->get('change_status') == 0) {
             $message ='Selected Unit Category is The Same';
             return redirect()->back()->with('success', $message);
         } else if ($request->get('change_status') == 1) {
             $transaction->transactions_totalPrice = $request->get('changePrice');
-            $transaction->transactions_description = 'Change Unit Fees: Step Down';
-            $category = Category::where('ID_Category', $unit->ID_Category)->first();
-            $today = new DateTime(date("Y-m-d H:i:s"));
-            $orderEndDate = new DateTime($order->endsAt);
-            $interval = $orderEndDate->diff($today);
-            $oldPrice = $interval->days * $category->pricePerDay;
-            $order->order_totalPrice -= $oldPrice;
-            $order->order_totalPrice += $request->get('changePrice');
+            $transaction->transactions_description = 'Change Unit Fees: Step Down To Unit ('.$newUnit->unit_name.')';
         } else if ($request->get('change_status') == 2) {
             $transaction->transactions_totalPrice = $request->get('changePrice');
-            $transaction->transactions_description = 'Change Unit Fees: Step Up';
+            $transaction->transactions_description = 'Change Unit Fees: Step Up To Unit ('.$newUnit->unit_name.')';
+            $order->order_totalPrice += $request->get('changePrice');
         } else{
             $message ='There is Something Wrong!';
             return redirect()->back()->with('Fail', $message);
@@ -904,7 +900,6 @@ class BranchController extends Controller
             $transaction->transactions_status = 0;
             $transaction->proof = 'Waiting for Payment';
         }
-        $newUnit = Unit::where('ID_Unit', $request->get('new_ID_Unit'))->first();
         $order->ID_Unit = $request->get('new_ID_Unit');
         $newUnit->capacity = $unit->capacity;
         $newUnit->unit_status = 1;
