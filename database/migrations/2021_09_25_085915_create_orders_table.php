@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id('ID_Order');
             $table->unsignedBigInteger('ID_User');
             $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('ID_Unit');
+            $table->unsignedBigInteger('ID_Unit')->unique();
             $table->foreign('ID_Unit')->references('ID_Unit')->on('units')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('order_status')->default(0);;
             $table->dateTime('startsFrom');

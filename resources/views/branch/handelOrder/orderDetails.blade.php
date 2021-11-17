@@ -242,7 +242,8 @@
                                                                             value="{{$order->endsAt}}">
                                                                         <input id="unitPricePerDay" hidden
                                                                             value="{{$category->pricePerDay}}">
-                                                                        <small>Old:{{$order->endsAt}}</small>
+                                                                        <small>Current End
+                                                                            Date:{{$order->endsAt}}</small>
                                                                         <br>
                                                                         Click Extend to Continue the Process
                                                                     </center>
@@ -590,9 +591,9 @@
 
                         </div>
                         <hr>
-                        <div class="row" style="gap: 10px; justify-content: space-between">
-                            <div class="col-sm-5 text-secondary">
-                                <a onclick="$('#unitCapacityDiv').toggle('slow');"
+                        <div class="row" style="gap: 10px; justify-content: space-between;text-transform: capitalize;">
+                            <div id="CapacityChangeBigDiv" class="col-sm-5 text-secondary">
+                                <a onclick="$('#unitCapacityDiv').toggle('fast');"
                                     style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">
                                     Change Unit Capacity</a>
                                 <div id="unitCapacityDiv" class="headerS mt-1" id="changeUnitCapacity"
@@ -601,15 +602,15 @@
                                         id="changeUnitCapacityForm" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div>
-                                            <label for="capacity">Capacity <br> (<small>Changing the capacity of the
+                                            <label for="capacity">Capacity: (<small>Changing the capacity of the
                                                     unit is
                                                     a very serious
                                                     action, make sure
-                                                    you are making the right option.</small>)</label>
+                                                    you're making the right option.</small>)</label>
                                             <input class="form-control mb-0" name="capacity" type="number"
                                                 value="{{$unit->capacity}}" min="0" max="100" id="unitCapacityNewInput"
                                                 style="margin-bottom: 20px">
-                                            <small style="display: none" id="unitCapacityStatus">Old Capacity:
+                                            <small style="display: none" id="unitCapacityStatus">Current Capacity:
                                                 {{$unit->capacity}}% ->
                                                 <small id="unitCapacityNumber"></small>
                                             </small>
@@ -619,9 +620,190 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-sm-5 text-secondary">
-                                <a href="" style="background-color: #66377f;width: 100%"
-                                    class="btn btn-sm btn-dark">Change Order Unit</a>
+                            <div class="col-sm-5 text-secondary" id="UnitChangeBigDiv">
+                                <form action="{{ route('branch.changeOrderUnit',[$unit, $order]) }}"
+                                    enctype="multipart/form-data" method="POST">
+                                    <a onclick="$('#changeOrderUnitMovingDiv').toggle('fast');"
+                                        style="background-color: #66377f;width: 100%" class="btn btn-sm btn-dark">Change
+                                        Order Unit</a>
+                                    <div id="changeOrderUnitMovingDiv" style="display: none">
+                                        <div class="headerS mt-1" style="color: #fff">
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <label for="capacity">Unit: (<small>Changing the unit of the
+                                                        order is
+                                                        a very serious
+                                                        action, make sure
+                                                        you're making the right option.</small>)
+
+                                                </label>
+                                                <a data-toggle="tooltip" title="View Change Log"
+                                                    onclick="$('.changeDetails').toggle('fast')"
+                                                    style="height: max-content" class="btn btn-sm btn-light mb-1">
+                                                    <i class="refresh-hover fas fa-info"
+                                                        style="color: #000 !important;"></i>
+                                                </a>
+                                            </div>
+                                            <div class="headerVehiclesSchedules" id="mainChangeUnitDiv"
+                                                style="display: none; color: #000;text-align: left">
+                                                <small id="newOrderTotalPrice"></small>
+                                                <br>
+                                                <small id="changeUnitPayment"></small>
+                                                <br>
+                                                <small id="changeUnitMoveable"></small>
+
+                                            </div>
+                                            <div class="container-fluid p-2 mb-1 changeDetails"
+                                                style="background-color: #E53D71; display: none; border-radius: 10px; color: #fff;">
+                                                @php
+                                                $startsFrom = new DateTime($order->startsFrom);
+                                                $endsAt = new DateTime($order->endsAt);
+                                                $today = new DateTime(date("Y-m-d H:i:s"));
+                                                $interval = $endsAt->diff($today);
+                                                $oldPrice = $interval->days * $category->pricePerDay;
+                                                @endphp
+                                                <div class="changeUnitLog" style="display: none">
+                                                    <small>Current Unit: {{$category->category_name}}</small><br>
+                                                    <small>Current Unit Renting Price = {{$oldPrice}}<br>
+                                                        (Order Period = {{$interval->days}} Days) * (Unit/Day =
+                                                        {{$category->pricePerDay}})
+                                                    </small>
+                                                    <br><small id="compositionPriceDaysLeft"></small>
+                                                    <br><small id="compositionPriceOld"></small>
+                                                    <br><small id="compositionPriceNew"></small>
+                                                    <br><small id="compositionPrice"></small>
+                                                    <br><small id="compositionDesc"></small>
+                                                    <br><small id="compositionMoveable"></small>
+                                                </div>
+                                            </div>
+                                            <div class="form-check">
+                                                @foreach ($categories as $categoryAvaliable)
+                                                @php
+                                                $ind = 0;
+                                                $unitName= '';
+                                                $idUnit = 0;
+                                                @endphp
+                                                <div class="container-fluid">
+                                                    @foreach ($units as $unitAvaliable)
+                                                    @if ($unitAvaliable->ID_Category == $categoryAvaliable->ID_Category)
+                                                    @php
+                                                    $ind++;
+                                                    $unitName = $unitAvaliable->unit_name;
+                                                    $idUnit = $unitAvaliable->ID_Unit;
+                                                    @endphp
+                                                    @endif
+                                                    @endforeach
+                                                    @if ($ind <= 0) <input disabled name="Idunit"
+                                                        class="checkCategory form-check-input" type="checkbox"
+                                                        value="{{$idUnit}}">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            {{$categoryAvaliable->category_name}}
+                                                            (There is {{$ind}} available units)
+                                                            <br>
+                                                            <small>This Category is has no units </small>
+                                                        </label>
+                                                        @else
+                                                        <input
+                                                            onchange="showCompositionPrice({{$category->pricePerDay}}, {{$order->order_totalPrice}}, {{$unit->capacity}})"
+                                                            id="unitPrice" name="Idunit"
+                                                            class="checkCategory form-check-input" type="checkbox"
+                                                            value="{{$idUnit}}">
+                                                        <input hidden id="changeUnitPricePerDay{{$idUnit}}"
+                                                            value="{{$categoryAvaliable->pricePerDay}}">
+                                                        <label class="form-check-label" for="flexCheckDefault">
+                                                            {{$categoryAvaliable->category_name}}
+                                                            (There is {{$ind}} available units)
+                                                            <br>
+                                                            <small>Unit {{$unitName}} is ready to use <br>
+                                                                Price/Day: {{$categoryAvaliable->pricePerDay}}
+                                                            </small>
+                                                        </label>
+
+                                                        @endif
+                                                </div>
+                                                @endforeach
+                                            </div>
+
+                                            @csrf
+                                            <div class="container" style="text-align: left">
+                                                <input hidden name="changePrice" style="margin: 5px" readonly
+                                                    type="text" class="form-control" id="unitChangePayment" value="0">
+                                                <input hidden type="number" value="0" id="change_status"
+                                                    name="change_status">
+                                                <input hidden type="number" value="0" id="new_ID_Unit"
+                                                    name="new_ID_Unit">
+                                                <div class="mt-3">
+                                                    <label for="changeUnit"><strong>Change Unit for This Order
+                                                            <small>(This will add the
+                                                                payment details for
+                                                                the
+                                                                new change and add a transaction with
+                                                                price: <small id="finallChangePrice"></small>)</small>
+                                                        </strong></label>
+                                                </div>
+                                                <div>
+                                                    <div class="form-check" style="margin-bottom: 10px">
+                                                        <div>
+                                                            <input onclick="$('#addPaymentChange').show('fast');"
+                                                                name="transaction"
+                                                                class="checkPaymentChange form-check-input"
+                                                                type="checkbox" value="1">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Include
+                                                                Payment
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <input onclick="$('#addPaymentChange').hide('fast');"
+                                                                checked name="transaction"
+                                                                class="checkPaymentChange form-check-input"
+                                                                type="checkbox" value="0">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Exclude
+                                                                Payment
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container" style="display: none;padding: 10px 15px"
+                                            id="addPaymentChange">
+                                            <div class="headerOrder row">
+                                                <div class="form-group" style="margin: 10px 0">
+                                                    <select name="ID_Bank" style="width: 100%" class="select2">
+                                                        <option value="0">Select Bank
+                                                        </option>
+                                                        @php
+                                                        $bankNo = 1;
+                                                        @endphp
+                                                        @foreach ($banks as $bank)
+                                                        <option value="{{$bank->ID_Bank}}">
+                                                            {{$bankNo++}}- (
+                                                            {{$bank->bank_name}} )
+                                                            -
+                                                            @ {{$bank->accountNo}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div style="margin: 10px 0">
+                                                    <a style="width: 100%;"
+                                                        onclick="$('#proofInputImageChangeUnit').click(); return false;"
+                                                        class="btn btn-sm btn-outline-light">Add
+                                                        Payment Proof</a>
+                                                    <input id="proofInputImageChangeUnit" style="display: none;"
+                                                        type="file" name="proof">
+                                                    <input
+                                                        style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                        disabled style="display: none" id="proofPhotoChangeUnit">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="headerS">
+                                            <button class="btn btn-sm btn-light" style="width: 100%">Change</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -681,10 +863,6 @@
                             <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
                                 <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
                             </a>
-                            <a data-toggle="tooltip" title="Delete Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover far fa-trash-alt icons"></i>
-                            </a>
                             @elseif ($transaction->transactions_status == 1)
                             <a target="_blank" rel="noopener noreferrer"
                                 href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
@@ -693,15 +871,11 @@
                             </a>
                             <a data-toggle="tooltip" title="Approve Transaction"
                                 style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover fas fa-check-circle icons"></i>
+                                <i class="use-hover fas fa-check-circle icons"></i>
                             </a>
                             <a data-toggle="tooltip" title="Disapprove Transaction"
                                 style="text-decoration: none;cursor: pointer">
                                 <i class="delete-hover fas fa-ban icons"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Delete Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover far fa-trash-alt icons"></i>
                             </a>
                             @elseif ($transaction->transactions_status == 2)
                             <a target="_blank" rel="noopener noreferrer"
@@ -711,11 +885,7 @@
                             </a>
                             <a data-toggle="tooltip" title="Approve Transaction"
                                 style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover fas fa-check-circle icons"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Delete Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover far fa-trash-alt icons"></i>
+                                <i class="use-hover fas fa-check-circle icons"></i>
                             </a>
                             @elseif ($transaction->transactions_status == 3)
                             <a target="_blank" rel="noopener noreferrer"
@@ -727,11 +897,11 @@
                                 style="text-decoration: none;cursor: pointer">
                                 <i class="delete-hover fas fa-ban icons"></i>
                             </a>
+                            @endif
                             <a data-toggle="tooltip" title="Delete Transaction"
                                 style="text-decoration: none;cursor: pointer">
                                 <i class="delete-hover far fa-trash-alt icons"></i>
                             </a>
-                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -1081,7 +1251,8 @@
                                             <div class="modal-body">
                                                 <div class="alert-success" style="padding: 10px; border-radius: 10px">
                                                     <p>
-                                                        Here you can change the trip and time of the delivery as well as
+                                                        Here you can change the trip and time of the delivery as
+                                                        well as
                                                         the Vehicle and the total price of the delivery.
                                                     </p>
                                                     <form method="POST"
@@ -1199,10 +1370,8 @@
 
             @endif
         </div>
-
     </div>
 </div>
-
 
 <script>
     function showPrivateKey(id) {
@@ -1232,13 +1401,89 @@
                 finallPrice = document.getElementById('finallExtendPrice');
                 finallPrice.textContent = $('#orderExtendPayment').val(); 
             }
+        }
+    }
+    function showCompositionPrice(oldUnitPrice, orderTotalPrice, unitCapacity) {
+        unitVal = $("input:checkbox[id=unitPrice]:checked");
+        pricePerDay = document.getElementById('changeUnitPricePerDay'+unitVal.val()).value;
+        var orderEndDate = new Date($('#extendOrderTimeOld').val()); 
+        var today = new Date();
+        if (orderEndDate < today) {
+            unitVal.prop('checked', false);
+            alert('Extend the period first, the order is expired')
+        }else{
+            dateDif = Math.round((orderEndDate-today)/(1000*60*60*24));
+            if (dateDif == 0) {
+                dateDif = 1;
+            }
+            var compositionPriceDaysLeft = document.getElementById('compositionPriceDaysLeft');
+            var compositionPriceOld = document.getElementById('compositionPriceOld');
+            var compositionPriceNew = document.getElementById('compositionPriceNew');
+            var compositionPrice = document.getElementById('compositionPrice');
+            var compositionDesc = document.getElementById('compositionDesc');
+            var compositionMoveable = document.getElementById('compositionMoveable');
+            var newOrderTotalPrice = document.getElementById('newOrderTotalPrice');
+            var changeUnitPayment = document.getElementById('changeUnitPayment');
+            var changeUnitMoveable = document.getElementById('changeUnitMoveable');
+            finallNewPrice = parseInt(pricePerDay) * dateDif;
+            finallOldPrice = oldUnitPrice * dateDif;
+            offTotal = orderTotalPrice - finallOldPrice;
+            onTotal = offTotal + finallNewPrice;
+            $('#mainChangeUnitDiv').show('fast');
+            $('.changeUnitLog').show('fast');
+            $('#CapacityChangeBigDiv').attr('class', 'col-sm-12 text-secondary');
+            $('#UnitChangeBigDiv').attr('class', 'col-sm-12 text-secondary');
+            compositionPriceDaysLeft.textContent =  "There Are "+ dateDif +" Remaining Days.";
+            compositionPriceOld.textContent =  "Current Unit Price = Unit/Day Price->"+oldUnitPrice+" * Remaining Days->"+dateDif+ " = ("+finallOldPrice+")";
+            compositionPriceNew.textContent =  "New Unit Price = Unit/Day Price->"+pricePerDay+" * Remaining Days->"+dateDif+ " = ("+finallNewPrice+")";
+            compositionPrice.textContent = "Order Total Price = ("+orderTotalPrice+") - Current Unit Price ("+finallOldPrice+") = Order Total Price ("+offTotal+") + New Unit Price = ("+finallNewPrice+") = "+onTotal;
+            finallChangePrice = document.getElementById('finallChangePrice');
             
-
+            if (orderTotalPrice == onTotal) {
+                $('#unitChangePayment').val(0);
+                $('#change_status').val(0);
+                $('#new_ID_Unit').val(0);
+                newOrderTotalPrice.textContent =  "No Change In the order price ("+ onTotal +")";
+                compositionDesc.textContent =  "Meaning there are no changes will be made becasue it is the same category.";
+                changeUnitPayment.textContent =  "No Need To Change The Unit";
+                compositionMoveable.textContent = "Unit Is Not Changeable, Try Another Unit: Same Unit";
+                changeUnitMoveable.textContent = "Unit Is Not Changeable: Same Unit";
+                finallChangePrice.textContent = '0: No Changes'; 
+            }else{
+            payment = finallNewPrice - finallOldPrice;
+                if (payment<0) {
+                    $('#unitChangePayment').val(0);
+                    $('#change_status').val(1);
+                    $('#new_ID_Unit').val(unitVal.val());
+                    newOrderTotalPrice.textContent = "Order total price change negatively (New:"+ onTotal +"/Old:"+orderTotalPrice+")";
+                    compositionDesc.textContent =  "Meaning the customer can change to a chaper Unit but the customer should not pay because it is a step down.";
+                    changeUnitPayment.textContent =  "Unit Is Not Refundable";
+                    compositionMoveable.textContent = "Unit Is Changeable: Unit Is Not Refundable";
+                    changeUnitMoveable.textContent = "Unit Is Changeable: no composition";
+                    finallChangePrice.textContent = "-"+payment+": Change Expanse Down"; 
+                }else{
+                    $('#unitChangePayment').val(payment);
+                    $('#change_status').val(2);
+                    $('#new_ID_Unit').val(unitVal.val());
+                    newOrderTotalPrice.textContent =  "New Order Total Price ("+ onTotal +")";
+                    compositionDesc.textContent =  "Meaning The Current Unit Price Will Be Deleted From The Order Total Price And Add The New Price to it. The Payment Will Be the Difference Between the old Price and the new price.";
+                    changeUnitPayment.textContent =  "The Customer Has To Pay: ("+payment+")";
+                    compositionMoveable.textContent = "Unit Is Changeable, Click Next To Proceed";
+                    changeUnitMoveable.textContent = "Unit Is Changeable";
+                    finallChangePrice.textContent = ""+payment+": Change Expanse Up"; 
+                }
+            }
         }
     }
     $(document).ready(function(){
         $('.checkPayment').click(function() {
             $('.checkPayment').not(this).prop('checked', false);
+        });
+        $('.checkPaymentChange').click(function() {
+            $('.checkPaymentChange').not(this).prop('checked', false);
+        });
+        $('.checkCategory').click(function() {
+            $('.checkCategory').not(this).prop('checked', false);
         });
         var unitCapacityNewInput = document.getElementById('unitCapacityNewInput');
         var unitCapacityNumber = document.getElementById('unitCapacityNumber');
@@ -1265,6 +1510,8 @@
             unitCapacityNumber.style.color = color;
 
         }
+        
+        
     });
     $(".select2").select2({
         theme: "bootstrap-5",
@@ -1274,11 +1521,18 @@
     + function($) {
     'use strict';
     var proofInputImage = document.getElementById('proofInputImage');
-    var p = document.getElementById('proofPhoto');
+    var proofPhoto = document.getElementById('proofPhoto');
     proofInputImage.onchange = function() {
-        p.style.display = '';
-        p.value = 'File Name:' + proofInputImage.files[0].name;
+        proofPhoto.style.display = '';
+        proofPhoto.value = 'File Name:' + proofInputImage.files[0].name;
+    }
+    var proofInputImageChangeUnit = document.getElementById('proofInputImageChangeUnit');
+    var proofPhotoChangeUnit = document.getElementById('proofPhotoChangeUnit');
+    proofInputImageChangeUnit.onchange = function() {
+        proofPhotoChangeUnit.style.display = '';
+        proofPhotoChangeUnit.value = 'File Name:' + proofInputImageChangeUnit.files[0].name;
     }
     }(jQuery);
+    
 </script>
 @endsection

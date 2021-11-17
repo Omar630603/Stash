@@ -641,8 +641,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="totalPrice" class="form-label">Deliver Price</label>
-                                            <input onchange="updatePrice()" type="number" class="form-control"
-                                                id="totalPriceInput" name="totalPrice">
+                                            <input onchange="showPrice()" type="number" class="form-control"
+                                                id="totalPriceInput" name="totalPrice" min="0">
                                         </div>
                                     </div>
                                 </div>
@@ -1387,8 +1387,13 @@
             unitVal = $("input:checkbox[id=unitPrice]:checked");
             pricePerDay = document.getElementById('unitPricePerDay'+unitVal.val())
             $('#orderTotalPayment').val(pricePerDay.value * dateDif)
+            orderTotalPayment = $('#orderTotalPayment').val();
+            totalPriceInput = $('#totalPriceInput').val();
+                if (totalPriceInput != '') {
+                    $('#orderTotalPayment').val(parseInt(orderTotalPayment) + parseInt(totalPriceInput));
+                }
             finallPrice = document.getElementById('finallPrice');
-            finallPrice.textContent = $('#orderTotalPayment').val(); 
+            finallPrice.textContent = $('#orderTotalPayment').val();
             }else{
                 if (orderEndDate != 'Invalid Date') {
                     alert('Date is already passed')
@@ -1410,13 +1415,6 @@
                 deliveryCheck.textContent =  'Delivery Period: '+dateDif+' days.';
             }
         }
-    function updatePrice() {
-        orderTotalPayment = $('#orderTotalPayment').val();
-        totalPriceInput = $('#totalPriceInput').val();
-        $('#orderTotalPayment').val(parseInt(orderTotalPayment) + parseInt(totalPriceInput));
-        finallPrice = document.getElementById('finallPrice');
-        finallPrice.textContent = $('#orderTotalPayment').val();
-    }
 </script>
 <script>
     + function($) {

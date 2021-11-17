@@ -150,15 +150,6 @@ class BranchController extends Controller
         $unit->save();
         return redirect()->back();
     }
-    public function changeUnitCapacity(Request $request, Unit $unit){
-        $request->validate([
-            'capacity' => 'required|integer|max:100'
-        ]);
-        $unit->capacity = $request->get('capacity');
-        $unit->save();
-        $message ='Unit Capacity has been changed successfully';
-        return redirect()->back()->with('success', $message);
-    }
     
     public function branchOrderDetailsU(Unit $unit)
     {
@@ -186,7 +177,7 @@ class BranchController extends Controller
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
                 ->where('delivery_schedules.ID_DeliveryVehicle', 'like', '%' . $request->get('driver') . '%')
-                ->get();
+                ->orderBy('delivery_schedules.created_at', 'desc')->get(); 
             $active = true;
             $activeV = $request->get('driver');
             $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
@@ -206,7 +197,7 @@ class BranchController extends Controller
                 ->orWhere('delivery_vehicles.vehicle_phone', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('delivery_vehicles.model', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
-                ->get();
+                ->orderBy('delivery_schedules.created_at', 'desc')->get();
             $active = true;
             $activeV = DeliveryVehicle::Where('delivery_vehicles.vehicle_name', 'like', '%' . $request->get('search') . '%')
                 ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
@@ -227,7 +218,8 @@ class BranchController extends Controller
             ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
             ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
             ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
-            ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
+            ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
+            ->orderBy('delivery_schedules.created_at', 'desc')->get();
         }
         return view('branch.delivery', ['vehicles' => $vehicles, 'schedules' => $schedules,
          'active' => $active, 'activeV' => $activeV, 'branch' => $branch, 'vehicleDriver' => $vehicleDriver
@@ -453,7 +445,7 @@ class BranchController extends Controller
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
                 ->where('orders.ID_User', 'like', '%' . $request->get('user') . '%')
-                ->get();
+                ->orderBy('orders.created_at', 'desc')->get();
             $active = true;
             $activeU = $request->get('user');
             $userProfile = User::where('ID_User', $request->get('user'))
@@ -473,7 +465,7 @@ class BranchController extends Controller
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('users.username', 'like', '%' . $request->get('search') . '%')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
-                ->get();
+                ->orderBy('orders.created_at', 'desc')->get();            
             $active = true;
             $activeU = User::Where('users.name', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('users.phone', 'like', '%' . $request->get('search') . '%')
@@ -500,7 +492,7 @@ class BranchController extends Controller
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
-                ->get();
+                ->orderBy('orders.created_at', 'desc')->get(); 
         }
         
         return view('branch.orders', ['users' => $users, 'orders' => $orders,
@@ -776,7 +768,7 @@ class BranchController extends Controller
                 $order->order_totalPrice += $request->get('totalPrice');
                 $order->save();
                 $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_description = 'Entry Transaction + ' . $schedule->schedule_description;
+                $transaction->transactions_description = 'Entry Transaction + Delivery: ' . $request->get('description_type');
                 $transaction->save();
                 $message ='Order has been made successfuly';
                 return redirect()->back()->with('success', $message);
@@ -798,11 +790,12 @@ class BranchController extends Controller
         $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
         $category = Category::where('ID_Category', $unit->ID_Category)->first();
         $banks = Bank::where('ID_Branch', $branch->ID_Branch)->get();
-
+        $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
+        $categories = Category::all();
         return view('branch.handelOrder.orderDetails', ['order' => $order, 'unit' => $unit,
          'category' => $category, 'customer' => $customer, 'branch' => $branch,
           'schedules' => $schedules, 'vehicles' => $vehicles, 'transactions'=> $transactions,
-        'banks'=>$banks]);
+        'banks'=>$banks, 'units' => $units,'categories' => $categories]);
     }
     public function extendOrder(Request $request, Order $order)
     {
@@ -859,7 +852,71 @@ class BranchController extends Controller
        $message ='Order description has been changed successfuly';
         return redirect()->back()->with('success', $message);
     }
-    
+    public function changeUnitCapacity(Request $request, Unit $unit){
+        $request->validate([
+            'capacity' => 'required|integer|max:100'
+        ]);
+        $unit->capacity = $request->get('capacity');
+        $unit->save();
+        $message ='Unit Capacity has been changed successfully';
+        return redirect()->back()->with('success', $message);
+    }
+    public function changeOrderUnit(Request $request, Unit $unit, Order $order)
+    {
+        $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
+        if ($request->get('change_status') == 0) {
+            $message ='Selected Unit Category is The Same';
+            return redirect()->back()->with('success', $message);
+        } else if ($request->get('change_status') == 1) {
+            $transaction->transactions_totalPrice = $request->get('changePrice');
+            $transaction->transactions_description = 'Change Unit Fees: Step Down';
+            $category = Category::where('ID_Category', $unit->ID_Category)->first();
+            $today = new DateTime(date("Y-m-d H:i:s"));
+            $orderEndDate = new DateTime($order->endsAt);
+            $interval = $orderEndDate->diff($today);
+            $oldPrice = $interval->days * $category->pricePerDay;
+            $order->order_totalPrice -= $oldPrice;
+            $order->order_totalPrice += $request->get('changePrice');
+        } else if ($request->get('change_status') == 2) {
+            $transaction->transactions_totalPrice = $request->get('changePrice');
+            $transaction->transactions_description = 'Change Unit Fees: Step Up';
+        } else{
+            $message ='There is Something Wrong!';
+            return redirect()->back()->with('Fail', $message);
+        }
+        if ($request->get('transaction') == 1) {
+            if ($request->get('ID_Bank') == 0) {
+                    $message = 'Select Bank';
+                    return redirect()->back()->with('fail', $message);
+            }else{
+                $transaction->ID_Bank = $request->get('ID_Bank');
+            }
+            $transaction->transactions_status = 1;
+            if ($request->file('proof')) {
+                $image_name = $request->file('proof')->store('transactions_images', 'public');
+                $transaction->proof = $image_name;
+            }else{
+                $message = 'Add Proof';
+                return redirect()->back()->with('fail', $message);
+            }
+        }else{
+            $transaction->transactions_status = 0;
+            $transaction->proof = 'Waiting for Payment';
+        }
+        $newUnit = Unit::where('ID_Unit', $request->get('new_ID_Unit'))->first();
+        $order->ID_Unit = $request->get('new_ID_Unit');
+        $newUnit->capacity = $unit->capacity;
+        $newUnit->unit_status = 1;
+        $unit->capacity = 0;
+        $unit->unit_status = 0;
+        $newUnit->save();
+        $unit->save();
+        $transaction->save();
+        $order->save();
+        $message ='Order has changed Unit successfuly';
+        return redirect()->back()->with('success', $message);
+    }
 
 //Banks & Transactions
     public function addBank(Request $request){
