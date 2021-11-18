@@ -812,8 +812,9 @@
         </div>
     </div>
     <div class="container-fluid" id="deliveryContainer" style="margin-top: 20px">
-        <div style="text-align: center">
-            <h4>Transactions History</h4>
+        <div class="headerVehiclesSchedules mb-auto" style="text-align: center; flex: 0">
+            <h4 class="widthHeader" style="width: 130px">Transactions</h4>
+            <img width="100px" class="img-fluid mb-auto" src="{{ asset('storage/images/transaction.svg') }}" alt="">
         </div>
         <div class="container-fluid">
             @if(count($transactions)>0)
@@ -821,6 +822,7 @@
                 <table id="transactionTable">
                     <thead>
                         <tr>
+                            <th class="column">Date</th>
                             <th class="column">Bank</th>
                             <th class="column">Description</th>
                             <th class="column">Amount</th>
@@ -831,6 +833,17 @@
                     <tbody>
                         @foreach ($transactions as $transaction)
                         <tr>
+                            <td data-label="Date" class="column">
+                                <p class="btn-sm btn-light">{{$transaction->created_at}}
+                                    @if ($transaction->transaction_madeBy)
+                                    <i data-toggle="tooltip" title="Transaction Made By Branch"
+                                        class="noUse-hover float-right far fa-building"></i>
+                                    @else
+                                    <i data-toggle="tooltip" title="Transaction Made By Customer"
+                                        class="refresh-hover float-right fas fa-user-tag"></i>
+                                    @endif
+                                </p>
+                            </td>
                             <td data-label="Bank" class="column">
                                 @if ($transaction->ID_Bank == Null)
                                 <p class="btn-sm btn-light">No bank (not paid yet)</p>
@@ -859,10 +872,13 @@
                                 <p class="btn-sm btn-success">Approved</p>
                                 @endif
                             </td>
-                            <td style="text-align: right" data-label="Action" class="column">
+                            <td style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end"
+                                data-label="Action" class="column">
                                 @if ($transaction->transactions_status == 0)
-                                <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
-                                    <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
+                                <a data-toggle="modal" data-target="#payTransaction{{$transaction->ID_Transaction}}"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i data-toggle="tooltip" title="Pay" class="use-hover fas fa-receipt icons"
+                                        aria-hidden="true"></i>
                                 </a>
                                 @elseif ($transaction->transactions_status == 1)
                                 <a target="_blank" rel="noopener noreferrer"
@@ -870,13 +886,15 @@
                                     title="View Proof" style="text-decoration: none;cursor: pointer">
                                     <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                 </a>
-                                <a data-toggle="tooltip" title="Approve Transaction"
+                                <a href="{{ route('branch.approveTransaction', $transaction) }}"
                                     style="text-decoration: none;cursor: pointer">
-                                    <i class="use-hover fas fa-check-circle icons"></i>
+                                    <i data-toggle="tooltip" title="Approve Transaction"
+                                        class="use-hover fas fa-check-circle icons"></i>
                                 </a>
-                                <a data-toggle="tooltip" title="Disapprove Transaction"
+                                <a href="{{ route('branch.disapproveTransaction', $transaction) }}"
                                     style="text-decoration: none;cursor: pointer">
-                                    <i class="delete-hover fas fa-ban icons"></i>
+                                    <i data-toggle="tooltip" title="Disapprove Transaction"
+                                        class="delete-hover fas fa-ban icons"></i>
                                 </a>
                                 @elseif ($transaction->transactions_status == 2)
                                 <a target="_blank" rel="noopener noreferrer"
@@ -884,9 +902,10 @@
                                     title="View Proof" style="text-decoration: none;cursor: pointer">
                                     <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                 </a>
-                                <a data-toggle="tooltip" title="Approve Transaction"
+                                <a href="{{ route('branch.approveTransaction', $transaction) }}"
                                     style="text-decoration: none;cursor: pointer">
-                                    <i class="use-hover fas fa-check-circle icons"></i>
+                                    <i data-toggle="tooltip" title="Approve Transaction"
+                                        class="use-hover fas fa-check-circle icons"></i>
                                 </a>
                                 @elseif ($transaction->transactions_status == 3)
                                 <a target="_blank" rel="noopener noreferrer"
@@ -894,15 +913,176 @@
                                     title="View Proof" style="text-decoration: none;cursor: pointer">
                                     <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                 </a>
-                                <a data-toggle="tooltip" title="Disapprove Transaction"
+                                <a href="{{ route('branch.disapproveTransaction', $transaction) }}"
                                     style="text-decoration: none;cursor: pointer">
-                                    <i class="delete-hover fas fa-ban icons"></i>
+                                    <i data-toggle="tooltip" title="Disapprove Transaction"
+                                        class="delete-hover fas fa-ban icons"></i>
                                 </a>
                                 @endif
-                                <a data-toggle="tooltip" title="Delete Transaction"
+                                <a data-toggle="modal" data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
                                     style="text-decoration: none;cursor: pointer">
-                                    <i class="delete-hover far fa-trash-alt icons"></i>
+                                    <i data-toggle="tooltip" title="Delete Transaction"
+                                        class="delete-hover far fa-trash-alt icons"></i>
                                 </a>
+                                <div class="modal fade" id="payTransaction{{$transaction->ID_Transaction}}"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="payTransaction{{$transaction->transactions_description}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="payTransaction{{$transaction->ID_Transaction}}Title">
+                                                    Pay: {{$transaction->transactions_description}}
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-success" style="padding: 10px; border-radius: 10px">
+                                                    <form action="{{ route('branch.payTransaction', $transaction) }}"
+                                                        id="payTransaction{{$transaction->ID_Transaction}}Form"
+                                                        enctype="multipart/form-data" method="POST">
+                                                        @csrf
+                                                        <p>
+                                                            <center><strong>!! This Will Pay The Order
+                                                                    {{$transaction->transactions_description}}!!</strong>
+                                                                <br>Choose Payment Bank And Upload The Payment Proof.
+                                                                Then Click Pay to Continue
+                                                                the Process
+                                                            </center>
+                                                        </p>
+
+                                                        <div class="container headerOrder" style="text-align: left">
+                                                            <div class="container">
+                                                                <div>
+                                                                    <label for="capacity"><strong>Pay Order
+                                                                            {{$transaction->transactions_description}}
+                                                                            <small>(This will add the
+                                                                                payment details for
+                                                                                the
+                                                                                extension transaction with
+                                                                                price:
+                                                                                {{$transaction->transactions_totalPrice}})</small>
+                                                                        </strong></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="container" style="padding: 10px 15px"
+                                                            id="addPaymentforTransaction{{$transaction->ID_Transaction}}">
+                                                            <div class="headerOrder row">
+                                                                <div class="form-group" style="margin: 10px 0">
+                                                                    <select name="ID_Bank" style="width: 100%"
+                                                                        class="select2">
+                                                                        <option value="0">Select Bank
+                                                                        </option>
+                                                                        @php
+                                                                        $bankNo = 1;
+                                                                        @endphp
+                                                                        @foreach ($banks as $bank)
+                                                                        <option value="{{$bank->ID_Bank}}">
+                                                                            {{$bankNo++}}- (
+                                                                            {{$bank->bank_name}} )
+                                                                            -
+                                                                            @ {{$bank->accountNo}}
+                                                                        </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div style="margin: 10px 0">
+                                                                    <a style="width: 100%;"
+                                                                        onclick="$('#proofInputImageTransaction{{$transaction->ID_Transaction}}').click(); return false;"
+                                                                        class="btn btn-sm btn-outline-light">Add
+                                                                        Payment Proof</a>
+                                                                    <input
+                                                                        onchange="showPaymentProof({{$transaction->ID_Transaction}})"
+                                                                        id="proofInputImageTransaction{{$transaction->ID_Transaction}}"
+                                                                        style="display: none;" type="file" name="proof">
+                                                                    <input
+                                                                        style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                                        disabled style="display: none"
+                                                                        id="proofPhotoTransaction{{$transaction->ID_Transaction}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#payTransaction{{$transaction->ID_Transaction}}Form').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-success">Pay</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="deleteTransaction{{$transaction->ID_Transaction}}"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="deleteTransaction{{$transaction->transactions_description}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="deleteTransaction{{$transaction->ID_Transaction}}Title">
+                                                    Delete: {{$transaction->transactions_description}}
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-danger" style="padding: 10px; border-radius: 10px">
+                                                    <form action="{{ route('branch.deleteTransaction', $transaction) }}"
+                                                        id="deleteTransaction{{$transaction->ID_Transaction}}Form"
+                                                        enctype="multipart/form-data" method="POST">
+                                                        @csrf
+                                                        <p>
+                                                            <center><strong>!! This Will Delete The Order
+                                                                    {{$transaction->transactions_description}}!!</strong>
+                                                                <br>Click Delete to Continue
+                                                                the Process
+                                                            </center>
+                                                        </p>
+                                                        <div class="form-check" style="margin-bottom: 10px">
+                                                            @if ($transaction->transactions_status == 0)
+                                                            <div>
+                                                                <input checked name="deleteTransactionType"
+                                                                    class="checkDeleteType form-check-input"
+                                                                    type="checkbox" value="1">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                    Delete The Transaction Completely
+                                                                </label>
+                                                            </div>
+                                                            @else
+                                                            <div>
+                                                                <input name="deleteTransactionType"
+                                                                    class="checkDeleteType form-check-input"
+                                                                    type="checkbox" value="1">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                    Delete The Transaction Completely
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <input checked name="deleteTransactionType"
+                                                                    class="checkDeleteType form-check-input"
+                                                                    type="checkbox" value="2">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                    Return The Transaction To Unpaid Status
+                                                                </label>
+                                                            </div>
+                                                            @endif
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#deleteTransaction{{$transaction->ID_Transaction}}Form').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-success">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -921,104 +1101,102 @@
         </div>
     </div>
     <div class="container-fluid" id="deliveryContainer" style="margin-top: 20px">
-        <div style="text-align: center">
-            <h4>Deliver History</h4>
-        </div>
-        <div>
-            <a data-toggle="modal" data-target="#addDelivery" class="btn btn-sm btn-success float-right"
-                style="border-radius: 10px; text-align: center; margin-top: 10px">Add
+        <div class="headerVehiclesSchedules mb-auto" style="text-align: center; flex: 0;">
+            <h4 class="widthHeader" style="width: 130px">Deliveries</h4>
+            <img width="100px" class="img-fluid mb-auto"
+                src="{{ asset('storage/DeliveryVehicle_images/deliveryVehicleDefault.png') }}" alt="">
+            <a data-toggle="modal" data-target="#addDelivery" class="btn btn-sm btn-success"
+                style="border-radius: 10px; text-align: center; margin-top: 10px; width: 100%">Add
             </a>
-            <div class="modal fade" id="addDelivery" tabindex="-1" aria-labelledby="addDelivery" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="justify-content: center">
-                            <h5 class="modal-title" id="addDeliveryTitle">Add
-                                Delivery Schedule
-                            </h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="alert-success" style="padding: 10px; border-radius: 10px">
-                                <p>
-                                    Here you can change the trip and time of the delivery as well as
-                                    the Vehicle and the total price of the delivery.
-                                </p>
-                                <form method="POST" id="addDeliveryForm" class="row g-3"
-                                    action="{{ route('branch.addSchedule')}}">
-                                    @csrf
-                                    <input hidden type="text" value="{{$order->ID_Order}}" name="ID_Order">
-                                    <div class="col-md-12">
-                                        <label for="phone" class="form-label">Vehicle</label>
-                                        <div class="form-group">
-                                            <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
-                                                <option value="0">Select Vehicle</option>
-                                                @php
-                                                $vehicleNo = 1;
-                                                @endphp
-                                                @foreach ($vehicles as $vehicle)
-                                                <option value="{{$vehicle->ID_DeliveryVehicle}}">
-                                                    {{$vehicleNo++}}- (
-                                                    {{$vehicle->plateNumber}} )
-                                                    -
-                                                    @ {{$vehicle->name}}
-                                                    - {{$vehicle->model}}
-                                                    - Price {{$vehicle->pricePerK}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+        </div>
+        <div class="modal fade" id="addDelivery" tabindex="-1" aria-labelledby="addDelivery" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="justify-content: center">
+                        <h5 class="modal-title" id="addDeliveryTitle">Add
+                            Delivery Schedule
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert-success" style="padding: 10px; border-radius: 10px">
+                            <p>
+                                Here you can change the trip and time of the delivery as well as
+                                the Vehicle and the total price of the delivery.
+                            </p>
+                            <form method="POST" id="addDeliveryForm" class="row g-3"
+                                action="{{ route('branch.addSchedule')}}">
+                                @csrf
+                                <input hidden type="text" value="{{$order->ID_Order}}" name="ID_Order">
+                                <div class="col-md-12">
+                                    <label for="phone" class="form-label">Vehicle</label>
+                                    <div class="form-group">
+                                        <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
+                                            <option value="0">Select Vehicle</option>
+                                            @php
+                                            $vehicleNo = 1;
+                                            @endphp
+                                            @foreach ($vehicles as $vehicle)
+                                            <option value="{{$vehicle->ID_DeliveryVehicle}}">
+                                                {{$vehicleNo++}}- (
+                                                {{$vehicle->plateNumber}} )
+                                                -
+                                                @ {{$vehicle->name}}
+                                                - {{$vehicle->model}}
+                                                - Price {{$vehicle->pricePerK}}
+                                            </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="pickedUpFrom" class="form-label">Pick Up
-                                            From</label>
-                                        <input type="text" class="form-control" id="pickedUpFrom" name="pickedUpFrom">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="deliveredTo" class="form-label">Deliver
-                                            To</label>
-                                        <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="pickedUp" class="form-label">Pick Up
-                                            Date</label>
-                                        <input type="datetime-local" class="form-control" id="pickedUp" name="pickedUp">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="delivered" class="form-label">Deliver
-                                            Date</label>
-                                        <input type="datetime-local" class="form-control" id="delivered"
-                                            name="delivered">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="totalPrice" class="form-label">Total
-                                            Price</label>
-                                        <input type="text" class="form-control" id="totalPrice" name="totalPrice">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="model" class="form-label">Status</label>
-                                        <div class="form-group">
-                                            <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
-                                                class="form-check form-switch">
-                                                <div>
-                                                    <label style="color: #000;" for="status">Status:
-                                                        <small style="display: none" id="statusDone">Done</small>
-                                                    </label>
-                                                </div>
-                                                <input style="margin-left: 0; margin-right: 5px; position: inherit"
-                                                    onchange="$('#statusDone').toggle('slow');" name="status"
-                                                    class="form-check-input" type="checkbox"
-                                                    id="flexSwitchCheckDefault">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="pickedUpFrom" class="form-label">Pick Up
+                                        From</label>
+                                    <input type="text" class="form-control" id="pickedUpFrom" name="pickedUpFrom">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="deliveredTo" class="form-label">Deliver
+                                        To</label>
+                                    <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="pickedUp" class="form-label">Pick Up
+                                        Date</label>
+                                    <input type="datetime-local" class="form-control" id="pickedUp" name="pickedUp">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="delivered" class="form-label">Deliver
+                                        Date</label>
+                                    <input type="datetime-local" class="form-control" id="delivered" name="delivered">
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="totalPrice" class="form-label">Total
+                                        Price</label>
+                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice">
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="model" class="form-label">Status</label>
+                                    <div class="form-group">
+                                        <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
+                                            class="form-check form-switch">
+                                            <div>
+                                                <label style="color: #000;" for="status">Status:
+                                                    <small style="display: none" id="statusDone">Done</small>
+                                                </label>
                                             </div>
+                                            <input style="margin-left: 0; margin-right: 5px; position: inherit"
+                                                onchange="$('#statusDone').toggle('slow');" name="status"
+                                                class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                data-dismiss="modal">Close</button>
-                            <button onclick="$('#addDeliveryForm').submit();" type="button"
-                                class="btn btn-sm btn-outline-primary">Add</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                            data-dismiss="modal">Close</button>
+                        <button onclick="$('#addDeliveryForm').submit();" type="button"
+                            class="btn btn-sm btn-outline-primary">Add</button>
                     </div>
                 </div>
             </div>
@@ -1490,14 +1668,22 @@
         $('.checkPaymentChange').click(function() {
             $('.checkPaymentChange').not(this).prop('checked', false);
         });
+        $('.checkDeleteType').click(function() {
+            $('.checkDeleteType').not(this).prop('checked', false);
+        });
         $('.checkCategory').click(function() {
             $('.checkCategory').not(this).prop('checked', false);
         });
         $('#transactionTable').DataTable( {
-            "pagingType": "full_numbers"
+            "pagingType": "full_numbers",
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
         $('#schedulesTable').DataTable( {
-            "pagingType": "full_numbers"
+            "pagingType": "full_numbers",
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+        });
+        $('.checkPaymentTransaction').click(function() {
+            $('.checkPaymentTransaction').not(this).prop('checked', false);
         });
         var unitCapacityNewInput = document.getElementById('unitCapacityNewInput');
         var unitCapacityNumber = document.getElementById('unitCapacityNumber');
@@ -1532,6 +1718,12 @@
         selectionCssClass: "select2--small", // For Select2 v4.1
         dropdownCssClass: "select2--small",
     });
+    function showPaymentProof(id) {
+        var proofInputImageTransaction = document.getElementById('proofInputImageTransaction'+id);
+        var proofPhotoTransaction = document.getElementById('proofPhotoTransaction'+id);
+        proofPhotoTransaction.style.display = '';
+        proofPhotoTransaction.value = 'File Name:' + proofInputImageTransaction.files[0].name;
+    }
     + function($) {
     'use strict';
     var proofInputImage = document.getElementById('proofInputImage');

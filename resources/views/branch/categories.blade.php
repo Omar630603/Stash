@@ -416,7 +416,8 @@
         var amount = $('#categoriesAmount').val();
         for (let index = 1; index <= amount; index++) {
             $('#categoriesTable'+index).DataTable( {
-                "pagingType": "full_numbers"
+                "pagingType": "full_numbers",
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
             });            
         }
         

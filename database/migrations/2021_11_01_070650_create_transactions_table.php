@@ -23,6 +23,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('transactions_totalPrice');
             $table->integer('transactions_status')->default(0);
             $table->string('proof');
+            $table->boolean('transaction_madeBy')->default(0);
             $table->timestamps();
         });
     }

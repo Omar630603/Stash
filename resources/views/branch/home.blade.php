@@ -506,7 +506,8 @@
             <script>
                 $(document).ready(function(){
                     $('#bankTable').DataTable( {
-                        "pagingType": "full_numbers"
+                        "pagingType": "full_numbers",
+                        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
                     });
                 });
             </script>

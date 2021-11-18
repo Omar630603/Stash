@@ -360,6 +360,7 @@ class BranchController extends Controller
 
         $transaction = new Transactions;
         $transaction->ID_Order = $order->ID_Order;
+        $transaction->transaction_madeBy = 1;
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
         $transaction->transactions_description = 'Delivery: ' . $request->get('description_type') . '. For Unit (' . $unit->unit_name . ')';
         $transaction->transactions_totalPrice = $request->get('totalPrice');
@@ -626,7 +627,7 @@ class BranchController extends Controller
         }
         $user->delete();
         $message = 'User Has been Deleted';
-        return redirect()->route('branch.orders')->with('success', $message);;
+        return redirect()->route('branch.orders')->with('success', $message);
     }
 
     public function deleteOrder(Order $order)
@@ -655,7 +656,7 @@ class BranchController extends Controller
         $this->changePrivateKeyUnit($unit);
         $order->delete();
         $message = 'Order Has been Deleted';
-        return redirect()->route('branch.orders')->with('success', $message);;
+        return redirect()->route('branch.orders')->with('success', $message);
     }
     public function addOrder(Request $request)
     {
@@ -736,6 +737,7 @@ class BranchController extends Controller
             $userOrder->ordered++;
             $userOrder->save();
             $transaction = new Transactions;
+            $transaction->transaction_madeBy = 1;
             if ($request->get('transaction') == 1) {
                 $transaction->ID_Order = $order->ID_Order;
                 if ($request->get('ID_Bank') == 0) {
@@ -840,6 +842,7 @@ class BranchController extends Controller
         $order->expandPrice += $request->get('expandPrice');
         $order->endsAt = $request->get('extendEndsAt');
         $transaction = new Transactions;
+        $transaction->transaction_madeBy = 1;
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
         $transaction->ID_Order = $order->ID_Order;
         $transaction->transactions_totalPrice = $request->get('expandPrice');
@@ -898,6 +901,7 @@ class BranchController extends Controller
     public function changeOrderUnit(Request $request, Unit $unit, Order $order)
     {
         $transaction = new Transactions;
+        $transaction->transaction_madeBy = 1;
         $newUnit = Unit::where('ID_Unit', $request->get('new_ID_Unit'))->first();
         $transaction->ID_Order = $order->ID_Order;
         if ($request->get('change_status') == 0) {
@@ -943,6 +947,59 @@ class BranchController extends Controller
         $transaction->save();
         $order->save();
         $message = 'Order has changed Unit successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function payTransaction(Request $request, Transactions $transaction)
+    {
+        if ($request->get('ID_Bank') == 0) {
+            $message = 'Select Bank';
+            return redirect()->back()->with('fail', $message);
+        } else {
+            $transaction->ID_Bank = $request->get('ID_Bank');
+        }
+        $transaction->transactions_status = 1;
+        if ($request->file('proof')) {
+            $image_name = $request->file('proof')->store('transactions_images', 'public');
+            $transaction->proof = $image_name;
+        } else {
+            $message = 'Add Proof';
+            return redirect()->back()->with('fail', $message);
+        }
+        $transaction->save();
+        $message = 'Transaction ' . $transaction->transactions_description . '  Has been Paied';
+        return redirect()->back()->with('success', $message);
+    }
+    public function disapproveTransaction(Transactions $transaction)
+    {
+        $transaction->transactions_status = 2;
+        $transaction->save();
+        $message = 'Transaction ' . $transaction->transactions_description . '  Has been Disapproved';
+        return redirect()->back()->with('success', $message);
+    }
+    public function approveTransaction(Transactions $transaction)
+    {
+        $transaction->transactions_status = 3;
+        $transaction->save();
+        $message = 'Transaction ' . $transaction->transactions_description . '  Has been Approved';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteTransaction(Request $request, Transactions $transaction)
+    {
+        $request->validate([
+            'deleteTransactionType' => 'required',
+        ]);
+        if ($request->get('deleteTransactionType') == 1) {
+            Storage::delete('public/' . $transaction->proof);
+            $transaction->delete();
+            $message = 'Transaction ' . $transaction->transactions_description . '  Has been Deleted';
+        } elseif ($request->get('deleteTransactionType') == 2) {
+            $transaction->ID_Bank = null;
+            $transaction->transactions_status = 0;
+            Storage::delete('public/' . $transaction->proof);
+            $transaction->proof = 'Waiting for Payment';
+            $transaction->save();
+            $message = 'Transaction ' . $transaction->transactions_description . '  Has Returen to Unpaid status';
+        }
         return redirect()->back()->with('success', $message);
     }
 

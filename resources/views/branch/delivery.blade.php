@@ -849,7 +849,8 @@
             $('.checkPayment').not(this).prop('checked', false);
         });
         $('#driversTable').DataTable( {
-            "pagingType": "full_numbers"
+            "pagingType": "full_numbers",
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
     });
     function chackDeliveryDates() {
