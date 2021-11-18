@@ -951,384 +951,391 @@
                 @endif
                 @endif
                 @if(count($orders)>0)
-
-                <div class="table100">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="column">Status</th>
-                                <th class="column">Period</th>
-                                <th class="column">Has Delivery</th>
-                                <th class="column">Total Price</th>
-                                <th class="column">Unit</th>
-                                <th class="column">Customer</th>
-                                <th class="column">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($orders as $order)
-                            <tr>
-                                <td data-label="Status" class="column">
-                                    @php
-                                    $status_unpaid = 0;
-                                    $status_paid = 0;
-                                    $status_disapproved = 0;
-                                    $status_approved = 0;
-                                    $amount=0;
-                                    @endphp
-                                    @foreach ($transactions as $transaction)
-                                    @if ($transaction->ID_Order == $order->ID_Order &&
-                                    $transaction->transactions_status==0)
-                                    @php
-                                    $status_unpaid++;$amount++;
-                                    @endphp
-                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
-                                    $transaction->transactions_status==1)
-                                    @php
-                                    $status_paid++;$amount++;
-                                    @endphp
-                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
-                                    $transaction->transactions_status==2)
-                                    @php
-                                    $status_disapproved++;$amount++;
-                                    @endphp
-                                    @elseif ($transaction->ID_Order == $order->ID_Order &&
-                                    $transaction->transactions_status==3)
-                                    @php
-                                    $status_approved++;$amount++;
-                                    @endphp
-                                    @endif
-                                    @endforeach
-
-                                    @if ($order->order_status == 0)
-                                    <div class="btn-sm btn-info">
-                                        <h6 class="mb-0">With Customer
-                                            @elseif($order->order_status == 1)
-                                            <div class="btn-sm btn-light">
-                                                <h6 class="mb-0">Waiting for Payment
-                                                    @elseif($order->order_status == 2)
-                                                    <div class="btn-sm btn-warning">
-                                                        <h6 class="mb-0">Delivery
-                                                            @elseif($order->order_status == 3)
-                                                            <div class="btn-sm btn-success">
-                                                                <h6 class="mb-0">In Stash
-                                                                    @elseif($order->order_status == 4)
-                                                                    <div class="btn-sm btn-secondary">
-                                                                        <h6 class="mb-0">Canceled
-                                                                            @endif
-                                                                            <i data-toggle="tooltip"
-                                                                                title="Order Transactions Details"
-                                                                                onclick="$('#orderTransactionsDetail{{$order->ID_Order}}').toggle('fast')"
-                                                                                class="fas fa-arrow-down float-right"></i>
-                                                                            <p class="mb-0"
-                                                                                style="display: none; width: max-content"
-                                                                                id="orderTransactionsDetail{{$order->ID_Order}}">
-                                                                                <small>Transactions: {{$amount}}
-                                                                                    <br>Unpaid: {{$status_unpaid}}
-                                                                                    <br>Paid: {{$status_paid}}
-                                                                                    <br>Disapproved:
-                                                                                    {{$status_disapproved}}
-                                                                                    <br>Approved: {{$status_approved}}
-                                                                                </small>
-                                                                            </p>
-                                                                        </h6>
-                                                                    </div>
-                                </td>
-
-                                <td data-label="Period" class="column">
-                                    <div>
+                <div class="tableWrapper">
+                    <div class="table100">
+                        <table id="ordersTable">
+                            <thead>
+                                <tr>
+                                    <th class="column">Status</th>
+                                    <th class="column">Period</th>
+                                    <th class="column">Has Delivery</th>
+                                    <th class="column">Total Price</th>
+                                    <th class="column">Unit</th>
+                                    <th class="column">Customer</th>
+                                    <th class="column">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($orders as $order)
+                                <tr>
+                                    <td data-label="Status" class="column">
                                         @php
-                                        $startsFrom = new DateTime($order->startsFrom);
-                                        $endsAt = new DateTime($order->endsAt);
-                                        $today = new DateTime(date("Y-m-d H:i:s"));
-                                        $interval = $startsFrom->diff($endsAt);
-                                        $orderCheck = $endsAt->diff($today);
+                                        $status_unpaid = 0;
+                                        $status_paid = 0;
+                                        $status_disapproved = 0;
+                                        $status_approved = 0;
+                                        $amount=0;
                                         @endphp
-                                        @if ($orderCheck->invert)
-                                        <div class="btn-sm btn-primary">
-                                            <h6 class="mb-0">Active: {{ $orderCheck->days }} @if ($orderCheck->days
-                                                <= 1) Day @else Days @endif Left<i data-toggle="tooltip"
-                                                    title="Order Date Details"
-                                                    onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
-                                                    class="fas fa-arrow-down float-right"></i>
-                                            </h6>
-                                            <p class="mb-0" style="display: none; width: max-content"
-                                                id="orderDateDetailsPositive{{$order->ID_Order}}">
-                                                @if($interval->days ==
-                                                0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$order->startsFrom}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$order->endsAt}}
-                                                <small>The same day</small>
-                                                @elseif($interval->m == 0 && $interval->y == 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->d}} Days</small>
-                                                @elseif($interval->y == 0 && $interval->m > 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->m}} months, {{$interval->d}} days</small>
-                                                @elseif($interval->y > 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
-                                                    days</small>
-                                                @endif
-                                            </p>
-                                        </div>
-                                        @else
-                                        <div class="btn-sm btn-danger">
-                                            <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
-                                                @if($orderCheck->days<= 1) Day @else Days @endif <i
-                                                    data-toggle="tooltip" title="Order Date Details"
-                                                    onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
-                                                    class="fas fa-arrow-down float-right"></i>
-
-                                            </h6>
-                                            <p class="mb-0" style="display: none; width: max-content"
-                                                id="orderDateDetailsNegative{{$order->ID_Order}}">
-                                                @if($interval->days == 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$order->startsFrom}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$order->endsAt}}
-                                                <small>The same day</small>
-                                                @elseif($interval->m == 0 && $interval->y == 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->d}} Days</small>
-                                                @elseif($interval->y == 0 && $interval->m > 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->m}} months, {{$interval->d}} days</small>
-                                                @elseif($interval->y > 0)
-                                                <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$order->ID_Order}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$order->ID_Order}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>{{$interval->y}} years, {{$interval->m}} months, {{$interval->d}}
-                                                    days</small>
-                                                @endif
-                                            </p>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td data-label="Has Delivery" class="column">
-                                    @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No Deliveries
-                                        </p>
-                                        @else
+                                        @foreach ($transactions as $transaction)
+                                        @if ($transaction->ID_Order == $order->ID_Order &&
+                                        $transaction->transactions_status==0)
                                         @php
-                                        $status_waiting = 0;
-                                        $status_On_Going = 0;
-                                        $status_Done = 0;
+                                        $status_unpaid++;$amount++;
                                         @endphp
-                                        @foreach ($schedules as $schedule)
-                                        @if ($schedule->ID_Order == $order->ID_Order && $schedule->schedule_status==0)
+                                        @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                        $transaction->transactions_status==1)
                                         @php
-                                        $status_waiting++;
+                                        $status_paid++;$amount++;
                                         @endphp
-                                        @elseif ($schedule->ID_Order == $order->ID_Order &&
-                                        $schedule->schedule_status==1)
+                                        @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                        $transaction->transactions_status==2)
                                         @php
-                                        $status_On_Going++;
+                                        $status_disapproved++;$amount++;
                                         @endphp
-                                        @elseif ($schedule->ID_Order == $order->ID_Order &&
-                                        $schedule->schedule_status==2)
+                                        @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                        $transaction->transactions_status==3)
                                         @php
-                                        $status_Done++;
+                                        $status_approved++;$amount++;
                                         @endphp
                                         @endif
                                         @endforeach
-                                        <div class="btn-sm btn-success">
-                                            <h6 class="mb-0">
-                                                Deliveries: {{$order->order_deliveries}}
-                                                <i data-toggle="tooltip" title="Order Deliveries Details"
-                                                    onclick="$('#orderDeliveriesDetail{{$order->ID_Order}}').toggle('fast')"
-                                                    class="fas fa-arrow-down float-right"></i>
+
+                                        @if ($order->order_status == 0)
+                                        <div class="btn-sm btn-info">
+                                            <h6 class="mb-0">With Customer
+                                                @elseif($order->order_status == 1)
+                                                <div class="btn-sm btn-light">
+                                                    <h6 class="mb-0">Waiting for Payment
+                                                        @elseif($order->order_status == 2)
+                                                        <div class="btn-sm btn-warning">
+                                                            <h6 class="mb-0">Delivery
+                                                                @elseif($order->order_status == 3)
+                                                                <div class="btn-sm btn-success">
+                                                                    <h6 class="mb-0">In Stash
+                                                                        @elseif($order->order_status == 4)
+                                                                        <div class="btn-sm btn-secondary">
+                                                                            <h6 class="mb-0">Canceled
+                                                                                @endif
+                                                                                <i data-toggle="tooltip"
+                                                                                    title="Order Transactions Details"
+                                                                                    onclick="$('#orderTransactionsDetail{{$order->ID_Order}}').toggle('fast')"
+                                                                                    class="fas fa-arrow-down float-right"></i>
+                                                                                <p class="mb-0"
+                                                                                    style="display: none; width: max-content"
+                                                                                    id="orderTransactionsDetail{{$order->ID_Order}}">
+                                                                                    <small>Transactions: {{$amount}}
+                                                                                        <br>Unpaid: {{$status_unpaid}}
+                                                                                        <br>Paid: {{$status_paid}}
+                                                                                        <br>Disapproved:
+                                                                                        {{$status_disapproved}}
+                                                                                        <br>Approved:
+                                                                                        {{$status_approved}}
+                                                                                    </small>
+                                                                                </p>
+                                                                            </h6>
+                                                                        </div>
+                                    </td>
+
+                                    <td data-label="Period" class="column">
+                                        <div>
+                                            @php
+                                            $startsFrom = new DateTime($order->startsFrom);
+                                            $endsAt = new DateTime($order->endsAt);
+                                            $today = new DateTime(date("Y-m-d H:i:s"));
+                                            $interval = $startsFrom->diff($endsAt);
+                                            $orderCheck = $endsAt->diff($today);
+                                            @endphp
+                                            @if ($orderCheck->invert)
+                                            <div class="btn-sm btn-primary">
+                                                <h6 class="mb-0">Active: {{ $orderCheck->days }} @if ($orderCheck->days
+                                                    <= 1) Day @else Days @endif Left<i data-toggle="tooltip"
+                                                        title="Order Date Details"
+                                                        onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
+                                                        class="fas fa-arrow-down float-right"></i>
+                                                </h6>
                                                 <p class="mb-0" style="display: none; width: max-content"
-                                                    id="orderDeliveriesDetail{{$order->ID_Order}}">
-                                                    <small>
-                                                        Waiting: {{$status_waiting}}
-                                                        <br>On-Going: {{$status_On_Going}}
-                                                        <br>Done: {{$status_Done}}
-                                                    </small>
+                                                    id="orderDateDetailsPositive{{$order->ID_Order}}">
+                                                    @if($interval->days ==
+                                                    0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$order->startsFrom}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$order->endsAt}}
+                                                    <small>The same day</small>
+                                                    @elseif($interval->m == 0 && $interval->y == 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->d}} Days</small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days</small>
+                                                    @endif
                                                 </p>
-                                            </h6>
+                                            </div>
+                                            @else
+                                            <div class="btn-sm btn-danger">
+                                                <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
+                                                    @if($orderCheck->days<= 1) Day @else Days @endif <i
+                                                        data-toggle="tooltip" title="Order Date Details"
+                                                        onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
+                                                        class="fas fa-arrow-down float-right"></i>
+
+                                                </h6>
+                                                <p class="mb-0" style="display: none; width: max-content"
+                                                    id="orderDateDetailsNegative{{$order->ID_Order}}">
+                                                    @if($interval->days == 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$order->startsFrom}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$order->endsAt}}
+                                                    <small>The same day</small>
+                                                    @elseif($interval->m == 0 && $interval->y == 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->d}} Days</small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$order->ID_Order}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$order->ID_Order}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>{{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days</small>
+                                                    @endif
+                                                </p>
+                                            </div>
+                                            @endif
                                         </div>
-                                        @endif
-                                </td>
-                                <td data-label="Total Price" class="column">
-                                    <p class="btn-sm btn-light">{{$order->order_totalPrice}}</p>
-                                </td>
-                                <td data-label="Unit" class="column">
-                                    <div class="btn-sm btn-light">
-                                        <h6 class="mb-0">
-                                            {{$order->unit_name}}
-                                            <i data-toggle="tooltip" title="Unit Capacity Details"
-                                                onclick="$('#unitCapacityDetails{{$order->ID_Order}}').toggle('fast')"
-                                                class="fas fa-arrow-down float-right"></i>
-                                            <div class="mb-0" style="display: none; width: max-content;"
-                                                id="unitCapacityDetails{{$order->ID_Order}}">
-                                                <div class="btn-sm btn-dark mt-2"
-                                                    style="background-color: transparent; color: #66377f; width: 100%; text-align: left">
-                                                    <small> (@if ($order->capacity == 100)
-                                                        Full: Capacity {{$order->capacity}}%)
-                                                        @elseif($order->capacity >= 95)
-                                                        Almost Full: Capacity {{$order->capacity}}%)
-                                                        @elseif($order->capacity >= 80)
-                                                        Moderately Full: Capacity {{$order->capacity}}%)
-                                                        @else
-                                                        Normal: Capacity {{$order->capacity}}%)
-                                                        @endif
-                                                    </small>
-                                                    <div class="progress mb-1" style="height: 5px" data-placement='left'
-                                                        data-toggle="tooltip" title="Capacity {{$order->capacity}}%">
-                                                        @if ($order->capacity >= 95)
-                                                        <div class="progress-bar bg-danger" role="progressbar"
-                                                            style="width: {{$order->capacity}}%"
-                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
-                                                            aria-valuemax="100">
+                                    </td>
+                                    <td data-label="Has Delivery" class="column">
+                                        @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No
+                                            Deliveries
+                                            </p>
+                                            @else
+                                            @php
+                                            $status_waiting = 0;
+                                            $status_On_Going = 0;
+                                            $status_Done = 0;
+                                            @endphp
+                                            @foreach ($schedules as $schedule)
+                                            @if ($schedule->ID_Order == $order->ID_Order &&
+                                            $schedule->schedule_status==0)
+                                            @php
+                                            $status_waiting++;
+                                            @endphp
+                                            @elseif ($schedule->ID_Order == $order->ID_Order &&
+                                            $schedule->schedule_status==1)
+                                            @php
+                                            $status_On_Going++;
+                                            @endphp
+                                            @elseif ($schedule->ID_Order == $order->ID_Order &&
+                                            $schedule->schedule_status==2)
+                                            @php
+                                            $status_Done++;
+                                            @endphp
+                                            @endif
+                                            @endforeach
+                                            <div class="btn-sm btn-success">
+                                                <h6 class="mb-0">
+                                                    Deliveries: {{$order->order_deliveries}}
+                                                    <i data-toggle="tooltip" title="Order Deliveries Details"
+                                                        onclick="$('#orderDeliveriesDetail{{$order->ID_Order}}').toggle('fast')"
+                                                        class="fas fa-arrow-down float-right"></i>
+                                                    <p class="mb-0" style="display: none; width: max-content"
+                                                        id="orderDeliveriesDetail{{$order->ID_Order}}">
+                                                        <small>
+                                                            Waiting: {{$status_waiting}}
+                                                            <br>On-Going: {{$status_On_Going}}
+                                                            <br>Done: {{$status_Done}}
+                                                        </small>
+                                                    </p>
+                                                </h6>
+                                            </div>
+                                            @endif
+                                    </td>
+                                    <td data-label="Total Price" class="column">
+                                        <p class="btn-sm btn-light">{{$order->order_totalPrice}}</p>
+                                    </td>
+                                    <td data-label="Unit" class="column">
+                                        <div class="btn-sm btn-light">
+                                            <h6 class="mb-0">
+                                                {{$order->unit_name}}
+                                                <i data-toggle="tooltip" title="Unit Capacity Details"
+                                                    onclick="$('#unitCapacityDetails{{$order->ID_Order}}').toggle('fast')"
+                                                    class="fas fa-arrow-down float-right"></i>
+                                                <div class="mb-0" style="display: none; width: max-content;"
+                                                    id="unitCapacityDetails{{$order->ID_Order}}">
+                                                    <div class="btn-sm btn-dark mt-2"
+                                                        style="background-color: transparent; color: #66377f; width: 100%; text-align: left">
+                                                        <small> (@if ($order->capacity == 100)
+                                                            Full: Capacity {{$order->capacity}}%)
+                                                            @elseif($order->capacity >= 95)
+                                                            Almost Full: Capacity {{$order->capacity}}%)
+                                                            @elseif($order->capacity >= 80)
+                                                            Moderately Full: Capacity {{$order->capacity}}%)
+                                                            @else
+                                                            Normal: Capacity {{$order->capacity}}%)
+                                                            @endif
+                                                        </small>
+                                                        <div class="progress mb-1" style="height: 5px"
+                                                            data-placement='left' data-toggle="tooltip"
+                                                            title="Capacity {{$order->capacity}}%">
+                                                            @if ($order->capacity >= 95)
+                                                            <div class="progress-bar bg-danger" role="progressbar"
+                                                                style="width: {{$order->capacity}}%"
+                                                                aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                                aria-valuemax="100">
+                                                            </div>
+                                                            @elseif($order->capacity >= 80)
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                style="width: {{$order->capacity}}%"
+                                                                aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                                aria-valuemax="100">
+                                                            </div>
+                                                            @else
+                                                            <div class="progress-bar bg-primary" role="progressbar"
+                                                                style="width: {{$order->capacity}}%"
+                                                                aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
+                                                                aria-valuemax="100">
+                                                            </div>
+                                                            @endif
                                                         </div>
-                                                        @elseif($order->capacity >= 80)
-                                                        <div class="progress-bar bg-warning" role="progressbar"
-                                                            style="width: {{$order->capacity}}%"
-                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
-                                                            aria-valuemax="100">
-                                                        </div>
-                                                        @else
-                                                        <div class="progress-bar bg-primary" role="progressbar"
-                                                            style="width: {{$order->capacity}}%"
-                                                            aria-valuenow="{{$order->capacity}}" aria-valuemin="0"
-                                                            aria-valuemax="100">
-                                                        </div>
-                                                        @endif
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </h6>
-                                    </div>
-                                </td>
-                                <td data-label="Customer" class="column">
-                                    <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
-                                        <p class="btn-sm btn-light">{{$order->username}}
-                                            @if ($order->madeBy)
-                                            <i data-toggle="tooltip" title="Order Made By Branch"
-                                                class="noUse-hover float-right far fa-building"></i>
-                                            @else
-                                            <i data-toggle="tooltip" title="Order Made By Customer"
-                                                class="refresh-hover float-right fas fa-user-tag"></i>
-                                            @endif
-                                        </p>
-                                    </a>
-                                </td>
-                                <td style="text-align: right" data-label="Action" class="column">
-                                    <div style="display: flex; justify-content:space-around">
-                                        <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}"
-                                            data-toggle="tooltip" title="Detials"
-                                            style="text-decoration: none;cursor: pointer">
-                                            <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                            </h6>
+                                        </div>
+                                    </td>
+                                    <td data-label="Customer" class="column">
+                                        <a href="{{route('branch.orders', ['user' => $order->ID_User])}}">
+                                            <p class="btn-sm btn-light">{{$order->username}}
+                                                @if ($order->madeBy)
+                                                <i data-toggle="tooltip" title="Order Made By Branch"
+                                                    class="noUse-hover float-right far fa-building"></i>
+                                                @else
+                                                <i data-toggle="tooltip" title="Order Made By Customer"
+                                                    class="refresh-hover float-right fas fa-user-tag"></i>
+                                                @endif
+                                            </p>
                                         </a>
-                                        <a onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"
-                                            data-toggle="tooltip" title="Delete Record"
-                                            style="text-decoration: none;cursor: pointer">
-                                            <i class="delete-hover far fa-trash-alt icons"></i>
-                                        </a>
-                                        <form hidden action="{{ route('branch.deleteOrder', $order) }}"
-                                            id="deleteOrder{{$order->ID_Order}}" enctype="multipart/form-data"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td style="text-align: right" data-label="Action" class="column">
+                                        <div style="display: flex; justify-content:space-around">
+                                            <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}"
+                                                data-toggle="tooltip" title="Detials"
+                                                style="text-decoration: none;cursor: pointer">
+                                                <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                            </a>
+                                            <a onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"
+                                                data-toggle="tooltip" title="Delete Record"
+                                                style="text-decoration: none;cursor: pointer">
+                                                <i class="delete-hover far fa-trash-alt icons"></i>
+                                            </a>
+                                            <form hidden action="{{ route('branch.deleteOrder', $order) }}"
+                                                id="deleteOrder{{$order->ID_Order}}" enctype="multipart/form-data"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 @else
                 <div class="headerS">
@@ -1369,6 +1376,10 @@
         $('.checkDescription_type').click(function() {
             $('.checkDescription_type').not(this).prop('checked', false);
         });
+        $('#ordersTable').DataTable( {
+            "pagingType": "full_numbers"
+        });            
+        
     });
     function showPrice() {
         var orderStartDate = new Date($('#orderStartDate').val()); 

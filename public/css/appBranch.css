@@ -31,12 +31,14 @@ table tbody tr:last-child {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #eee;
 }
-
+tbody tr {
+    background-color: #dddd;
+}
 tbody tr:hover {
     color: #3f1652;
-    background-color: #ffbf8e;
+    background-color: #fccaa4;
     cursor: pointer;
 }
 
@@ -333,4 +335,9 @@ img {
     text-align: end;
     text-orientation: sideways;
     display: none;
+}
+.tableWrapper {
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
 }

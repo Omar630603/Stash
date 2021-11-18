@@ -817,96 +817,98 @@
         </div>
         <div class="container-fluid">
             @if(count($transactions)>0)
-            <table>
-                <thead>
-                    <tr>
-                        <th class="column">Bank</th>
-                        <th class="column">Description</th>
-                        <th class="column">Amount</th>
-                        <th class="column">Status</th>
-                        <th class="column">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($transactions as $transaction)
-                    <tr>
-                        <td data-label="Bank" class="column">
-                            @if ($transaction->ID_Bank == Null)
-                            <p class="btn-sm btn-light">No bank (not paid yet)</p>
-                            @else
-                            @foreach ($banks as $bank)
-                            @if ($transaction->ID_Bank == $bank->ID_Bank)
-                            <p class="btn-sm btn-light">{{$bank->bank_name}} - {{$bank->accountNo}}</p>
-                            @endif
-                            @endforeach
-                            @endif
-                        </td>
-                        <td data-label="Description" class="column">
-                            <p class="btn-sm btn-light">{{$transaction->transactions_description}}</p>
-                        </td>
-                        <td data-label="Amount" class="column">
-                            <p class="btn-sm btn-light">{{$transaction->transactions_totalPrice}}</p>
-                        </td>
-                        <td data-label="Status" class="column">
-                            @if ($transaction->transactions_status == 0 )
-                            <p class="btn-sm btn-warning">Unpaid</p>
-                            @elseif ($transaction->transactions_status == 1 )
-                            <p class="btn-sm btn-success">Paid</p>
-                            @elseif ($transaction->transactions_status == 2 )
-                            <p class="btn-sm btn-danger">Disapproved</p>
-                            @elseif ($transaction->transactions_status == 3 )
-                            <p class="btn-sm btn-success">Approved</p>
-                            @endif
-                        </td>
-                        <td style="text-align: right" data-label="Action" class="column">
-                            @if ($transaction->transactions_status == 0)
-                            <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
-                            </a>
-                            @elseif ($transaction->transactions_status == 1)
-                            <a target="_blank" rel="noopener noreferrer"
-                                href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
-                                title="View Proof" style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Approve Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-check-circle icons"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Disapprove Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover fas fa-ban icons"></i>
-                            </a>
-                            @elseif ($transaction->transactions_status == 2)
-                            <a target="_blank" rel="noopener noreferrer"
-                                href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
-                                title="View Proof" style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Approve Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-check-circle icons"></i>
-                            </a>
-                            @elseif ($transaction->transactions_status == 3)
-                            <a target="_blank" rel="noopener noreferrer"
-                                href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
-                                title="View Proof" style="text-decoration: none;cursor: pointer">
-                                <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
-                            </a>
-                            <a data-toggle="tooltip" title="Disapprove Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover fas fa-ban icons"></i>
-                            </a>
-                            @endif
-                            <a data-toggle="tooltip" title="Delete Transaction"
-                                style="text-decoration: none;cursor: pointer">
-                                <i class="delete-hover far fa-trash-alt icons"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="tableWrapper">
+                <table id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th class="column">Bank</th>
+                            <th class="column">Description</th>
+                            <th class="column">Amount</th>
+                            <th class="column">Status</th>
+                            <th class="column">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($transactions as $transaction)
+                        <tr>
+                            <td data-label="Bank" class="column">
+                                @if ($transaction->ID_Bank == Null)
+                                <p class="btn-sm btn-light">No bank (not paid yet)</p>
+                                @else
+                                @foreach ($banks as $bank)
+                                @if ($transaction->ID_Bank == $bank->ID_Bank)
+                                <p class="btn-sm btn-light">{{$bank->bank_name}} - {{$bank->accountNo}}</p>
+                                @endif
+                                @endforeach
+                                @endif
+                            </td>
+                            <td data-label="Description" class="column">
+                                <p class="btn-sm btn-light">{{$transaction->transactions_description}}</p>
+                            </td>
+                            <td data-label="Amount" class="column">
+                                <p class="btn-sm btn-light">{{$transaction->transactions_totalPrice}}</p>
+                            </td>
+                            <td data-label="Status" class="column">
+                                @if ($transaction->transactions_status == 0 )
+                                <p class="btn-sm btn-warning">Unpaid</p>
+                                @elseif ($transaction->transactions_status == 1 )
+                                <p class="btn-sm btn-success">Paid</p>
+                                @elseif ($transaction->transactions_status == 2 )
+                                <p class="btn-sm btn-danger">Disapproved</p>
+                                @elseif ($transaction->transactions_status == 3 )
+                                <p class="btn-sm btn-success">Approved</p>
+                                @endif
+                            </td>
+                            <td style="text-align: right" data-label="Action" class="column">
+                                @if ($transaction->transactions_status == 0)
+                                <a data-toggle="tooltip" title="Pay" style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-receipt icons" aria-hidden="true"></i>
+                                </a>
+                                @elseif ($transaction->transactions_status == 1)
+                                <a target="_blank" rel="noopener noreferrer"
+                                    href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                    title="View Proof" style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Approve Transaction"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-check-circle icons"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Disapprove Transaction"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i class="delete-hover fas fa-ban icons"></i>
+                                </a>
+                                @elseif ($transaction->transactions_status == 2)
+                                <a target="_blank" rel="noopener noreferrer"
+                                    href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                    title="View Proof" style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Approve Transaction"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-check-circle icons"></i>
+                                </a>
+                                @elseif ($transaction->transactions_status == 3)
+                                <a target="_blank" rel="noopener noreferrer"
+                                    href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                    title="View Proof" style="text-decoration: none;cursor: pointer">
+                                    <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Disapprove Transaction"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i class="delete-hover fas fa-ban icons"></i>
+                                </a>
+                                @endif
+                                <a data-toggle="tooltip" title="Delete Transaction"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i class="delete-hover far fa-trash-alt icons"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             @else
             <div class="headerS">
                 <h3>
@@ -1023,343 +1025,349 @@
         </div>
         <div class="container-fluid">
             @if(count($schedules)>0)
+            <div class="tableWrapper">
+                <table id="schedulesTable">
+                    <thead>
+                        <tr>
+                            <th class="column">Trip & Period</th>
+                            <th class="column">Status</th>
+                            <th class="column">Vehicle</th>
+                            <th class="column">Total Price</th>
+                            <th class="column">Description</th>
+                            <th class="column">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($schedules as $schedule)
+                        <tr>
+                            <td data-label="Trip" class="column">
+                                <div>
+                                    @php
+                                    $startsFrom = new DateTime($schedule->pickedUp);
+                                    $endsAt = new DateTime($schedule->delivered);
+                                    $today = new DateTime(date("Y-m-d H:i:s"));
+                                    $interval = $startsFrom->diff($endsAt);
+                                    $scheduleCheck = $endsAt->diff($today);
+                                    @endphp
+                                    @if ($scheduleCheck->invert)
+                                    <div class="btn-sm btn-primary">
+                                        <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
+                                            {{ $scheduleCheck->days }} @if ($scheduleCheck->days <= 1) Day @else Days
+                                                @endif Left <i data-toggle="tooltip" title="Delivery Trip Details"
+                                                onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                                class="fas fa-arrow-down float-right"></i>
+                                        </h6>
+                                        <p class="mb-0" style="display: none; width: max-content"
+                                            id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                            Pick-Up : {{$schedule->pickedUpFrom}}
+                                            <br>Destination: {{$schedule->deliveredTo}}
+                                            <br>
+                                            @if($interval->days == 0)
 
-            <table>
-                <thead>
-                    <tr>
-                        <th class="column">Trip & Period</th>
-                        <th class="column">Status</th>
-                        <th class="column">Vehicle</th>
-                        <th class="column">Total Price</th>
-                        <th class="column">Description</th>
-                        <th class="column">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($schedules as $schedule)
-                    <tr>
-                        <td data-label="Trip" class="column">
-                            <div>
-                                @php
-                                $startsFrom = new DateTime($schedule->pickedUp);
-                                $endsAt = new DateTime($schedule->delivered);
-                                $today = new DateTime(date("Y-m-d H:i:s"));
-                                $interval = $startsFrom->diff($endsAt);
-                                $scheduleCheck = $endsAt->diff($today);
-                                @endphp
-                                @if ($scheduleCheck->invert)
-                                <div class="btn-sm btn-primary">
-                                    <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Active @endif:
-                                        {{ $scheduleCheck->days }} @if ($scheduleCheck->days <= 1) Day @else Days @endif
-                                            Left <i data-toggle="tooltip" title="Delivery Trip Details"
-                                            onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
-                                            class="fas fa-arrow-down float-right"></i>
-                                    </h6>
-                                    <p class="mb-0" style="display: none; width: max-content"
-                                        id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
-                                        Pick-Up : {{$schedule->pickedUpFrom}}
-                                        <br>Destination: {{$schedule->deliveredTo}}
-                                        <br>
-                                        @if($interval->days == 0)
-
-                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">From:</small>
-                                        </i>
-                                        {{$schedule->pickedUp}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$schedule->delivered}}
-                                        <small>(The same day)</small>
-                                        @elseif($interval->m == 0 && $interval->y == 0)
-                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">From:</small>
-                                        </i>
-                                        {{$startsFrom->format('Y-m-d')}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$endsAt->format('Y-m-d')}}
-                                        <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
-                                                </small>
-                                                @elseif($interval->y == 0 && $interval->m > 0)
-                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>({{$interval->m}} months, {{$interval->d}} days)</small>
-                                                @elseif($interval->y > 0)
-                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>({{$interval->y}} years, {{$interval->m}} months,
-                                                    {{$interval->d}}
-                                                    days)</small>
-                                                @endif
-                                    </p>
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$schedule->pickedUp}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$schedule->delivered}}
+                                            <small>(The same day)</small>
+                                            @elseif($interval->m == 0 && $interval->y == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$startsFrom->format('Y-m-d')}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$endsAt->format('Y-m-d')}}
+                                            <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                    </small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days)</small>
+                                                    @endif
+                                        </p>
+                                    </div>
+                                    @else
+                                    <div class="btn-sm btn-danger">
+                                        <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
+                                            @endif: Exceeded
+                                            {{ $scheduleCheck->days+1 }} @if ($scheduleCheck->days <= 1) Day @else Days
+                                                @endif <i data-toggle="tooltip" title="Delivery Trip Details"
+                                                onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
+                                                class="fas fa-arrow-down float-right"></i>
+                                        </h6>
+                                        <p class="mb-0" style="display: none; width: max-content"
+                                            id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
+                                            Pick-Up : {{$schedule->pickedUpFrom}}
+                                            <br>Destination: {{$schedule->deliveredTo}}
+                                            <br>
+                                            @if($interval->days == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$schedule->pickedUp}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$schedule->delivered}}
+                                            <small>(The same day)</small>
+                                            @elseif($interval->m == 0 && $interval->y == 0)
+                                            <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">From:</small>
+                                            </i>
+                                            {{$startsFrom->format('Y-m-d')}}
+                                            <br>
+                                            <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                    style="display: none">Until:</small>
+                                            </i>
+                                            {{$endsAt->format('Y-m-d')}}
+                                            <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
+                                                    </small>
+                                                    @elseif($interval->y == 0 && $interval->m > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->m}} months, {{$interval->d}} days)</small>
+                                                    @elseif($interval->y > 0)
+                                                    <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                        <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">From:</small>
+                                                    </i>
+                                                    {{$startsFrom->format('Y-m-d')}}
+                                                    <br>
+                                                    <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
+                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                        <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
+                                                            style="display: none">Until:</small>
+                                                    </i>
+                                                    {{$endsAt->format('Y-m-d')}}
+                                                    <small>({{$interval->y}} years, {{$interval->m}} months,
+                                                        {{$interval->d}}
+                                                        days)</small>
+                                                    @endif
+                                        </p>
+                                    </div>
+                                    @endif
                                 </div>
-                                @else
-                                <div class="btn-sm btn-danger">
-                                    <h6 class="mb-0">@if ($schedule->schedule_status == 2) Done @else Expaired
-                                        @endif: Exceeded
-                                        {{ $scheduleCheck->days+1 }} @if ($scheduleCheck->days <= 1) Day @else Days
-                                            @endif <i data-toggle="tooltip" title="Delivery Trip Details"
-                                            onclick="$('#orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}').toggle('fast')"
-                                            class="fas fa-arrow-down float-right"></i>
-                                    </h6>
-                                    <p class="mb-0" style="display: none; width: max-content"
-                                        id="orderDateDetailsPositive{{$schedule->ID_DeliverySchedule}}">
-                                        Pick-Up : {{$schedule->pickedUpFrom}}
-                                        <br>Destination: {{$schedule->deliveredTo}}
-                                        <br>
-                                        @if($interval->days == 0)
-                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">From:</small>
-                                        </i>
-                                        {{$schedule->pickedUp}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$schedule->delivered}}
-                                        <small>(The same day)</small>
-                                        @elseif($interval->m == 0 && $interval->y == 0)
-                                        <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                            <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">From:</small>
-                                        </i>
-                                        {{$startsFrom->format('Y-m-d')}}
-                                        <br>
-                                        <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                            <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                style="display: none">Until:</small>
-                                        </i>
-                                        {{$endsAt->format('Y-m-d')}}
-                                        <small>({{$interval->d}}@if ($interval->days <= 1) Day @else Days @endif)
-                                                </small>
-                                                @elseif($interval->y == 0 && $interval->m > 0)
-                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>({{$interval->m}} months, {{$interval->d}} days)</small>
-                                                @elseif($interval->y > 0)
-                                                <i onmouseover="$('#fromIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                    <small id="fromIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">From:</small>
-                                                </i>
-                                                {{$startsFrom->format('Y-m-d')}}
-                                                <br>
-                                                <i onmouseover="$('#untilIcon{{$schedule->ID_DeliverySchedule}}').toggle('fast');"
-                                                    class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                    <small id="untilIcon{{$schedule->ID_DeliverySchedule}}"
-                                                        style="display: none">Until:</small>
-                                                </i>
-                                                {{$endsAt->format('Y-m-d')}}
-                                                <small>({{$interval->y}} years, {{$interval->m}} months,
-                                                    {{$interval->d}}
-                                                    days)</small>
-                                                @endif
-                                    </p>
-                                </div>
+                            </td>
+                            <td data-label="Status" class="column">
+                                @if ($schedule->schedule_status == 0)
+                                <p class="btn-sm btn-info">Waiting</p>
+                                @elseif ($schedule->schedule_status == 1)
+                                <p class="btn-sm btn-warning">On-Going</p>
+                                @elseif ($schedule->schedule_status == 2)
+                                <p class="btn-sm btn-success">Done</p>
                                 @endif
-                            </div>
-                        </td>
-                        <td data-label="Status" class="column">
-                            @if ($schedule->schedule_status == 0)
-                            <p class="btn-sm btn-info">Waiting</p>
-                            @elseif ($schedule->schedule_status == 1)
-                            <p class="btn-sm btn-warning">On-Going</p>
-                            @elseif ($schedule->schedule_status == 2)
-                            <p class="btn-sm btn-success">Done</p>
-                            @endif
-                        </td>
-                        <td data-label="Vehicle" class="column">
-                            <a href="{{route('branch.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
-                                <p class="btn-sm btn-light">{{$schedule->vehicle_name}}</p>
-                            </a>
+                            </td>
+                            <td data-label="Vehicle" class="column">
+                                <a href="{{route('branch.delivery', ['driver' => $schedule->ID_DeliveryVehicle])}}">
+                                    <p class="btn-sm btn-light">{{$schedule->vehicle_name}}</p>
+                                </a>
 
-                        </td>
-                        <td data-label="Total Price" class="column">
-                            <p class="btn-sm btn-light">{{$schedule->schedule_totalPrice}}</p>
-                        </td>
-                        <td data-label="Description" class="column">
-                            <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
-                        </td>
-                        <td style="text-align: right" data-label="Action" class="column">
-                            <div style="display: flex; justify-content:space-around">
-                                <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
-                                    data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
-                                    <i class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
+                            </td>
+                            <td data-label="Total Price" class="column">
+                                <p class="btn-sm btn-light">{{$schedule->schedule_totalPrice}}</p>
+                            </td>
+                            <td data-label="Description" class="column">
+                                <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
+                            </td>
+                            <td style="text-align: right" data-label="Action" class="column">
+                                <div style="display: flex; justify-content:space-around">
+                                    <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
+                                        data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
+                                        <i class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
 
-                                <div class="modal fade" id="editDelivery{{$schedule->ID_DeliverySchedule}}"
-                                    tabindex="-1" aria-labelledby="editDelivery{{$schedule->ID_DeliverySchedule}}"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header" style="justify-content: center">
-                                                <h5 class="modal-title"
-                                                    id="editDelivery{{$schedule->ID_DeliverySchedule}}Title">Edit
-                                                    Delivery Info
-                                                </h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="alert-success" style="padding: 10px; border-radius: 10px">
-                                                    <p>
-                                                        Here you can change the trip and time of the delivery as
-                                                        well as
-                                                        the Vehicle and the total price of the delivery.
-                                                    </p>
-                                                    <form method="POST"
-                                                        id="editDelivery{{$schedule->ID_DeliverySchedule}}Form"
-                                                        class="row g-3"
-                                                        action="{{ route('branch.editSchedule', ['schedule'=>$schedule])}}">
-                                                        @csrf
-                                                        <div class="col-md-12">
-                                                            <label for="phone" class="form-label">Vehicle</label>
-                                                            <div class="form-group">
-                                                                <select name="ID_DeliveryVehicle" style="width: 100%"
-                                                                    class="select2">
-                                                                    <option value="0">Select Vehicle</option>
-                                                                    @php
-                                                                    $vehicleNo = 1;
-                                                                    @endphp
-                                                                    @foreach ($vehicles as $vehicle)
-                                                                    @if ($schedule->ID_DeliveryVehicle ==
-                                                                    $vehicle->ID_DeliveryVehicle)
-                                                                    <option selected
-                                                                        value="{{$vehicle->ID_DeliveryVehicle}}">
-                                                                        {{$vehicleNo++}}- (
-                                                                        {{$vehicle->plateNumber}} )
-                                                                        -
-                                                                        @ {{$vehicle->name}}
-                                                                        - {{$vehicle->model}}
-                                                                        - Price {{$vehicle->pricePerK}}
-                                                                    </option>
-                                                                    @else
-                                                                    <option value="{{$vehicle->ID_DeliveryVehicle}}">
-                                                                        {{$vehicleNo++}}- (
-                                                                        {{$vehicle->plateNumber}} )
-                                                                        -
-                                                                        @ {{$vehicle->name}}
-                                                                        - {{$vehicle->model}}
-                                                                        - Price {{$vehicle->pricePerK}}
-                                                                    </option>
-                                                                    @endif
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="pickedUpFrom" class="form-label">Pick Up
-                                                                From</label>
-                                                            <input type="text" class="form-control" id="pickedUpFrom"
-                                                                name="pickedUpFrom" value="{{$schedule->pickedUpFrom}}"
-                                                                placeholder="{{$schedule->pickedUpFrom}}">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="deliveredTo" class="form-label">Deliver
-                                                                To</label>
-                                                            <input type="text" class="form-control" id="deliveredTo"
-                                                                name="deliveredTo" value="{{$schedule->deliveredTo}}"
-                                                                placeholder="{{$schedule->deliveredTo}}">
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="pickedUp" class="form-label">Pick Up
-                                                                Date</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="pickedUp" name="pickedUp">
-                                                            <small>Old:{{$schedule->pickedUp}}</small>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="delivered" class="form-label">Deliver
-                                                                Date</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="delivered" name="delivered">
-                                                            <small>Old:{{$schedule->delivered}}</small>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="totalPrice" class="form-label">Total
-                                                                Price</label>
-                                                            <input type="text" class="form-control" id="totalPrice"
-                                                                name="totalPrice" value="{{$schedule->totalPrice}}"
-                                                                placeholder="{{$schedule->totalPrice}}">
-                                                        </div>
-                                                    </form>
+                                    <div class="modal fade" id="editDelivery{{$schedule->ID_DeliverySchedule}}"
+                                        tabindex="-1" aria-labelledby="editDelivery{{$schedule->ID_DeliverySchedule}}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header" style="justify-content: center">
+                                                    <h5 class="modal-title"
+                                                        id="editDelivery{{$schedule->ID_DeliverySchedule}}Title">Edit
+                                                        Delivery Info
+                                                    </h5>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button
-                                                    onclick="$('#editDelivery{{$schedule->ID_DeliverySchedule}}Form').submit();"
-                                                    type="button" class="btn btn-sm btn-outline-primary">Change</button>
+                                                <div class="modal-body">
+                                                    <div class="alert-success"
+                                                        style="padding: 10px; border-radius: 10px">
+                                                        <p>
+                                                            Here you can change the trip and time of the delivery as
+                                                            well as
+                                                            the Vehicle and the total price of the delivery.
+                                                        </p>
+                                                        <form method="POST"
+                                                            id="editDelivery{{$schedule->ID_DeliverySchedule}}Form"
+                                                            class="row g-3"
+                                                            action="{{ route('branch.editSchedule', ['schedule'=>$schedule])}}">
+                                                            @csrf
+                                                            <div class="col-md-12">
+                                                                <label for="phone" class="form-label">Vehicle</label>
+                                                                <div class="form-group">
+                                                                    <select name="ID_DeliveryVehicle"
+                                                                        style="width: 100%" class="select2">
+                                                                        <option value="0">Select Vehicle</option>
+                                                                        @php
+                                                                        $vehicleNo = 1;
+                                                                        @endphp
+                                                                        @foreach ($vehicles as $vehicle)
+                                                                        @if ($schedule->ID_DeliveryVehicle ==
+                                                                        $vehicle->ID_DeliveryVehicle)
+                                                                        <option selected
+                                                                            value="{{$vehicle->ID_DeliveryVehicle}}">
+                                                                            {{$vehicleNo++}}- (
+                                                                            {{$vehicle->plateNumber}} )
+                                                                            -
+                                                                            @ {{$vehicle->name}}
+                                                                            - {{$vehicle->model}}
+                                                                            - Price {{$vehicle->pricePerK}}
+                                                                        </option>
+                                                                        @else
+                                                                        <option
+                                                                            value="{{$vehicle->ID_DeliveryVehicle}}">
+                                                                            {{$vehicleNo++}}- (
+                                                                            {{$vehicle->plateNumber}} )
+                                                                            -
+                                                                            @ {{$vehicle->name}}
+                                                                            - {{$vehicle->model}}
+                                                                            - Price {{$vehicle->pricePerK}}
+                                                                        </option>
+                                                                        @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="pickedUpFrom" class="form-label">Pick Up
+                                                                    From</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="pickedUpFrom" name="pickedUpFrom"
+                                                                    value="{{$schedule->pickedUpFrom}}"
+                                                                    placeholder="{{$schedule->pickedUpFrom}}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="deliveredTo" class="form-label">Deliver
+                                                                    To</label>
+                                                                <input type="text" class="form-control" id="deliveredTo"
+                                                                    name="deliveredTo"
+                                                                    value="{{$schedule->deliveredTo}}"
+                                                                    placeholder="{{$schedule->deliveredTo}}">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="pickedUp" class="form-label">Pick Up
+                                                                    Date</label>
+                                                                <input type="datetime-local" class="form-control"
+                                                                    id="pickedUp" name="pickedUp">
+                                                                <small>Old:{{$schedule->pickedUp}}</small>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="delivered" class="form-label">Deliver
+                                                                    Date</label>
+                                                                <input type="datetime-local" class="form-control"
+                                                                    id="delivered" name="delivered">
+                                                                <small>Old:{{$schedule->delivered}}</small>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="totalPrice" class="form-label">Total
+                                                                    Price</label>
+                                                                <input type="text" class="form-control" id="totalPrice"
+                                                                    name="totalPrice" value="{{$schedule->totalPrice}}"
+                                                                    placeholder="{{$schedule->totalPrice}}">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button
+                                                        onclick="$('#editDelivery{{$schedule->ID_DeliverySchedule}}Form').submit();"
+                                                        type="button"
+                                                        class="btn btn-sm btn-outline-primary">Change</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
+                                        data-toggle="tooltip" title="Delete Record"
+                                        style="text-decoration: none;cursor: pointer">
+                                        <i class="delete-hover far fa-trash-alt icons"></i>
+                                    </a>
+                                    <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
+                                        id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                        enctype="multipart/form-data" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 </div>
-                                <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
-                                    data-toggle="tooltip" title="Delete Record"
-                                    style="text-decoration: none;cursor: pointer">
-                                    <i class="delete-hover far fa-trash-alt icons"></i>
-                                </a>
-                                <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
-                                    id="deleteSchedule{{$schedule->ID_DeliverySchedule}}" enctype="multipart/form-data"
-                                    method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             @else
             <div class="headerS">
                 <h3>
@@ -1484,6 +1492,12 @@
         });
         $('.checkCategory').click(function() {
             $('.checkCategory').not(this).prop('checked', false);
+        });
+        $('#transactionTable').DataTable( {
+            "pagingType": "full_numbers"
+        });
+        $('#schedulesTable').DataTable( {
+            "pagingType": "full_numbers"
         });
         var unitCapacityNewInput = document.getElementById('unitCapacityNewInput');
         var unitCapacityNumber = document.getElementById('unitCapacityNumber');

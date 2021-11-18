@@ -52,6 +52,7 @@
         </ol>
     </nav>
     @if (count($categories)>0)
+    <input type="number" value="{{count($categories)}}" id="categoriesAmount" hidden>
     @foreach ($categories as $category)
     @php
     $ind = 0;
@@ -154,7 +155,7 @@
                 <div style="flex: 1">
                     <div class="table100">
                         @if ( $ind > 0)
-                        <table>
+                        <table id="categoriesTable{{$category->ID_Category}}">
                             <thead>
                                 <tr>
                                     <th class="column">Status</th>
@@ -259,7 +260,7 @@
                                                                 {{$unit->unit_name}} Unit
                                                             </h5>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="modal-body" style="text-align: center">
                                                             @if ($unit->unit_status)
                                                             <div class="alert-danger"
                                                                 style="padding: 10px; border-radius: 10px">
@@ -330,7 +331,7 @@
                                                                 {{$unit->unit_name}} Unit
                                                             </h5>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="modal-body" style="text-align: center">
                                                             @if ($unit->unit_status)
                                                             <div class="alert-danger"
                                                                 style="padding: 10px; border-radius: 10px">
@@ -410,6 +411,15 @@
       } else {
         x.type = "password";
       }
-    }
+    }    
+    $(document).ready(function() {
+        var amount = $('#categoriesAmount').val();
+        for (let index = 1; index <= amount; index++) {
+            $('#categoriesTable'+index).DataTable( {
+                "pagingType": "full_numbers"
+            });            
+        }
+        
+    } );
 </script>
 @endsection
