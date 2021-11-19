@@ -17,7 +17,7 @@
         </div>
         @elseif ($message = Session::get('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert"
-            style=" text-align: center; border-radius: 20px">
+            style=" text-align: center; border-radius: 10px">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>
                 <p style="margin: 0">{{ $message }}</p>
@@ -40,7 +40,7 @@
     @endif
 </div>
 <div class="container-fluid">
-    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 20px">
+    <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
         <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
             <li class="breadcrumb-item"><a href="javascript:void(0)">Branch Employee : {{ Auth::user()->username }}</a>
@@ -52,6 +52,7 @@
         </ol>
     </nav>
     @if (count($categories)>0)
+    <input type="number" value="{{count($categories)}}" id="categoriesAmount" hidden>
     @foreach ($categories as $category)
     @php
     $ind = 0;
@@ -68,9 +69,9 @@
     }
     }
     @endphp
-    <div class="card mb-3" style="border-radius:20px;">
+    <div class="card mb-3" style="border-radius: 10px;">
         <div class="card-header"
-            style="padding: 10px; background-image: url({{ asset('storage/' . $category->category_img) }}); border-radius:20px; background-repeat: no-repeat, repeat; background-position: left; background-size: contain;">
+            style="padding: 10px; background-image: url({{ asset('storage/' . $category->category_img) }}); border-radius: 10px; background-repeat: no-repeat, repeat; background-position: left; background-size: contain;">
             <div style="display: flex; justify-content: flex-end; ">
                 <div style="flex: 1; text-align: center; margin-left: 20px">
                     <h5 style="margin: 0">{{$category->category_name}}</h5>
@@ -83,6 +84,8 @@
                         <input hidden type="text" value="{{$category->ID_Category}}" name="ID_Category">
                         <input hidden type="text" value="{{$category->category_name}}" name="categoryName">
                         <input hidden type="text" value="{{$ind+1}}" name="ind">
+                        <input hidden name="amount" type="number" value="1" min="0" max="20"
+                            id="amountRequest{{$category->ID_Category}}">
                     </form>
                     <button type="submit" data-toggle="modal" data-target="#addCategory{{$category->ID_Category}}"
                         class="btn btn-sm btn-outline-success" style="border-radius: 10px; text-align: center;">Add
@@ -98,13 +101,20 @@
                                     </h5>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="alert-success" style="padding: 10px; border-radius: 20px">
+                                    <div class="alert-success" style="padding: 10px; border-radius: 10px">
                                         <p>
                                             This will add a new unit with the name
                                             <strong>0{{$branch->ID_Branch}}-0{{$category->ID_Category}}-{{$category->category_name}}/{{$ind+1}}</strong><br>
                                             Click Add to Proceed<br>
                                             The Private key will be generated automatically
                                         </p>
+                                        <label for="amount">Amount</label><br>
+                                        <small>This option is to add units according to the amount selected
+                                            <br> The default value is 1 and maximum value is 20.</small>
+                                        <input
+                                            onchange="$('#amountRequest{{$category->ID_Category}}').val($(this).val())"
+                                            class="form-control" name="amount" type="number" value="1" min="0" max="20"
+                                            id="amountInput{{$category->ID_Category}}">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -121,7 +131,7 @@
         </div>
         <div class="mb-2" style="padding: 10px; margin: 0; ">
             <div class="alert-success mb-2"
-                style="display: flex; justify-content: space-between; border-radius: 20px; padding: 10px; width: 100%">
+                style="display: flex; justify-content: space-between; border-radius: 10px; padding: 10px; width: 100%">
                 <div>
                     <p style="margin: 0"><strong>Description : </strong>{{$category->description}}</p>
                     <p style="margin: 0"><strong>Dimensions : </strong>{{$category->dimensions}}</p>
@@ -145,7 +155,7 @@
                 <div style="flex: 1">
                     <div class="table100">
                         @if ( $ind > 0)
-                        <table>
+                        <table id="categoriesTable{{$category->ID_Category}}">
                             <thead>
                                 <tr>
                                     <th class="column">Status</th>
@@ -173,12 +183,30 @@
                                             <p class="btn-sm btn-secondary mb-0" style="width:40%">Unoccupied
                                             </p>
                                             @endif
-                                            <div class="btn-sm btn-success"
-                                                style="background-color: #66377f; width: 50%">Capacity
+                                            <div class="btn-sm btn-dark"
+                                                style="background-color: #66377f; text-align: left; width: 50%">(
+                                                <small>@if ($unit->capacity == 100)
+                                                    Full: Capacity {{$unit->capacity}}%)
+                                                    @elseif($unit->capacity >= 95)
+                                                    Almost: Full Capacity {{$unit->capacity}}%)
+                                                    @elseif($unit->capacity >= 80)
+                                                    Moderately Full: Capacity {{$unit->capacity}}%)
+                                                    @elseif($unit->capacity == 0)
+                                                    Empty)
+                                                    @else
+                                                    Capacity {{$unit->capacity}}%)
+                                                    @endif
+                                                </small>
                                                 <div class="progress mb-1" style="height: 5px" data-placement='left'
                                                     data-toggle="tooltip" title="Capacity {{$unit->capacity}}%">
                                                     @if ($unit->capacity >= 95)
                                                     <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: {{$unit->capacity}}%"
+                                                        aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
+                                                        aria-valuemax="100">
+                                                    </div>
+                                                    @elseif($unit->capacity >= 80)
+                                                    <div class="progress-bar bg-warning" role="progressbar"
                                                         style="width: {{$unit->capacity}}%"
                                                         aria-valuenow="{{$unit->capacity}}" aria-valuemin="0"
                                                         aria-valuemax="100">
@@ -232,10 +260,10 @@
                                                                 {{$unit->unit_name}} Unit
                                                             </h5>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="modal-body" style="text-align: center">
                                                             @if ($unit->unit_status)
                                                             <div class="alert-danger"
-                                                                style="padding: 10px; border-radius: 20px">
+                                                                style="padding: 10px; border-radius: 10px">
                                                                 <p>
                                                                     <center><strong>!! This Unit is Occupied !!</strong>
                                                                     </center><br>
@@ -247,7 +275,7 @@
                                                             </div>
                                                             @else
                                                             <div class="alert-warning"
-                                                                style="padding: 10px; border-radius: 20px">
+                                                                style="padding: 10px; border-radius: 10px">
                                                                 <p>
                                                                     <center><strong>This Unit is Unoccupied</strong>
                                                                     </center><br>
@@ -303,10 +331,10 @@
                                                                 {{$unit->unit_name}} Unit
                                                             </h5>
                                                         </div>
-                                                        <div class="modal-body">
+                                                        <div class="modal-body" style="text-align: center">
                                                             @if ($unit->unit_status)
                                                             <div class="alert-danger"
-                                                                style="padding: 10px; border-radius: 20px">
+                                                                style="padding: 10px; border-radius: 10px">
                                                                 <p>
                                                                     <center><strong>!! This Unit is Occupied !!</strong>
                                                                     </center><br>
@@ -318,7 +346,7 @@
                                                             </div>
                                                             @else
                                                             <div class="alert-warning"
-                                                                style="padding: 10px; border-radius: 20px">
+                                                                style="padding: 10px; border-radius: 10px">
                                                                 <p>
                                                                     <center><strong>This Unit is Unoccupied</strong>
                                                                     </center><br>
@@ -383,6 +411,16 @@
       } else {
         x.type = "password";
       }
-    }
+    }    
+    $(document).ready(function() {
+        var amount = $('#categoriesAmount').val();
+        for (let index = 1; index <= amount; index++) {
+            $('#categoriesTable'+index).DataTable( {
+                "pagingType": "full_numbers",
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+            });            
+        }
+        
+    } );
 </script>
 @endsection
