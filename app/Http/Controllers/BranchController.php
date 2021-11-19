@@ -187,7 +187,7 @@ class BranchController extends Controller
         $searchName = '';
         $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         if ($request->get('driver')) {
-            $schedules = DeliverySchedule::select('*')
+            $schedules = DeliverySchedule::select('*', 'delivery_schedules.created_at')
                 ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
                 ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
@@ -204,7 +204,7 @@ class BranchController extends Controller
                 $searchName = 'NO ACCESS';
             }
         } elseif ($request->get('search')) {
-            $schedules = DeliverySchedule::select('*',)
+            $schedules = DeliverySchedule::select('*', 'delivery_schedules.created_at')
                 ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
                 ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
@@ -230,7 +230,7 @@ class BranchController extends Controller
                 $searchName = $request->get('search');
             }
         } else {
-            $schedules = DeliverySchedule::select('*')
+            $schedules = DeliverySchedule::select('*', 'delivery_schedules.created_at')
                 ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
                 ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
@@ -471,7 +471,7 @@ class BranchController extends Controller
             ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
             ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         if ($request->get('user')) {
-            $orders = Order::select('*')
+            $orders = Order::select('*', 'orders.created_at')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
@@ -489,7 +489,7 @@ class BranchController extends Controller
                 $searchName = 'NO ACCESS';
             }
         } elseif ($request->get('search')) {
-            $orders = Order::select('*')
+            $orders = Order::select('*', 'orders.created_at')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('users.username', 'like', '%' . $request->get('search') . '%')
@@ -516,7 +516,7 @@ class BranchController extends Controller
                 $searchName = $request->get('search');
             }
         } else {
-            $orders = Order::select('*')
+            $orders = Order::select('*', 'orders.created_at')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
@@ -807,12 +807,14 @@ class BranchController extends Controller
         $customer = User::where('ID_User', $order->ID_User)->first();
         $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
         $vehicles = DeliveryVehicle::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
-        $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+        $schedules = DeliverySchedule::select('*', 'delivery_schedules.created_at')
+            ->Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
             ->where('delivery_vehicles.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
             ->where('delivery_schedules.ID_Order', 'like', '%' . $order->ID_Order . '%')
-            ->get();
+            ->orderBy('delivery_schedules.created_at', 'desc')->get();
         $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
-        $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
+        $transactions = Transactions::where('ID_Order', $order->ID_Order)
+            ->orderBy('transactions.created_at', 'desc')->get();
         $category = Category::where('ID_Category', $unit->ID_Category)->first();
         $banks = Bank::where('ID_Branch', $branch->ID_Branch)->get();
         $units = Unit::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
@@ -1042,7 +1044,7 @@ class BranchController extends Controller
         $banks = Bank::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         $msg = 'All';
         if ($request->get('status') != null) {
-            $transactions = Transactions::select('*')
+            $transactions = Transactions::select('*', 'transactions.created_at')
                 ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')
@@ -1061,7 +1063,7 @@ class BranchController extends Controller
                 $msg = 'Deleted';
             }
         } else {
-            $transactions = Transactions::select('*')
+            $transactions = Transactions::select('*', 'transactions.created_at')
                 ->Join('orders', 'transactions.ID_Order', '=', 'orders.ID_Order')
                 ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
                 ->where('units.ID_Branch', 'like', '%' . $branch->ID_Branch . '%')

@@ -1345,6 +1345,7 @@
                 <table id="schedulesTable">
                     <thead>
                         <tr>
+                            <th class="column">NO#</th>
                             <th class="column">Trip & Period</th>
                             <th class="column">Status</th>
                             <th class="column">Vehicle</th>
@@ -1354,8 +1355,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $scheduleNO = 1;
+                        @endphp
                         @foreach ($schedules as $schedule)
                         <tr>
+                            <td data-label="NO#" class="column" style="text-align: center">
+                                <span style="width: 100%" class="m-0 badge badge-light">{{$scheduleNO++}}</span>
+                            </td>
                             <td data-label="Trip" class="column">
                                 <div>
                                     @php
