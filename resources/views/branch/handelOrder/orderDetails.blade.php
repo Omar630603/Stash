@@ -865,11 +865,13 @@
                                 @if ($transaction->transactions_status == 0 )
                                 <p class="btn-sm btn-warning">Unpaid</p>
                                 @elseif ($transaction->transactions_status == 1 )
-                                <p class="btn-sm btn-success">Paid</p>
+                                <p class="btn-sm btn-dark">Paid</p>
                                 @elseif ($transaction->transactions_status == 2 )
                                 <p class="btn-sm btn-danger">Disapproved</p>
                                 @elseif ($transaction->transactions_status == 3 )
                                 <p class="btn-sm btn-success">Approved</p>
+                                @elseif ($transaction->transactions_status == 4 )
+                                <p class="btn-sm btn-secondary">Deleted</p>
                                 @endif
                             </td>
                             <td style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end"
@@ -919,11 +921,19 @@
                                         class="delete-hover fas fa-ban icons"></i>
                                 </a>
                                 @endif
+                                @if ($transaction->transactions_status == 4)
+                                <a data-toggle="modal" data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i data-toggle="tooltip" title="Return To Unpaid Transaction"
+                                        class="refresh-hover fas fa-sync icons"></i>
+                                </a>
+                                @else
                                 <a data-toggle="modal" data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
                                     style="text-decoration: none;cursor: pointer">
                                     <i data-toggle="tooltip" title="Delete Transaction"
                                         class="delete-hover far fa-trash-alt icons"></i>
                                 </a>
+                                @endif
                                 <div class="modal fade" id="payTransaction{{$transaction->ID_Transaction}}"
                                     tabindex="-1" role="dialog"
                                     aria-labelledby="payTransaction{{$transaction->transactions_description}}"
@@ -1051,6 +1061,15 @@
                                                                     Delete The Transaction Completely
                                                                 </label>
                                                             </div>
+                                                            @elseif ($transaction->transactions_status == 4)
+                                                            <div>
+                                                                <input checked name="deleteTransactionType"
+                                                                    class="checkDeleteType form-check-input"
+                                                                    type="checkbox" value="2">
+                                                                <label class="form-check-label" for="flexCheckDefault">
+                                                                    Return The Transaction To Unpaid Status
+                                                                </label>
+                                                            </div>
                                                             @else
                                                             <div>
                                                                 <input name="deleteTransactionType"
@@ -1078,7 +1097,12 @@
                                                     data-dismiss="modal">Close</button>
                                                 <button
                                                     onclick="$('#deleteTransaction{{$transaction->ID_Transaction}}Form').submit();"
-                                                    type="button" class="btn btn-sm btn-outline-success">Delete</button>
+                                                    type="button" class="btn btn-sm btn-outline-danger">
+                                                    @if($transaction->transactions_status == 4)
+                                                    Return
+                                                    @else
+                                                    Delete
+                                                    @endIf</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1120,83 +1144,197 @@
                     <div class="modal-body">
                         <div class="alert-success" style="padding: 10px; border-radius: 10px">
                             <p>
-                                Here you can change the trip and time of the delivery as well as
-                                the Vehicle and the total price of the delivery.
+                                Here you can add deliveries for the order.
                             </p>
-                            <form method="POST" id="addDeliveryForm" class="row g-3"
-                                action="{{ route('branch.addSchedule')}}">
-                                @csrf
-                                <input hidden type="text" value="{{$order->ID_Order}}" name="ID_Order">
-                                <div class="col-md-12">
-                                    <label for="phone" class="form-label">Vehicle</label>
-                                    <div class="form-group">
-                                        <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
-                                            <option value="0">Select Vehicle</option>
-                                            @php
-                                            $vehicleNo = 1;
-                                            @endphp
-                                            @foreach ($vehicles as $vehicle)
-                                            <option value="{{$vehicle->ID_DeliveryVehicle}}">
-                                                {{$vehicleNo++}}- (
-                                                {{$vehicle->plateNumber}} )
-                                                -
-                                                @ {{$vehicle->name}}
-                                                - {{$vehicle->model}}
-                                                - Price {{$vehicle->pricePerK}}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="pickedUpFrom" class="form-label">Pick Up
-                                        From</label>
-                                    <input type="text" class="form-control" id="pickedUpFrom" name="pickedUpFrom">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="deliveredTo" class="form-label">Deliver
-                                        To</label>
-                                    <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="pickedUp" class="form-label">Pick Up
-                                        Date</label>
-                                    <input type="datetime-local" class="form-control" id="pickedUp" name="pickedUp">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="delivered" class="form-label">Deliver
-                                        Date</label>
-                                    <input type="datetime-local" class="form-control" id="delivered" name="delivered">
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="totalPrice" class="form-label">Total
-                                        Price</label>
-                                    <input type="text" class="form-control" id="totalPrice" name="totalPrice">
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="model" class="form-label">Status</label>
-                                    <div class="form-group">
-                                        <div style="background: #fff; padding: 3px; border-radius: 5px;display: flex; justify-content: space-between;"
-                                            class="form-check form-switch">
-                                            <div>
-                                                <label style="color: #000;" for="status">Status:
-                                                    <small style="display: none" id="statusDone">Done</small>
-                                                </label>
-                                            </div>
-                                            <input style="margin-left: 0; margin-right: 5px; position: inherit"
-                                                onchange="$('#statusDone').toggle('slow');" name="status"
-                                                class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <div class="p-2" style="background: #eee; border-radius: 10px">
+                                <form method="POST" id="addScheduleForm" class="row g-3"
+                                    action="{{ route('branch.addSchedule')}}" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label">Order</label>
+                                        <div class="form-group">
+                                            <select name="ID_Order" style="width: 100%" class="select2">
+                                                <option selected value="{{$order->ID_Order}}"> (
+                                                    {{$order->unit_name}} )
+                                                    -
+                                                    @ {{$customer->username}}
+                                                    - {{$customer->name}}
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Vehicle</label>
+                                        <div class="form-group">
+                                            <select name="ID_DeliveryVehicle" style="width: 100%" class="select2">
+                                                <option value="0">Select Vehicle</option>
+                                                @php
+                                                $vehicleNo = 1;
+                                                @endphp
+                                                @foreach ($vehicles as $vehicle)
+                                                <option value="{{$vehicle->ID_DeliveryVehicle}}">
+                                                    {{$vehicleNo++}}- (
+                                                    {{$vehicle->plateNumber}} )
+                                                    -
+                                                    @ {{$vehicle->vehicle_name}}
+                                                    - {{$vehicle->model}}
+                                                    - Price {{$vehicle->pricePerK}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pickedUpFrom" class="form-label">Pick Up From</label>
+                                        <input type="text" class="form-control" id="pickedUpFrom" name="pickedUpFrom">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="deliveredTo" class="form-label">Deliver To</label>
+                                        <input type="text" class="form-control" id="deliveredTo" name="deliveredTo">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="description_type" class="form-label">Description
+                                            Type</label>
+                                        <div class="form-check">
+                                            @if (!count($schedules)>0) <div>
+                                                <input name="description_type" checked
+                                                    class="checkDescription_type form-check-input" type="checkbox"
+                                                    value="First Delivery">
+                                                <p style="width: 100%" class="btn-sm btn-info">First
+                                                    Delivery</p>
+                                                </label>
+                                            </div>
+                                            @else
+                                            <div>
+                                                <input onclick="checkDeliveryAva({{$unit->capacity}})"
+                                                    name="description_type"
+                                                    class="checkDescription_type form-check-input" type="checkbox"
+                                                    value="Add to Unit" id="addToUnitOption">
+                                                <p class="btn-sm btn-info">Add to Unit
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <input onclick="$('#reminderRemove').show('slow');"
+                                                    name="description_type"
+                                                    class="checkDescription_type form-check-input" type="checkbox"
+                                                    value="Transform from Unit">
+                                                <p class="btn-sm btn-info">Transform from Unit</p>
+                                                <br><small style="display: none" id="reminder">Change The Unit
+                                                    Capacity After
+                                                    This!</small>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="description_note" class="form-label">Description
+                                            Note</label>
+                                        <textarea type="text" class="form-control" id="description_note"
+                                            name="description_note" rows="5"></textarea>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="model" class="form-label">Status</label>
+                                        <div class="form-check">
+                                            <div>
+                                                <input name="status" checked class="checkStatus form-check-input"
+                                                    type="checkbox" value="0">
+                                                <p style="width: 100%" class="btn-sm btn-info">Waiting</p>
+                                            </div>
+                                            <div>
+                                                <input name="status" class="checkStatus form-check-input"
+                                                    type="checkbox" value="1">
+                                                <p class="btn-sm btn-warning">On-going</p>
+                                            </div>
+                                            <div>
+                                                <input name="status" class="checkStatus form-check-input"
+                                                    type="checkbox" value="2">
+                                                <p class="btn-sm btn-success">Done</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="pickedUp" class="form-label">Pick Up Date</label>
+                                        <input onchange="chackDeliveryDates()" type="datetime-local"
+                                            class="form-control" id="pickedUp" name="pickedUp">
+                                        <small id="deliveryCheck"></small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="delivered" class="form-label">Deliver Date</label>
+                                        <input onchange="chackDeliveryDates()" type="datetime-local"
+                                            class="form-control" id="delivered" name="delivered">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="totalPrice" class="form-label">Total Price</label>
+                                        <input onchange="showPrice()" type="number" class="form-control"
+                                            id="totalPriceInput" name="totalPrice">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div>
+                                            <label for="capacity"><strong>Delivery Payment
+                                                    <small>(This will add the payment details for
+                                                        the transaction with price: <small id="price"></small>)</small>
+                                                </strong></label>
+                                        </div>
+                                        <div>
+                                            <div class="form-check" style="margin-bottom: 10px">
+                                                <div>
+                                                    <input onclick="$('#addPaymentDelivey').show('fast');"
+                                                        name="transaction" class="checkPaymentDelivey form-check-input"
+                                                        type="checkbox" value="1">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        Include
+                                                        Payment
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <input onclick="$('#addPaymentDelivey').hide('fast');" checked
+                                                        name="transaction" class="checkPaymentDelivey form-check-input"
+                                                        type="checkbox" value="0">
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        Exclude
+                                                        Payment
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="addPaymentDelivey" style="display: none" class="col-md-12">
+                                        <div class="form-group" style="margin: 10px 0">
+                                            <select name="ID_Bank" style="width: 100%" class="select2">
+                                                <option value="0">Select Bank</option>
+                                                @php
+                                                $bankNo = 1;
+                                                @endphp
+                                                @foreach ($banks as $bank)
+                                                <option value="{{$bank->ID_Bank}}">
+                                                    {{$bankNo++}}- (
+                                                    {{$bank->bank_name}} )
+                                                    -
+                                                    @ {{$bank->accountNo}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div style="margin: 10px 0">
+                                            <a style="width: 100%;"
+                                                onclick="$('#proofInputImageDelivery').click(); return false;"
+                                                class="btn btn-sm btn-outline-dark">Add Payment Proof</a>
+                                            <input id="proofInputImageDelivery" style="display: none;" type="file"
+                                                name="proof">
+                                            <input
+                                                style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                disabled style="display: none" id="proofPhotoDelivery">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-outline-secondary"
                             data-dismiss="modal">Close</button>
-                        <button onclick="$('#addDeliveryForm').submit();" type="button"
-                            class="btn btn-sm btn-outline-primary">Add</button>
+                        <button onclick="$('#addScheduleForm').submit();" type="button"
+                            class="btn btn-sm btn-outline-primary">Schedule</button>
                     </div>
                 </div>
             </div>
@@ -1411,37 +1549,37 @@
                             <td data-label="Description" class="column">
                                 <p class="btn-sm btn-light">{{$schedule->schedule_description}}</p>
                             </td>
-                            <td style="text-align: right" data-label="Action" class="column">
-                                <div style="display: flex; justify-content:space-around">
-                                    <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
-                                        data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
-                                        <i class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
+                            <td style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end"
+                                data-label="Action" class="column">
+                                <a style="text-decoration: none ;cursor: pointer" data-toggle="modal"
+                                    data-target="#editDelivery{{$schedule->ID_DeliverySchedule}}">
+                                    <i class="use-hover fa fa-pencil-square-o icons" aria-hidden="true"></i></a>
 
-                                    <div class="modal fade" id="editDelivery{{$schedule->ID_DeliverySchedule}}"
-                                        tabindex="-1" aria-labelledby="editDelivery{{$schedule->ID_DeliverySchedule}}"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header" style="justify-content: center">
-                                                    <h5 class="modal-title"
-                                                        id="editDelivery{{$schedule->ID_DeliverySchedule}}Title">Edit
-                                                        Delivery Info
-                                                    </h5>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="alert-success"
-                                                        style="padding: 10px; border-radius: 10px">
-                                                        <p>
-                                                            Here you can change the trip and time of the delivery as
-                                                            well as
-                                                            the Vehicle and the total price of the delivery.
-                                                        </p>
+                                <div class="modal fade" id="editDelivery{{$schedule->ID_DeliverySchedule}}"
+                                    tabindex="-1" aria-labelledby="editDelivery{{$schedule->ID_DeliverySchedule}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="editDelivery{{$schedule->ID_DeliverySchedule}}Title">Edit
+                                                    Delivery Info
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-success" style="padding: 10px; border-radius: 10px">
+                                                    <p>
+                                                        Here you can change the trip and time of the delivery as
+                                                        well as
+                                                        the Vehicle and the total price of the delivery.
+                                                    </p>
+                                                    <div class="p-2" style="background: #eee; border-radius: 10px">
                                                         <form method="POST"
                                                             id="editDelivery{{$schedule->ID_DeliverySchedule}}Form"
                                                             class="row g-3"
                                                             action="{{ route('branch.editSchedule', ['schedule'=>$schedule])}}">
                                                             @csrf
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-8">
                                                                 <label for="phone" class="form-label">Vehicle</label>
                                                                 <div class="form-group">
                                                                     <select name="ID_DeliveryVehicle"
@@ -1477,18 +1615,65 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-check">
+                                                                    @if ($schedule->schedule_status == 0)
+                                                                    <input name="status" checked
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="0">
+                                                                    <p style="width: 100%" class="btn-sm btn-info">
+                                                                        Waiting</p>
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="1">
+                                                                    <p class="btn-sm btn-warning">On-going</p>
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="2">
+                                                                    <p class="btn-sm btn-success">Done</p>
+                                                                    @elseif($schedule->schedule_status == 1)
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="0">
+                                                                    <p style="width: 100%" class="btn-sm btn-info">
+                                                                        Waiting</p>
+                                                                    <input name="status" checked
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="1">
+                                                                    <p class="btn-sm btn-warning">On-going</p>
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="2">
+                                                                    <p class="btn-sm btn-success">Done</p>
+                                                                    @elseif($schedule->schedule_status == 2)
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="0">
+                                                                    <p style="width: 100%" class="btn-sm btn-info">
+                                                                        Waiting</p>
+                                                                    <input name="status"
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="1">
+                                                                    <p class="btn-sm btn-warning">On-going</p>
+                                                                    <input name="status" checked
+                                                                        class="checkStatusEdit form-check-input"
+                                                                        type="checkbox" value="2">
+                                                                    <p class="btn-sm btn-success">Done</p>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-6">
                                                                 <label for="pickedUpFrom" class="form-label">Pick Up
                                                                     From</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="pickedUpFrom" name="pickedUpFrom"
+                                                                    name="pickedUpFrom"
                                                                     value="{{$schedule->pickedUpFrom}}"
                                                                     placeholder="{{$schedule->pickedUpFrom}}">
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label for="deliveredTo" class="form-label">Deliver
                                                                     To</label>
-                                                                <input type="text" class="form-control" id="deliveredTo"
+                                                                <input type="text" class="form-control"
                                                                     name="deliveredTo"
                                                                     value="{{$schedule->deliveredTo}}"
                                                                     placeholder="{{$schedule->deliveredTo}}">
@@ -1496,49 +1681,92 @@
                                                             <div class="col-md-4">
                                                                 <label for="pickedUp" class="form-label">Pick Up
                                                                     Date</label>
-                                                                <input type="datetime-local" class="form-control"
-                                                                    id="pickedUp" name="pickedUp">
-                                                                <small>Old:{{$schedule->pickedUp}}</small>
+                                                                <input
+                                                                    onchange="chackDeliveryDatesEdit({{$schedule->ID_DeliverySchedule}})"
+                                                                    type="datetime-local" class="form-control"
+                                                                    id="pickedUpEdit{{$schedule->ID_DeliverySchedule}}"
+                                                                    name="pickedUp">
+                                                                <small>Old:{{$schedule->pickedUp}}</small><br>
+                                                                <small
+                                                                    id="deliveryCheckEdit{{$schedule->ID_DeliverySchedule}}"></small>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <label for="delivered" class="form-label">Deliver
                                                                     Date</label>
-                                                                <input type="datetime-local" class="form-control"
-                                                                    id="delivered" name="delivered">
+                                                                <input
+                                                                    onchange="chackDeliveryDatesEdit({{$schedule->ID_DeliverySchedule}})"
+                                                                    type="datetime-local" class="form-control"
+                                                                    id="deliveredEdit{{$schedule->ID_DeliverySchedule}}"
+                                                                    name="delivered">
                                                                 <small>Old:{{$schedule->delivered}}</small>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <label for="totalPrice" class="form-label">Total
                                                                     Price</label>
-                                                                <input type="text" class="form-control" id="totalPrice"
-                                                                    name="totalPrice" value="{{$schedule->totalPrice}}"
-                                                                    placeholder="{{$schedule->totalPrice}}">
+                                                                <input type="text" class="form-control"
+                                                                    name="totalPrice"
+                                                                    value="{{$schedule->schedule_totalPrice}}"
+                                                                    placeholder="{{$schedule->_scheduletotalPrice}}">
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button
-                                                        onclick="$('#editDelivery{{$schedule->ID_DeliverySchedule}}Form').submit();"
-                                                        type="button"
-                                                        class="btn btn-sm btn-outline-primary">Change</button>
-                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#editDelivery{{$schedule->ID_DeliverySchedule}}Form').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-primary">Change</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
-                                        data-toggle="tooltip" title="Delete Record"
-                                        style="text-decoration: none;cursor: pointer">
-                                        <i class="delete-hover far fa-trash-alt icons"></i>
-                                    </a>
-                                    <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
-                                        id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
-                                        enctype="multipart/form-data" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
+                                </div>
+                                <a data-toggle="modal" data-target="#deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                    style="text-decoration: none;cursor: pointer">
+                                    <i data-toggle="tooltip" title="Delete Schedule"
+                                        class="delete-hover far fa-trash-alt icons"></i>
+                                </a>
+                                <div class="modal fade" id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="justify-content: center">
+                                                <h5 class="modal-title"
+                                                    id="deleteSchedule{{$schedule->ID_DeliverySchedule}}Title">
+                                                    Delete Delivery Schedule: {{$schedule->schedule_description}}
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert-danger" style="padding: 10px; border-radius: 10px">
+                                                    <p>
+                                                        <center><strong>!! This Will Delete The Order Delivery
+                                                                Schedule!!</strong>
+                                                            <br>
+                                                            {{$schedule->schedule_description}}
+                                                            <br>
+                                                            Click Delete to Continue the Process
+                                                        </center>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button
+                                                    onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}form').submit();"
+                                                    type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
+                                                    id="deleteSchedule{{$schedule->ID_DeliverySchedule}}form"
+                                                    enctype="multipart/form-data" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -1560,6 +1788,14 @@
 </div>
 
 <script>
+    function checkDeliveryAva(capacity) {
+        if (capacity >= 95) {
+            alert('Unit is Full, You Cannot Add To It');
+            $('#addToUnitOption').prop('checked', false);
+        }else{
+            $('#reminder').show('slow');
+        }
+    }
     function showPrivateKey(id) {
       var x = document.getElementById("privateKey"+id);
       if (x.type === "password") {
@@ -1685,6 +1921,18 @@
         $('.checkPaymentTransaction').click(function() {
             $('.checkPaymentTransaction').not(this).prop('checked', false);
         });
+        $('.checkStatus').click(function() {
+            $('.checkStatus').not(this).prop('checked', false);
+        });
+        $('.checkStatusEdit').click(function() {
+            $('.checkStatusEdit').not(this).prop('checked', false);
+        });
+        $('.checkDescription_type').click(function() {
+            $('.checkDescription_type').not(this).prop('checked', false);
+        });
+        $('.checkPaymentDelivey').click(function() {
+            $('.checkPaymentDelivey').not(this).prop('checked', false);
+        });
         var unitCapacityNewInput = document.getElementById('unitCapacityNewInput');
         var unitCapacityNumber = document.getElementById('unitCapacityNumber');
         var color = '';
@@ -1739,6 +1987,45 @@
         proofPhotoChangeUnit.value = 'File Name:' + proofInputImageChangeUnit.files[0].name;
     }
     }(jQuery);
-    
+    function chackDeliveryDates() {
+        var pickedUp = new Date($('#pickedUp').val()); 
+            var delivered = new Date($('#delivered').val());
+            var deliveryCheck = document.getElementById('deliveryCheck');
+            if (pickedUp > delivered) {
+                alert('Dates are Invalid')
+                $('#pickedUp').val(null)
+                $('#delivered').val(null)
+            } else {
+                dateDif = Math.round((delivered-pickedUp)/(1000*60*60*24));
+                deliveryCheck.textContent =  'Delivery Period: '+dateDif+' days.';
+            }
+    }
+    function chackDeliveryDatesEdit(id) {
+        var pickedUpEdit = new Date($('#pickedUpEdit'+id).val()); 
+        var deliveredEdit = new Date($('#deliveredEdit'+id).val());
+        var deliveryCheckEdit = document.getElementById('deliveryCheckEdit'+id);
+        if (pickedUpEdit > deliveredEdit) {
+            alert('Dates are Invalid')
+            $('#pickedUpEdit'+id).val(null)
+            $('#deliveredEdit'+id).val(null)
+        } else {
+            dateDif = Math.round((deliveredEdit-pickedUpEdit)/(1000*60*60*24));
+            deliveryCheckEdit.textContent =  'Delivery Period: '+dateDif+' days.';
+        }
+    }
+    function showPrice() {
+        price = document.getElementById('price');
+        totalPriceInput = document.getElementById('totalPriceInput');
+        price.textContent = totalPriceInput.value;
+    }
++ function($) {
+    'use strict';
+    var proofInputImageDelivery = document.getElementById('proofInputImageDelivery');
+    var pDelivery = document.getElementById('proofPhotoDelivery');
+    proofInputImageDelivery.onchange = function() {
+        pDelivery.style.display = '';
+        pDelivery.value = 'File Name:' + proofInputImageDelivery.files[0].name;
+    }
+}(jQuery);
 </script>
 @endsection

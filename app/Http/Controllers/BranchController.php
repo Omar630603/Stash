@@ -400,6 +400,7 @@ class BranchController extends Controller
             'pickedUp' => 'required',
             'delivered' => 'required',
             'totalPrice' => 'required',
+            'status' => 'required',
         ]);
         $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
         $driver->vehicle_deliveries--;
@@ -410,6 +411,7 @@ class BranchController extends Controller
         $schedule->deliveredTo = $request->get('deliveredTo');
         $schedule->pickedUp = $request->get('pickedUp');
         $schedule->delivered = $request->get('delivered');
+        $schedule->schedule_status = $request->get('status');
 
         $order = Order::where('ID_Order', $schedule->ID_Order)->first();
         $order->order_totalPrice -= $schedule->totalPrice;
@@ -660,14 +662,16 @@ class BranchController extends Controller
     }
     public function addOrder(Request $request)
     {
+        $user = null;
+        $order = new Order;
         $request->validate([
             'transaction' => 'required',
             'delivery' => 'required',
             'order_status' => 'required',
             'Idunit' => 'required',
+            'startsFrom' => 'required',
+            'endsAt' => 'required',
         ]);
-        $user = null;
-        $order = new Order;
         if ($request->get('userNew') == "on") {
             $request->validate([
                 'name' => 'required',
@@ -699,116 +703,104 @@ class BranchController extends Controller
                 $ID_User = $request->get('userOld');
             }
         }
-        if (!$request->get('Idunit')) {
-            $message = 'No Category Selected';
-            return redirect()->back()->with('fail', $message);
-        }
         $order->ID_User = $ID_User;
         $order->ID_Unit = $request->get('Idunit');
-        if ($request->get('startsFrom') == null || $request->get('endsAt') == null) {
-            $message = 'Order dates are empty';
-            return redirect()->back()->with('fail', $message);
+        $order->startsFrom = $request->get('startsFrom');
+        $order->endsAt = $request->get('endsAt');
+        $order->madeBy = 1;
+        $order->order_status = $request->get('order_status');
+        $order->order_description = $request->get('order_description');
+        $date1 = new DateTime($request->get('startsFrom'));
+        $date2 = new DateTime($request->get('endsAt'));
+        $interval = $date1->diff($date2);
+        $unit = Unit::where('ID_Unit', $request->get('Idunit'))->first();
+        $category = Category::where('ID_Category', $unit->ID_Category)->first();
+        if ($interval->days == 0) {
+            $order->order_totalPrice = $category->pricePerDay;
         } else {
-            $order->startsFrom = $request->get('startsFrom');
-            $order->endsAt = $request->get('endsAt');
-            $order->madeBy = 1;
-            $order->order_status = $request->get('order_status');
-            $order->order_description = $request->get('order_description');
-            $date1 = new DateTime($request->get('startsFrom'));
-            $date2 = new DateTime($request->get('endsAt'));
-            $interval = $date1->diff($date2);
-            $unit = Unit::where('ID_Unit', $request->get('Idunit'))->first();
-            $category = Category::where('ID_Category', $unit->ID_Category)->first();
-            if ($interval->days == 0) {
-                $order->order_totalPrice = $category->pricePerDay;
-            } else {
-                $order->order_totalPrice = $category->pricePerDay * $interval->days;
-            }
-            if ($request->get('capacity')) {
-                $unit->unit_status = 1;
-                $unit->capacity = $request->get('capacity');
-            } else {
-                $message = 'Insert Capacity';
+            $order->order_totalPrice = $category->pricePerDay * $interval->days;
+        }
+        if ($request->get('capacity')) {
+            $unit->unit_status = 1;
+            $unit->capacity = $request->get('capacity');
+        } else {
+            $message = 'Insert Capacity';
+            return redirect()->back()->with('fail', $message);
+        }
+        if ($request->get('transaction') == 1) {
+            if ($request->get('ID_Bank') == 0) {
+                $message = 'Select Bank';
                 return redirect()->back()->with('fail', $message);
             }
-            $order->save();
-            $unit->save();
-            $userOrder = User::where('ID_User', $ID_User)->first();
-            $userOrder->ordered++;
-            $userOrder->save();
-            $transaction = new Transactions;
-            $transaction->transaction_madeBy = 1;
-            if ($request->get('transaction') == 1) {
-                $transaction->ID_Order = $order->ID_Order;
-                if ($request->get('ID_Bank') == 0) {
-                    $message = 'Select Bank';
-                    return redirect()->back()->with('fail', $message);
-                } else {
-                    $transaction->ID_Bank = $request->get('ID_Bank');
-                }
-                $transaction->transactions_description = 'Entry Transaction For Unit (' . $unit->unit_name . ')';
-                $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_status = 1;
-                if ($request->file('proof')) {
-                    $image_name = $request->file('proof')->store('transactions_images', 'public');
-                    $transaction->proof = $image_name;
-                } else {
-                    $message = 'Add Proof';
-                    return redirect()->back()->with('fail', $message);
-                }
-                $transaction->save();
-            } else if ($request->get('transaction') == 2) {
-                $transaction->ID_Order = $order->ID_Order;
-                $transaction->transactions_description = 'Entry Transaction For Unit (' . $unit->unit_name . ')';
-                $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_status = 0;
-                $transaction->proof = 'Waiting for Payment';
-                $transaction->save();
+            if (!$request->file('proof')) {
+                $message = 'Add Proof';
+                return redirect()->back()->with('fail', $message);
             }
-
-            if ($request->get('delivery') == 1) {
-                $schedule = new DeliverySchedule();
-                $schedule->ID_Order = $order->ID_Order;
-                if (!$request->get('ID_DeliveryVehicle')) {
-                    $message = 'Add Vehicle';
-                    return redirect()->back()->with('fail', $message);
-                }
-                $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
-                $schedule->schedule_status = $request->get('status');
-                $schedule->schedule_description = $request->get('description_type') . ': ' . $request->get('description_note');
-                if (!$request->get('pickedUpFrom') || !$request->get('deliveredTo')) {
-                    $message = 'Add Trip Detials';
-                    return redirect()->back()->with('fail', $message);
-                }
-                $schedule->pickedUpFrom = $request->get('pickedUpFrom');
-                $schedule->deliveredTo = $request->get('deliveredTo');
-                if (!$request->get('pickedUp') || !$request->get('delivered')) {
-                    $message = 'Add Trip Date Detials';
-                    return redirect()->back()->with('fail', $message);
-                }
-                $schedule->pickedUp = $request->get('pickedUp');
-                $schedule->delivered = $request->get('delivered');
-                if (!$request->get('totalPrice')) {
-                    $message = 'Add Price';
-                    return redirect()->back()->with('fail', $message);
-                }
-                $schedule->schedule_totalPrice = $request->get('totalPrice');
-                $schedule->save();
-                $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
-                $driver->vehicle_deliveries++;
-                $driver->save();
-                $order->order_deliveries++;
-                $order->order_totalPrice += $request->get('totalPrice');
-                $order->save();
-                $transaction->transactions_totalPrice = $order->order_totalPrice;
-                $transaction->transactions_description = 'Entry Transaction + Delivery: ' . $request->get('description_type') . '. For Unit (' . $unit->unit_name . ')';
-                $transaction->save();
-                $message = 'Order has been made successfuly';
-                return redirect()->back()->with('success', $message);
-            }
-            $message = 'Order has been made successfuly';
-            return redirect()->back()->with('success', $message);
         }
+        if ($request->get('delivery') == 1) {
+            if (!$request->get('ID_DeliveryVehicle')) {
+                $message = 'Add Vehicle';
+                return redirect()->back()->with('fail', $message);
+            }
+            if (!$request->get('pickedUpFrom') || !$request->get('deliveredTo')) {
+                $message = 'Add Trip Detials';
+                return redirect()->back()->with('fail', $message);
+            }
+            if (!$request->get('pickedUp') || !$request->get('delivered')) {
+                $message = 'Add Trip Date Detials';
+                return redirect()->back()->with('fail', $message);
+            }
+            if (!$request->get('totalPrice')) {
+                $message = 'Add Price';
+                return redirect()->back()->with('fail', $message);
+            }
+        }
+        $order->save();
+        $unit->save();
+        $userOrder = User::where('ID_User', $ID_User)->first();
+        $userOrder->ordered++;
+        $userOrder->save();
+        $transaction = new Transactions;
+        $transaction->transactions_description = 'Entry Transaction For Unit (' . $unit->unit_name . ')';
+        $transaction->transactions_totalPrice = $order->order_totalPrice;
+        $transaction->transaction_madeBy = 1;
+        if ($request->get('transaction') == 1) {
+            $transaction->ID_Order = $order->ID_Order;
+            $transaction->ID_Bank = $request->get('ID_Bank');
+            $transaction->transactions_status = 1;
+            $image_name = $request->file('proof')->store('transactions_images', 'public');
+            $transaction->proof = $image_name;
+            $transaction->save();
+        } else if ($request->get('transaction') == 2) {
+            $transaction->ID_Order = $order->ID_Order;
+            $transaction->transactions_status = 0;
+            $transaction->proof = 'Waiting for Payment';
+            $transaction->save();
+        }
+        if ($request->get('delivery') == 1) {
+            $schedule = new DeliverySchedule();
+            $schedule->ID_Order = $order->ID_Order;
+            $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+            $schedule->schedule_status = $request->get('status');
+            $schedule->schedule_description = $request->get('description_type') . ': ' . $request->get('description_note');
+            $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+            $schedule->deliveredTo = $request->get('deliveredTo');
+            $schedule->pickedUp = $request->get('pickedUp');
+            $schedule->delivered = $request->get('delivered');
+            $schedule->schedule_totalPrice = $request->get('totalPrice');
+            $schedule->save();
+            $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+            $driver->vehicle_deliveries++;
+            $driver->save();
+            $order->order_deliveries++;
+            $order->order_totalPrice += $request->get('totalPrice');
+            $order->save();
+            $transaction->transactions_totalPrice = $order->order_totalPrice;
+            $transaction->transactions_description = 'Entry Transaction + Delivery: ' . $request->get('description_type') . '. For Unit (' . $unit->unit_name . ')';
+            $transaction->save();
+        }
+        $message = 'Order has been made successfuly';
+        return redirect()->back()->with('success', $message);
     }
     public function branchOrderDetails(Order $order)
     {
@@ -988,13 +980,19 @@ class BranchController extends Controller
         $request->validate([
             'deleteTransactionType' => 'required',
         ]);
+        $order = Order::where('ID_Order', $transaction->ID_Order)->first();
         if ($request->get('deleteTransactionType') == 1) {
             Storage::delete('public/' . $transaction->proof);
-            $transaction->delete();
+            $order->order_totalPrice -= $transaction->transactions_totalPrice;
+            $transaction->transactions_status = 4;
+            $order->save();
+            $transaction->save();
             $message = 'Transaction ' . $transaction->transactions_description . '  Has been Deleted';
         } elseif ($request->get('deleteTransactionType') == 2) {
             $transaction->ID_Bank = null;
             $transaction->transactions_status = 0;
+            $order->order_totalPrice += $transaction->transactions_totalPrice;
+            $order->save();
             Storage::delete('public/' . $transaction->proof);
             $transaction->proof = 'Waiting for Payment';
             $transaction->save();
@@ -1059,6 +1057,8 @@ class BranchController extends Controller
                 $msg = 'Disapproved';
             } else if ($request->get('status') == 3) {
                 $msg = 'Approved';
+            } else if ($request->get('status') == 4) {
+                $msg = 'Deleted';
             }
         } else {
             $transactions = Transactions::select('*')

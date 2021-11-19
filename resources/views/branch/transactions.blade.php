@@ -50,6 +50,7 @@
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 1]) }}">Paid</a>
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 2]) }}">Disapproved</a>
                     <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 3]) }}">Approved</a>
+                    <a class="dropdown-item" href="{{ route('branch.transactions', ['status' => 4]) }}">Deleted</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('branch.transactions') }}">All
                         Transactions</a>
@@ -110,11 +111,13 @@
                             @if ($transaction->transactions_status == 0 )
                             <p class="btn-sm btn-warning">Unpaid</p>
                             @elseif ($transaction->transactions_status == 1 )
-                            <p class="btn-sm btn-success">Paid</p>
+                            <p class="btn-sm btn-dark">Paid</p>
                             @elseif ($transaction->transactions_status == 2 )
                             <p class="btn-sm btn-danger">Disapproved</p>
                             @elseif ($transaction->transactions_status == 3 )
                             <p class="btn-sm btn-success">Approved</p>
+                            @elseif ($transaction->transactions_status == 4 )
+                            <p class="btn-sm btn-secondary">Deleted</p>
                             @endif
                         </td>
                         <td style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end"
@@ -164,11 +167,19 @@
                                     class="delete-hover fas fa-ban icons"></i>
                             </a>
                             @endif
+                            @if ($transaction->transactions_status == 4)
+                            <a data-toggle="modal" data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
+                                style="text-decoration: none;cursor: pointer">
+                                <i data-toggle="tooltip" title="Return To Unpaid Transaction"
+                                    class="refresh-hover fas fa-sync icons"></i>
+                            </a>
+                            @else
                             <a data-toggle="modal" data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
                                 style="text-decoration: none;cursor: pointer">
                                 <i data-toggle="tooltip" title="Delete Transaction"
                                     class="delete-hover far fa-trash-alt icons"></i>
                             </a>
+                            @endif
                             <div class="modal fade" id="payTransaction{{$transaction->ID_Transaction}}" tabindex="-1"
                                 role="dialog" aria-labelledby="payTransaction{{$transaction->transactions_description}}"
                                 aria-hidden="true">
@@ -295,6 +306,15 @@
                                                                 Delete The Transaction Completely
                                                             </label>
                                                         </div>
+                                                        @elseif ($transaction->transactions_status == 4)
+                                                        <div>
+                                                            <input checked name="deleteTransactionType"
+                                                                class="checkDeleteType form-check-input" type="checkbox"
+                                                                value="2">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                Return The Transaction To Unpaid Status
+                                                            </label>
+                                                        </div>
                                                         @else
                                                         <div>
                                                             <input name="deleteTransactionType"
@@ -322,7 +342,12 @@
                                                 data-dismiss="modal">Close</button>
                                             <button
                                                 onclick="$('#deleteTransaction{{$transaction->ID_Transaction}}Form').submit();"
-                                                type="button" class="btn btn-sm btn-outline-success">Delete</button>
+                                                type="button" class="btn btn-sm btn-outline-danger">
+                                                @if($transaction->transactions_status == 4)
+                                                Return
+                                                @else
+                                                Delete
+                                                @endIf</button>
                                         </div>
                                     </div>
                                 </div>

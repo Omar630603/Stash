@@ -124,7 +124,7 @@
                         <a href="{{route('branch.delivery', ['driver' => $vehicle->ID_DeliveryVehicle])}}">
                             <div class="chat_people">
                                 <div class="chat_img">
-                                    <img style="border: 2px solid #9D3488; border-radius: 50%; padding: 2px;"
+                                    <img style="border: 2px solid #9D3488; border-radius: 50%;"
                                         src="{{ asset('storage/' . $vehicle->vehicle_img) }}"
                                         alt="{{$vehicle->vehicle_name}}">
                                 </div>
@@ -582,6 +582,7 @@
                 <table id="driversTable">
                     <thead>
                         <tr>
+                            <th class="column">NO#</th>
                             <th class="column">Trip & Period</th>
                             <th class="column">Status</th>
                             <th class="column">Vehicle</th>
@@ -592,8 +593,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $scheduleNO = 1;
+                        @endphp
                         @foreach ($schedules as $schedule)
                         <tr>
+                            <td data-label="NO#" class="column" style="text-align: center">
+                                <span style="width: 100%" class="m-0 badge badge-light">{{$scheduleNO++}}</span>
+                            </td>
                             <td data-label="Trip" class="column">
                                 <div>
                                     @php
@@ -801,17 +808,56 @@
                                         style="text-decoration: none;cursor: pointer">
                                         <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                     </a>
-                                    <a onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}').submit();"
-                                        data-toggle="tooltip" title="Delete Record"
+                                    <a data-toggle="modal"
+                                        data-target="#deleteSchedule{{$schedule->ID_DeliverySchedule}}"
                                         style="text-decoration: none;cursor: pointer">
-                                        <i class="delete-hover far fa-trash-alt icons"></i>
+                                        <i data-toggle="tooltip" title="Delete Schedule"
+                                            class="delete-hover far fa-trash-alt icons"></i>
                                     </a>
-                                    <form hidden action="{{ route('branch.deleteSchedule', $schedule) }}"
-                                        id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
-                                        enctype="multipart/form-data" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
+                                    <div class="modal fade" id="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                        tabindex="-1" role="dialog"
+                                        aria-labelledby="deleteSchedule{{$schedule->ID_DeliverySchedule}}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header" style="justify-content: center">
+                                                    <h5 class="modal-title"
+                                                        id="deleteSchedule{{$schedule->ID_DeliverySchedule}}Title">
+                                                        Delete Delivery Schedule: {{$schedule->schedule_description}}
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="alert-danger"
+                                                        style="padding: 10px; border-radius: 10px">
+                                                        <p>
+                                                            <center><strong>!! This Will Delete The Order Delivery
+                                                                    Schedule!!</strong>
+                                                                <br>
+                                                                {{$schedule->schedule_description}}
+                                                                <br>
+                                                                Click Delete to Continue the Process
+                                                            </center>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button
+                                                        onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}form').submit();"
+                                                        type="button"
+                                                        class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <form hidden
+                                                        action="{{ route('branch.deleteSchedule', $schedule) }}"
+                                                        id="deleteSchedule{{$schedule->ID_DeliverySchedule}}form"
+                                                        enctype="multipart/form-data" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

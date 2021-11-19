@@ -487,6 +487,8 @@
                                         href="{{ route('branch.transactions', ['status' => 2]) }}">Disapproved</a>
                                     <a class="dropdown-item"
                                         href="{{ route('branch.transactions', ['status' => 3]) }}">Approved</a>
+                                    <a class="dropdown-item"
+                                        href="{{ route('branch.transactions', ['status' => 4]) }}">Deleted</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('branch.transactions') }}">All
                                         Transactions</a>

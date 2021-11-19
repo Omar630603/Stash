@@ -186,7 +186,7 @@
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
+                                    <h5>{{$user->username}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
                                     <p>Ordered : {{$user->ordered}}</p>
                                 </div>
@@ -198,13 +198,12 @@
                     <div class="chat_list active_chat">
                         <a href="{{route('branch.orders', ['user' => $user->ID_User])}}">
                             <div class="chat_people">
-                                <div class="chat_img"
-                                    style="border: 2px solid #9D3488; border-radius: 50%; padding: 2px;">
+                                <div class="chat_img" style="border: 2px solid #9D3488; border-radius: 50%;">
                                     <img style="border-radius: 50%" src="{{ asset('storage/' . $user->user_img) }}"
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
+                                    <h5>{{$user->username}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
                                     <p>Ordered : {{$user->ordered}}</p>
                                 </div>
@@ -220,7 +219,7 @@
                                         alt="{{$user->name}}">
                                 </div>
                                 <div class="chat_ib">
-                                    <h5>{{$user->name}} <span class="chat_date">Phone: {{$user->phone}}</span>
+                                    <h5>{{$user->username}} <span class="chat_date">Phone: {{$user->phone}}</span>
                                     </h5>
                                     <p>Ordered : {{$user->ordered}}</p>
                                 </div>
@@ -956,6 +955,7 @@
                         <table id="ordersTable">
                             <thead>
                                 <tr>
+                                    <th class="column">NO#</th>
                                     <th class="column">Status</th>
                                     <th class="column">Period</th>
                                     <th class="column">Has Delivery</th>
@@ -966,14 +966,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                $orderNO = 1;
+                                @endphp
                                 @foreach ($orders as $order)
                                 <tr>
-                                    <td data-label="Status" class="column">
+                                    <td data-label="NO#" class="column" style="text-align: center">
+                                        <span style="width: 100%" class="m-0 badge badge-light">{{$orderNO++}}</span>
+                                    </td>
+                                    <td data-label=" Status" class="column">
                                         @php
                                         $status_unpaid = 0;
                                         $status_paid = 0;
                                         $status_disapproved = 0;
                                         $status_approved = 0;
+                                        $status_deleted = 0;
                                         $amount=0;
                                         @endphp
                                         @foreach ($transactions as $transaction)
@@ -996,6 +1003,11 @@
                                         $transaction->transactions_status==3)
                                         @php
                                         $status_approved++;$amount++;
+                                        @endphp
+                                        @elseif ($transaction->ID_Order == $order->ID_Order &&
+                                        $transaction->transactions_status==4)
+                                        @php
+                                        $status_deleted++;$amount++;
                                         @endphp
                                         @endif
                                         @endforeach
@@ -1020,22 +1032,51 @@
                                                                                     title="Order Transactions Details"
                                                                                     onclick="$('#orderTransactionsDetail{{$order->ID_Order}}').toggle('fast')"
                                                                                     class="fas fa-arrow-down float-right"></i>
-                                                                                <p class="mb-0"
+                                                                                <div class="mb-0"
                                                                                     style="display: none; width: max-content"
                                                                                     id="orderTransactionsDetail{{$order->ID_Order}}">
-                                                                                    <small>Transactions: {{$amount}}
-                                                                                        <br>Unpaid: {{$status_unpaid}}
-                                                                                        <br>Paid: {{$status_paid}}
-                                                                                        <br>Disapproved:
-                                                                                        {{$status_disapproved}}
-                                                                                        <br>Approved:
-                                                                                        {{$status_approved}}
+                                                                                    <small>
+                                                                                        <div
+                                                                                            style="background: #eee; padding: 5px; margin-top: 3px; border-radius: 3px">
+                                                                                            <span
+                                                                                                class="badge badge-info">Transactions:
+                                                                                                ({{$amount}})
+                                                                                            </span>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <span
+                                                                                                        class="badge badge-warning">Unpaid:
+                                                                                                        ({{$status_unpaid}})</span>
+                                                                                                    <span
+                                                                                                        class="badge badge-dark">
+                                                                                                        Paid:
+                                                                                                        ({{$status_paid}})</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <span
+                                                                                                        class="badge badge-danger">Disapproved:
+                                                                                                        ({{$status_disapproved}})</span>
+                                                                                                    <span
+                                                                                                        class="badge badge-success">
+                                                                                                        Approved:
+                                                                                                        ({{$status_approved}})</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-12">
+                                                                                                    <span
+                                                                                                        class="badge badge-secondary">Deleted:
+                                                                                                        ({{$status_deleted}})</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </small>
-                                                                                </p>
+                                                                                </div>
                                                                             </h6>
                                                                         </div>
                                     </td>
-
                                     <td data-label="Period" class="column">
                                         <div>
                                             @php
@@ -1085,7 +1126,11 @@
                                                             style="display: none">Until:</small>
                                                     </i>
                                                     {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->d}} Days</small>
+                                                    <small>{{$interval->d}}@if ($interval->d == 1)
+                                                        Day
+                                                        @else
+                                                        Days
+                                                        @endif</small>
                                                     @elseif($interval->y == 0 && $interval->m > 0)
                                                     <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
                                                         class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
@@ -1161,7 +1206,11 @@
                                                             style="display: none">Until:</small>
                                                     </i>
                                                     {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->d}} Days</small>
+                                                    <small>{{$interval->d}} @if ($interval->d == 1)
+                                                        Day
+                                                        @else
+                                                        Days
+                                                        @endif </small>
                                                     @elseif($interval->y == 0 && $interval->m > 0)
                                                     <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
                                                         class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
@@ -1234,14 +1283,29 @@
                                                     <i data-toggle="tooltip" title="Order Deliveries Details"
                                                         onclick="$('#orderDeliveriesDetail{{$order->ID_Order}}').toggle('fast')"
                                                         class="fas fa-arrow-down float-right"></i>
-                                                    <p class="mb-0" style="display: none; width: max-content"
+                                                    <div class="mb-0" style="display: none; width: max-content"
                                                         id="orderDeliveriesDetail{{$order->ID_Order}}">
                                                         <small>
-                                                            Waiting: {{$status_waiting}}
-                                                            <br>On-Going: {{$status_On_Going}}
-                                                            <br>Done: {{$status_Done}}
+                                                            <div
+                                                                style="background: #eee; padding: 5px; margin-top: 3px; border-radius: 3px">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <span class="badge badge-info">Waiting:
+                                                                            ({{$status_waiting}})</span>
+                                                                        <span class="badge badge-warning">
+                                                                            On-Going:
+                                                                            ({{$status_On_Going}})</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <span class="badge badge-success">Done:
+                                                                            ({{$status_Done}})</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </small>
-                                                    </p>
+                                                    </div>
                                                 </h6>
                                             </div>
                                             @endif
@@ -1318,17 +1382,52 @@
                                                 style="text-decoration: none;cursor: pointer">
                                                 <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                             </a>
-                                            <a onclick="$('#deleteOrder{{$order->ID_Order}}').submit();"
-                                                data-toggle="tooltip" title="Delete Record"
+                                            <a data-toggle="modal" data-target="#deleteOrder{{$order->ID_Order}}"
                                                 style="text-decoration: none;cursor: pointer">
-                                                <i class="delete-hover far fa-trash-alt icons"></i>
+                                                <i data-toggle="tooltip" title="Delete Order"
+                                                    class="delete-hover far fa-trash-alt icons"></i>
                                             </a>
-                                            <form hidden action="{{ route('branch.deleteOrder', $order) }}"
-                                                id="deleteOrder{{$order->ID_Order}}" enctype="multipart/form-data"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
+                                            <div class="modal fade" id="deleteOrder{{$order->ID_Order}}" tabindex="-1"
+                                                role="dialog" aria-labelledby="deleteOrder" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header" style="justify-content: center">
+                                                            <h5 class="modal-title"
+                                                                id="deleteOrder{{$order->ID_Order}}Title">
+                                                                Delete Order for Customer {{$order->name}}
+                                                            </h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="alert-danger"
+                                                                style="padding: 10px; border-radius: 10px">
+                                                                <p>
+                                                                    <center><strong>!! This Will Delete The
+                                                                            Order!!</strong>
+                                                                        <br>
+                                                                        Click Delete to Continue the Process
+                                                                    </center>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                data-dismiss="modal">Close</button>
+                                                            <button
+                                                                onclick="$('#deleteOrder{{$order->ID_Order}}form').submit();"
+                                                                type="button"
+                                                                class="btn btn-sm btn-outline-danger">Delete</button>
+                                                            <form hidden
+                                                                action="{{ route('branch.deleteOrder', $order) }}"
+                                                                id="deleteOrder{{$order->ID_Order}}form"
+                                                                enctype="multipart/form-data" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
