@@ -86,6 +86,7 @@ class BranchController extends Controller
         $branch->branch_name = $request->get('branch_name');
         $branch->city = $request->get('city');
         $branch->branch_address = $request->get('branch_address');
+        $branch->save();
         $message = 'Branch Data has been edited';
         return redirect()->back()->with('success', $message);
     }
