@@ -603,7 +603,7 @@ class BranchController extends Controller
     public function deleteUser(User $user)
     {
         if ($user->user_img != "User_images/userDefault.png") {
-            Storage::delete('public/' . $user->img);
+            Storage::delete('public/' . $user->user_img);
         }
         $orders = Order::where('ID_User', $user->ID_User)->get();
         foreach ($orders as $order) {
