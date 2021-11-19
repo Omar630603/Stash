@@ -1997,9 +1997,10 @@
     function chackDeliveryDates() {
         var pickedUp = new Date($('#pickedUp').val()); 
             var delivered = new Date($('#delivered').val());
+            var today = new Date();
             var deliveryCheck = document.getElementById('deliveryCheck');
-            if (pickedUp > delivered) {
-                alert('Dates are Invalid')
+            if (pickedUp < today || pickedUp > delivered) {
+                alert('Date and time are Invalid')
                 $('#pickedUp').val(null)
                 $('#delivered').val(null)
             } else {
@@ -2011,7 +2012,7 @@
         var pickedUpEdit = new Date($('#pickedUpEdit'+id).val()); 
         var deliveredEdit = new Date($('#deliveredEdit'+id).val());
         var deliveryCheckEdit = document.getElementById('deliveryCheckEdit'+id);
-        if (pickedUpEdit > deliveredEdit) {
+        if (pickedUpEdit > delivered) {
             alert('Dates are Invalid')
             $('#pickedUpEdit'+id).val(null)
             $('#deliveredEdit'+id).val(null)

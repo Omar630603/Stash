@@ -903,8 +903,9 @@
         var pickedUp = new Date($('#pickedUp').val()); 
             var delivered = new Date($('#delivered').val());
             var deliveryCheck = document.getElementById('deliveryCheck');
-            if (pickedUp > delivered) {
-                alert('Dates are Invalid')
+            var today = new Date();
+            if (pickedUp < today || pickedUp > delivered) {
+                alert('Date and time are Invalid')
                 $('#pickedUp').val(null)
                 $('#delivered').val(null)
             } else {
