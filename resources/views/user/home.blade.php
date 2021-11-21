@@ -103,7 +103,7 @@
                                     <div style="display: flex; flex-direction: column; gap: 10px;">
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
-                                        <form method="post" style="display: none;" action=""
+                                        <form method="post" style="display: none;" action="{{ route('user.editImage', $user) }}"
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -114,7 +114,7 @@
                                         </form>
                                         <a href="" onclick="$('#restore').submit(); return false;"
                                             class="btn btn-outline-dark">Restore Default</a>
-                                        <form style="display: none" method="POST" action="" id="restore">
+                                        <form style="display: none" method="POST" action="{{ route('user.defaultImage', $user) }}" id="restore">
                                             @csrf
                                         </form>
                                     </div>
@@ -123,9 +123,10 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius:20px;">
-                        <form method="post" action="" enctype="multipart/form-data">
+                        <form method="post" action="{{  route('user.editBioData', $user)  }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="float-right" style="cursor: pointer;">
