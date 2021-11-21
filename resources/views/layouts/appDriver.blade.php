@@ -35,7 +35,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/appWelcome.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/appDriver.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
         <link rel="icon" href="{{ asset('storage/images/logo.png') }}">
     </head>
@@ -67,10 +67,8 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="/">Home</a></li>
-                                <li><a href="{{ route('welcome.services') }}">Services</a></li>
-                                <li><a href="{{ route('welcome.aboutus') }}">About Us</a></li>
-                                <li><a href="{{ route('welcome.contactus') }}">ContactS Us</a></li>
+                                <li><a href="{{route('home')}}">Home</a></li>
+
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -141,12 +139,7 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-                                    <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
-                                    </li>
-                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
-                                    </li>
-                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
-                                    </li>
+
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>
@@ -177,8 +170,8 @@
     </script>
     <script>
         $(window).on('load', function () {
-      $('#loading').slideToggle('fast');
-    }) 
+        $('#loading').slideToggle('fast');
+        }) 
     </script>
 
 </html>

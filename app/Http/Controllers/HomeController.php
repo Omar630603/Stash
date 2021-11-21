@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\DeliveryVehicle;
 
 class HomeController extends Controller
 {
@@ -33,12 +34,26 @@ class HomeController extends Controller
         }
         return $isBranch;
     }
+    public function checkDriver()
+    {
+        $driver = DeliveryVehicle::all();
+        $isDriver = False;
+        for ($i = 0; $i < count($driver); $i++) {
+            if (auth()->user()->ID_User == $driver[$i]->ID_User) {
+                $isDriver = True;
+                break;
+            }
+        }
+        return $isDriver;
+    }
     public function index()
     {
         if ($this->checkBranch()) {
             return redirect()->route('branch.home');
-        }else {
-            return redirect()->route('user.home');
+        } else if ($this->checkDriver()) {
+            return redirect()->route('driver.home');
+        } else {
+            return redirect()->route('customer.home');
         }
     }
 }
