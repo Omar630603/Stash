@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-Route::get('/', [WelcomeController::class, 'welcome']);
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome.home');
 Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.services');
 Route::get('/contactUs', [WelcomeController::class, 'contactUs'])->name('welcome.contactus');
 Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.aboutus');
@@ -26,6 +26,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
 Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
+Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->name('user.editBioData')->middleware('UserAccess');
+Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
+Route::post('/user/defaultImage/{user}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('UserAccess');
 
 
 //BranchAccess//Home
@@ -79,6 +82,9 @@ Route::post('/branch/AddBank', [BranchController::class, 'addBank'])->name('bran
 Route::post('/branch/editBranchBank/{bank}', [BranchController::class, 'editBranchBank'])->name('branch.editBranchBank')->middleware('BranchAccess');
 Route::delete('/branch/deleteBank/{bank}', [BranchController::class, 'deleteBank'])->name('branch.deleteBank')->middleware('BranchAccess');
 Route::get('/branch/Transactions', [BranchController::class, 'branchTransactions'])->name('branch.transactions')->middleware('BranchAccess');
+
+//User Categories
+Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category');
 
 
 Auth::routes();
