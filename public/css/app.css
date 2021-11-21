@@ -10625,3 +10625,14 @@ nav.shift ul li a:hover:after {
     padding-right: 5px;
     font-size: 20px;
 }
+.icons {
+    background-color: #66377f;
+    border-radius: 100px;
+    padding: 7px;
+    color: #fff;
+    font-size: 12px;
+    vertical-align: middle;
+    width: 40px;
+    text-align: center;
+    content: attr(data-label);
+}

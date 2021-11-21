@@ -145,7 +145,7 @@
                                 <img src="{{ asset('storage/' . Auth::user()->user_img) }}"
                                     alt="user{{ Auth::user()->username }}" class="rounded-circle" width="150"
                                     style="border: white 2px solid;">
-                                <div class="mt-3">
+                                <div class="mt-5">
                                     <div style="display: flex; flex-direction: column; gap: 10px;">
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
@@ -174,7 +174,7 @@
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius: 10px;">
                         <form method="post" action="{{ route('branch.editBioData', $branchEmployee) }}"
-                            enctype="multipart/form-data">
+                            enctype="multipart/form-data" class="mb-0">
                             @csrf
                             <div class="card-body">
                                 <div class="float-right" style="cursor: pointer;">
@@ -184,37 +184,29 @@
                                             aria-hidden="true"></i></a>
                                 </div>
                                 <div class="row" style="margin-top: 30px">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label for="name"><strong>Full Name</strong></label>
                                         <input name="name" type="text" class="form-control"
                                             value="{{ Auth::user()->name }}" placeholder="Enter Your Full Name">
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label for="username"><strong>User Name</strong></label>
                                         <input name="username" type="text" class="form-control"
                                             value="{{ Auth::user()->username }}" placeholder="Enter Your UserName">
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label for="email"><strong>Email</strong></label>
                                         <input name="email" type="text" class="form-control"
                                             value="{{ Auth::user()->email }}" placeholder="Enter Your Email">
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label for="phone"><strong>Phone</strong></label>
                                         <input name="phone" type="text" class="form-control"
                                             value="{{ Auth::user()->phone }}" placeholder="Enter Your Phone">
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <label for="address"><strong>Address</strong></label>
