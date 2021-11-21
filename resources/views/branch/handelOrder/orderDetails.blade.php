@@ -1345,6 +1345,7 @@
                 <table id="schedulesTable">
                     <thead>
                         <tr>
+                            <th class="column">NO#</th>
                             <th class="column">Trip & Period</th>
                             <th class="column">Status</th>
                             <th class="column">Vehicle</th>
@@ -1354,8 +1355,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                        $scheduleNO = 1;
+                        @endphp
                         @foreach ($schedules as $schedule)
                         <tr>
+                            <td data-label="NO#" class="column" style="text-align: center">
+                                <span style="width: 100%" class="m-0 badge badge-light">{{$scheduleNO++}}</span>
+                            </td>
                             <td data-label="Trip" class="column">
                                 <div>
                                     @php
@@ -1990,9 +1997,10 @@
     function chackDeliveryDates() {
         var pickedUp = new Date($('#pickedUp').val()); 
             var delivered = new Date($('#delivered').val());
+            var today = new Date();
             var deliveryCheck = document.getElementById('deliveryCheck');
-            if (pickedUp > delivered) {
-                alert('Dates are Invalid')
+            if (pickedUp < today || pickedUp > delivered) {
+                alert('Date and time are Invalid')
                 $('#pickedUp').val(null)
                 $('#delivered').val(null)
             } else {
@@ -2004,7 +2012,7 @@
         var pickedUpEdit = new Date($('#pickedUpEdit'+id).val()); 
         var deliveredEdit = new Date($('#deliveredEdit'+id).val());
         var deliveryCheckEdit = document.getElementById('deliveryCheckEdit'+id);
-        if (pickedUpEdit > deliveredEdit) {
+        if (pickedUpEdit > delivered) {
             alert('Dates are Invalid')
             $('#pickedUpEdit'+id).val(null)
             $('#deliveredEdit'+id).val(null)
