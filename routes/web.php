@@ -27,18 +27,13 @@ Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.abo
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //UserAccess//Home
-<<<<<<< HEAD
-Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
-Route::post('/user/editBioData/{user}', [UserController::class, 'editUser'])->name('user.editBioData')->middleware('UserAccess');
-Route::put('/user/editImage/{user}', [UserController::class, 'editUserImage'])->name('user.editImage')->middleware('UserAccess');
-Route::post('/user/defaultImage/{user}', [UserController::class, 'editUserImageDefult'])->name('user.defaultImage')->middleware('UserAccess');
-
-=======
 Route::get('/customer/home', [UserController::class, 'index'])->name('customer.home')->middleware('UserAccess');
 Route::post('/customer/editBioData/{customer}', [UserController::class, 'editCustomer'])->name('customer.editBioData')->middleware('UserAccess');
 Route::put('/customer/editImage/{customer}', [UserController::class, 'editCustomerImage'])->name('customer.editImage')->middleware('UserAccess');
 Route::post('/customer/defaultImage/{customer}', [UserController::class, 'editCustomerImageDefult'])->name('customer.defaultImage')->middleware('UserAccess');
->>>>>>> 92fc941098b055cad93defff323b34e62d7a7004
+
+//UserAccess//Categories
+Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category')->middleware('UserAccess');
 
 //BranchAccess//Home
 Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');
@@ -92,17 +87,11 @@ Route::post('/branch/editBranchBank/{bank}', [BranchController::class, 'editBran
 Route::delete('/branch/deleteBank/{bank}', [BranchController::class, 'deleteBank'])->name('branch.deleteBank')->middleware('BranchAccess');
 Route::get('/branch/Transactions', [BranchController::class, 'branchTransactions'])->name('branch.transactions')->middleware('BranchAccess');
 
-<<<<<<< HEAD
-//User Categories
-Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category');
-
-=======
 //Driver Access
 Route::get('/driver/home', [DeliveryVehicleController::class, 'index'])->name('driver.home')->middleware('DriverAccess');
 Route::post('/driver/editBioData/driver/{driver}', [DeliveryVehicleController::class, 'editDriver'])->name('driver.editBioDataDriver')->middleware('DriverAccess');
 Route::put('/driver/editImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImage'])->name('driver.editImageDriver')->middleware('DriverAccess');
 Route::post('/driver/defaultImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImageDefult'])->name('driver.defaultImageDriver')->middleware('DriverAccess');
 Route::delete('/driver/driver/deleteDriver/{driver}', [DeliveryVehicleController::class, 'deleteDriver'])->name('driver.deleteDriver')->middleware('DriverAccess');
->>>>>>> 92fc941098b055cad93defff323b34e62d7a7004
 
 Auth::routes();

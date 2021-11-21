@@ -143,12 +143,8 @@
                                     <div style="display: flex; flex-direction: column; gap: 10px;">
                                         <a href="" onclick="$('#imageInput').click(); return false;"
                                             class="btn btn-outline-dark">Change Picture</a>
-<<<<<<< HEAD
-                                        <form method="post" style="display: none;" action="{{ route('user.editImage', $user) }}"
-=======
                                         <form method="post" style="display: none;"
                                             action="{{ route('customer.editImage', $customer) }}"
->>>>>>> 92fc941098b055cad93defff323b34e62d7a7004
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -159,12 +155,8 @@
                                         </form>
                                         <a href="" onclick="$('#restore').submit(); return false;"
                                             class="btn btn-outline-dark">Restore Default</a>
-<<<<<<< HEAD
-                                        <form style="display: none" method="POST" action="{{ route('user.defaultImage', $user) }}" id="restore">
-=======
                                         <form style="display: none" method="POST"
                                             action="{{ route('customer.defaultImage', $customer) }}" id="restore">
->>>>>>> 92fc941098b055cad93defff323b34e62d7a7004
                                             @csrf
                                         </form>
                                     </div>
@@ -175,14 +167,9 @@
                 </div>
                 
                 <div class="col-md-8">
-<<<<<<< HEAD
-                    <div class="card mb-3" style="border-radius:20px;">
-                        <form method="post" action="{{  route('user.editBioData', $user)  }}" enctype="multipart/form-data">
-=======
                     <div class="card mb-3" style="border-radius: 10px;">
                         <form method="post" action="{{ route('customer.editBioData', $customer) }}"
                             enctype="multipart/form-data" class="mb-0">
->>>>>>> 92fc941098b055cad93defff323b34e62d7a7004
                             @csrf
                             <div class="card-body">
                                 <div class="float-right" style="cursor: pointer;">
