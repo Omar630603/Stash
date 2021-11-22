@@ -22,9 +22,9 @@ class UserController extends Controller
     public function showCategories()
     {
         $categories = Category::all();
-        $branch = Branch::all();
+        $branches = Branch::all();
         $units = Unit::all();
-        return view('user.categories', ['categories' => $categories, 'units' => $units, 'branch' => $branch]);
+        return view('user.categories', ['categories' => $categories, 'units' => $units, 'branches' => $branches]);
     }
 
 

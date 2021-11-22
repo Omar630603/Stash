@@ -133,7 +133,7 @@
             <div class="alert-success mb-2"
                 style="display: flex; justify-content: space-between; border-radius: 10px; padding: 10px; width: 100%">
                 <div>
-                    <p style="margin: 0"><strong>Description : </strong>{{$category->description}}</p>
+                    <p style="margin: 0"><strong>Description : </strong>{{$category->category_description}}</p>
                     <p style="margin: 0"><strong>Dimensions : </strong>{{$category->dimensions}}</p>
                     <p style="margin: 0"><strong>Occupied : </strong><a href=""></a>{{$occupied}}</a> |
                         <strong>Unoccupied :
