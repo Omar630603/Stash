@@ -74,9 +74,37 @@ class UserController extends Controller
         $message = 'Your Default Image Returend Successfully';
         return redirect()->back()->with('success', $message);
     }
-    public function chooseCity()
+    public function chooseCity(Request $request)
     {
         $cities = Branch::select('city')->groupby('city')->get();
-        return view('user.makeOrder.chooseCity', ['cities' => $cities]);
+        $unit = Category::where('ID_Category', $request->get('unit'))->first();
+        return view('user.makeOrder.chooseCity', ['cities' => $cities, 'unit' => $unit]);
+    }
+    public function chooseLocation(Request $request)
+    {
+        if (!$request->get('city')) {
+            $message = 'Choose A City';
+            return redirect()->back()->with('fail', $message);
+        } else {
+            $locations =  Branch::where('city', $request->get('city'))->get();
+            $unit = Category::where('ID_Category', $request->get('unit'))->first();
+            return view('user.makeOrder.chooseLocation', ['locations' => $locations, 'unit' => $unit]);
+        }
+    }
+    public function showUnits(Request $request)
+    {
+        if (!$request->get('branch')) {
+            $message = 'Choose A Location';
+            return redirect()->back()->with('fail', $message);
+        } else {
+            $unit = Category::where('ID_Category', $request->get('unit'))->first();
+            $unitsAvaliable = Unit::where('ID_Branch', 'like', '%' . $request->get('branch') . '%')
+                ->where('unit_status', 'like', '%' . 0 . '%')->orderBy('unit_name', 'desc')->get();
+            $categories = Category::all();
+            return view('user.makeOrder.showUnits', [
+                'unitsAvaliable' => $unitsAvaliable,
+                'unit' => $unit, 'categories' => $categories
+            ]);
+        }
     }
 }

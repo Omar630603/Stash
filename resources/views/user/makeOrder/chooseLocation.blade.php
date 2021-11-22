@@ -37,19 +37,19 @@
 <div class="container">
     <div class="chooseCityContainer">
         <div style="width: 50%; display: flex; justify-content: center; height: 350px; width: 350;">
-            <img class="img-fluid" src="{{ asset('storage/images/chooseCity.png') }}" alt="">
+            <img class="img-fluid" src="{{ asset('storage/images/chooseLocation.png') }}" alt="">
         </div>
-        <div style="width: 50%" class="m-0">
-            <p>Choose a city where you want to rent {{$unit->category_name}} unit.</p>
-            <form action="{{ route('chooseLocation') }}" method="GET" enctype="multipart/form-data">
+        <div style="width: 50%;" class="m-0">
+            <p>Choose a location where you want to rent {{$unit->category_name}} unit.</p>
+            <form action="{{ route('showUnits') }}" method="GET" enctype="multipart/form-data">
                 @csrf
                 <input hidden name="unit" type="text" value="{{$unit->ID_Category}}">
                 <div class="form-group" style="margin: 10px 0">
-                    <select name="city" style="width: 100%" class="select2">
-                        <option value="0">Select City</option>
-                        @foreach ($cities as $city)
-                        <option value="{{$city->city}}">
-                            {{$city->city}}
+                    <select name="branch" style="width: 100%" class="select2">
+                        <option value="0">Select Location</option>
+                        @foreach ($locations as $location)
+                        <option value="{{$location->ID_Branch}}">
+                            Branch Name: {{$location->branch_name}} - Branch Address: {{$location->branch_address}}
                         </option>
                         @endforeach
                     </select>

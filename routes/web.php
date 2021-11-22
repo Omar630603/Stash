@@ -32,7 +32,10 @@ Route::get('/customer/home', [UserController::class, 'index'])->name('customer.h
 Route::post('/customer/editBioData/{customer}', [UserController::class, 'editCustomer'])->name('customer.editBioData')->middleware('UserAccess');
 Route::put('/customer/editImage/{customer}', [UserController::class, 'editCustomerImage'])->name('customer.editImage')->middleware('UserAccess');
 Route::post('/customer/defaultImage/{customer}', [UserController::class, 'editCustomerImageDefult'])->name('customer.defaultImage')->middleware('UserAccess');
-Route::get('/chooseCity', [UserController::class, 'chooseCity'])->name('chooseCity')->middleware('UserAccess');;
+Route::get('/chooseCity', [UserController::class, 'chooseCity'])->name('chooseCity')->middleware('UserAccess');
+Route::get('/chooseLocation', [UserController::class, 'chooseLocation'])->name('chooseLocation')->middleware('UserAccess');
+Route::get('/showUnits', [UserController::class, 'showUnits'])->name('showUnits')->middleware('UserAccess');
+
 
 //UserAccess//Categories
 Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category')->middleware('UserAccess');
