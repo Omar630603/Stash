@@ -29,4 +29,8 @@ class WelcomeController extends Controller
     {
         return view('aboutUs');
     }
+    public function rent()
+    {
+        return view('user.home');
+    }
 }

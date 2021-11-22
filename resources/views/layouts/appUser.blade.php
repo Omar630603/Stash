@@ -67,7 +67,10 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="{{route('home')}}">Home</a></li>
+                                <li><a href="{{  route('welcome.home')  }}">Home</a></li>
+                                <li><a href="{{  route('home')  }}">Profile</a></li>
+                                <li><a href="{{  route('user.category')  }}">Container</a></li>
+                                <li><a href="">Orders</a></li>
 
                             </ul>
                         </nav>
