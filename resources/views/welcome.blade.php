@@ -2,17 +2,65 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="welcomeHeader">
-        <div class="headerParagraph">
-            <h1>STASH</h1>
-            <div>
-                <p>
+    <div class="row welcomeHeader">
+        <div class="col-sm-8 headerParagraph">
+            <div class="row" style="align-items: center">
+                <h1 class="col-sm-4" style="font-size: 60px">STASH</h1>
+                <p class="col-sm-8" style="font-size: 15px">
                     The place where your junk or treasures could be stored. </br>
-                    Your have the item, we have a place.
+                    You have the item, we have the place.
                 </p>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 container-fluid">
+                    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="{{ asset('storage/images/welcome1.jpg') }}"
+                                    alt="First slide">
+                                <div class="carousel-caption">
+                                    <h1>Welcome!</h1>
+                                    <p>To Stash</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="{{ asset('storage/images/welcome2.jpg') }}"
+                                    alt="Second slide">
+                                <div class="carousel-caption">
+                                    <h1>Safety & Security</h1>
+                                    <p>are what we care about</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="{{ asset('storage/images/welcome3.jpg') }}"
+                                    alt="Third slide">
+                                <div class="carousel-caption">
+                                    <h1>Privacy</h1>
+                                    <p>is our top priority</p>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="headerImage">
+        <div class="col-sm-3 headerImage m-0">
             <img class="img-fluid shake" width="200px" src="{{ asset('storage/images/Logo.png') }}">
             <img class="img-fluid" width="400px" src="{{ asset('storage/images/Logo with Name H.png') }}">
         </div>

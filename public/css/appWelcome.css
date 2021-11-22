@@ -1,31 +1,31 @@
 .welcomeHeader {
-    margin: 0 60px;
+    margin: 0 50px;
     padding: 10px 10px;
-    display: flex;
+    justify-content: space-between;
     gap: 20px;
 }
 .headerParagraph {
-    padding: 10px 10px;
+    padding: 20px;
     background-color: #9d3488;
     border-radius: 20px;
-    display: flex;
-    gap: 20px;
 }
 .headerParagraph h1 {
     color: #fff;
-    font-size: 70px;
-    margin: 0 10px;
 }
 .headerParagraph p {
+    font-size: medium;
     color: #fff;
-    margin: 0 20px;
-    font-size: 18px;
     text-align: justify;
     text-justify: inter-word;
+    margin-bottom: 0;
 }
 .headerImage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 20px;
-    padding: 40px 40px;
+    padding: 20px;
     animation-name: example;
     animation-duration: 3s;
     animation-iteration-count: infinite;
@@ -34,7 +34,8 @@
     text-align: center;
 }
 .headerImage .shake {
-    animation: shake 1.5s;
+    animation: shake 3s;
+    animation-delay: -1s;
     animation-iteration-count: infinite;
 }
 @keyframes shake {
@@ -120,4 +121,13 @@
 }
 .card:hover {
     box-shadow: 0 4px #66377f;
+}
+.carousel-item img {
+    border-radius: 10px;
+}
+.carousel-caption p {
+    text-align: center;
+}
+.carousel-caption {
+    top: 5%;
 }

@@ -35,11 +35,23 @@
     @endif
 </div>
 <div class="container">
-    <div class="chooseCityContainer">
-        <div style="width: 50%; display: flex; justify-content: center; height: 350px; width: 350;">
+    <div style="margin: 0px 20px">
+        <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
+            <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">Unit: {{$unit->category_name}}</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('chooseCity', ['unit'=> $unit->ID_Category] ) }}">Choose
+                        City</a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="chooseCityContainer row">
+        <div class="col-md-5" style="display: flex; justify-content: center; max-width: 500px;">
             <img class="img-fluid" src="{{ asset('storage/images/chooseCity.png') }}" alt="">
         </div>
-        <div style="width: 50%" class="m-0">
+        <div class="col-md-5">
             <p>Choose a city where you want to rent {{$unit->category_name}} unit.</p>
             <form action="{{ route('chooseLocation') }}" method="GET" enctype="multipart/form-data">
                 @csrf
