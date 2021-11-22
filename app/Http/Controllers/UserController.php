@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\User;
-use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Unit;
 use Illuminate\Http\Request;
