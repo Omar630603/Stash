@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DeliveryVehicleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\DeliveryVehicle;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -18,15 +20,25 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-Route::get('/', [WelcomeController::class, 'welcome']);
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome.home');
 Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.services');
 Route::get('/contactUs', [WelcomeController::class, 'contactUs'])->name('welcome.contactus');
 Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.aboutus');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/loginFirst', [WelcomeController::class, 'redirectLogin'])->name('loginFirst');
 
 //UserAccess//Home
-Route::get('/user/home', [UserController::class, 'index'])->name('user.home')->middleware('UserAccess');
+Route::get('/customer/home', [UserController::class, 'index'])->name('customer.home')->middleware('UserAccess');
+Route::post('/customer/editBioData/{customer}', [UserController::class, 'editCustomer'])->name('customer.editBioData')->middleware('UserAccess');
+Route::put('/customer/editImage/{customer}', [UserController::class, 'editCustomerImage'])->name('customer.editImage')->middleware('UserAccess');
+Route::post('/customer/defaultImage/{customer}', [UserController::class, 'editCustomerImageDefult'])->name('customer.defaultImage')->middleware('UserAccess');
+Route::get('/chooseCity', [UserController::class, 'chooseCity'])->name('chooseCity')->middleware('UserAccess');
+Route::get('/chooseLocation', [UserController::class, 'chooseLocation'])->name('chooseLocation')->middleware('UserAccess');
+Route::get('/showUnits', [UserController::class, 'showUnits'])->name('showUnits')->middleware('UserAccess');
 
+
+//UserAccess//Categories
+Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category')->middleware('UserAccess');
 
 //BranchAccess//Home
 Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');
@@ -80,5 +92,11 @@ Route::post('/branch/editBranchBank/{bank}', [BranchController::class, 'editBran
 Route::delete('/branch/deleteBank/{bank}', [BranchController::class, 'deleteBank'])->name('branch.deleteBank')->middleware('BranchAccess');
 Route::get('/branch/Transactions', [BranchController::class, 'branchTransactions'])->name('branch.transactions')->middleware('BranchAccess');
 
+//Driver Access
+Route::get('/driver/home', [DeliveryVehicleController::class, 'index'])->name('driver.home')->middleware('DriverAccess');
+Route::post('/driver/editBioData/driver/{driver}', [DeliveryVehicleController::class, 'editDriver'])->name('driver.editBioDataDriver')->middleware('DriverAccess');
+Route::put('/driver/editImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImage'])->name('driver.editImageDriver')->middleware('DriverAccess');
+Route::post('/driver/defaultImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImageDefult'])->name('driver.defaultImageDriver')->middleware('DriverAccess');
+Route::delete('/driver/driver/deleteDriver/{driver}', [DeliveryVehicleController::class, 'deleteDriver'])->name('driver.deleteDriver')->middleware('DriverAccess');
 
 Auth::routes();

@@ -44,7 +44,6 @@ class BranchController extends Controller
         $branchEmployee->address = $request->get('address');
         $branchEmployee->phone = $request->get('phone');
         $branchEmployee->save();
-        return redirect()->back();
         $message = 'Branch Employee data has been Edited Successfully';
         return redirect()->back()->with('success', $message);
     }
@@ -198,7 +197,8 @@ class BranchController extends Controller
                 ->orderBy('delivery_schedules.created_at', 'desc')->get();
             $active = true;
             $activeV = $request->get('driver');
-            $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))->first();
+            $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('driver'))
+                ->join('users', 'delivery_vehicles.ID_User', '=', 'users.ID_User')->first();
 
             if (!$vehicleDriver || $vehicleDriver->ID_Branch != $branch->ID_Branch) {
                 $noDriver = true;
@@ -224,7 +224,8 @@ class BranchController extends Controller
                 ->orWhere('delivery_vehicles.plateNumber', 'like', '%' . $request->get('search') . '%')
                 ->first();
             if ($activeV) {
-                $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)->first();
+                $vehicleDriver = DeliveryVehicle::where('ID_DeliveryVehicle', $activeV->ID_DeliveryVehicle)
+                    ->join('users', 'delivery_vehicles.ID_User', '=', 'users.ID_User')->first();
                 $activeV = $activeV->ID_DeliveryVehicle;
             } else {
                 $noDriver = true;
@@ -246,48 +247,66 @@ class BranchController extends Controller
     }
     public function editDriver(Request $request, DeliveryVehicle $driver)
     {
+        $user = User::where('ID_User', $driver->ID_User)->first();
         $request->validate([
             'name' => 'required',
             'model' => 'required',
             'plateNumber' => 'required',
             'phone' => 'required',
             'pricePerK' => 'required',
+            'address' => 'required',
+            'email' => 'required'
         ]);
+        $user->name = $request->get('name');
+        $user->username = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('plateNumber'));
+        $user->phone = $request->get('phone');
+        $user->address = $request->get('address');
         $driver->vehicle_name = $request->get('name');
         $driver->model = $request->get('model');
         $driver->plateNumber = $request->get('plateNumber');
         $driver->vehicle_phone = $request->get('phone');
         $driver->pricePerK = $request->get('pricePerK');
+        $user->save();
         $driver->save();
         $message = 'Driver Data Has been Edited';
         return redirect()->back()->with('success', $message);
     }
     public function editDriverImage(Request $request, DeliveryVehicle $driver)
     {
+        $user = User::where('ID_User', $driver->ID_User)->first();
         if ($driver->vehicle_img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
             if ($request->file('image')) {
                 $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
             }
             $driver->vehicle_img = $image_name;
+            $user->user_img = $image_name;
         } else {
             Storage::delete('public/' . $driver->vehicle_img);
             if ($request->file('image')) {
                 $image_name = $request->file('image')->store('DeliveryVehicle_images', 'public');
             }
             $driver->vehicle_img = $image_name;
+            $user->user_img = $image_name;
         }
         $driver->save();
+        $user->save();
         $message = 'Driver Image Has been Changed';
         return redirect()->back()->with('success', $message);
     }
     public function editDriverImageDefult(DeliveryVehicle $driver)
     {
+        $user = User::where('ID_User', $driver->ID_User)->first();
         if ($driver->vehicle_img == "DeliveryVehicle_images/deliveryVehicleDefault.png") {
             $driver->vehicle_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+            $user->user_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
         } else {
             Storage::delete('public/' . $driver->vehicle_img);
             $driver->vehicle_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+            $user->user_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
         }
+        $user->save();
         $driver->save();
         $message = 'Driver Image Has been Restored';
         return redirect()->back()->with('success', $message);
@@ -300,9 +319,21 @@ class BranchController extends Controller
             'plateNumber' => 'required',
             'phone' => 'required',
             'pricePerK' => 'required',
+            'address' => 'required',
+            'email' => 'required'
         ]);
+        $user = new User;
+        $user->name = $request->get('name');
+        $user->username = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('plateNumber'));
+        $user->phone = $request->get('phone');
+        $user->address = $request->get('address');
+        $user->user_img = 'DeliveryVehicle_images/deliveryVehicleDefault.png';
+        $user->save();
         $driver = new DeliveryVehicle;
         $driver->ID_Branch = $request->get('ID_Branch');
+        $driver->ID_User = $user->ID_User;
         $driver->vehicle_name = $request->get('name');
         $driver->model = $request->get('model');
         $driver->plateNumber = $request->get('plateNumber');
@@ -317,6 +348,8 @@ class BranchController extends Controller
         if ($driver->vehicle_img != "DeliveryVehicle_images/deliveryVehicleDefault.png") {
             Storage::delete('public/' . $driver->vehicle_img);
         }
+        $user = User::where('ID_User', $driver->ID_User)->first();
+        $user->delete();
         $driver->delete();
         return redirect()->route('branch.delivery');
     }
@@ -452,8 +485,10 @@ class BranchController extends Controller
     public function branchOrders(Request $request)
     {
         $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
-        $branchess = Branch::pluck('ID_user')->all();
-        $users = User::whereNotIn('ID_user', $branchess)->get();
+        $branchess = Branch::pluck('ID_User')->all();
+        $drivers = DeliveryVehicle::pluck('ID_User')->all();
+        $branchessDrivers = array_merge($branchess, $drivers);
+        $users = User::whereNotIn('ID_User', $branchessDrivers)->get();
         $categories = Category::all();
         $vehicles = DeliveryVehicle::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         $active = false;
@@ -481,10 +516,10 @@ class BranchController extends Controller
             $active = true;
             $activeU = $request->get('user');
             $userProfile = User::where('ID_User', $request->get('user'))
-                ->whereNotIn('ID_user', $branchess)
+                ->whereNotIn('ID_user', $branchessDrivers)
                 ->first();
             if ($userProfile) {
-                $userProfile = User::where('ID_User', $activeU)->whereNotIn('ID_user', $branchess)->first();
+                $userProfile = User::where('ID_User', $activeU)->whereNotIn('ID_user', $branchessDrivers)->first();
             } else {
                 $noUser = true;
                 $searchName = 'NO ACCESS';
@@ -502,14 +537,14 @@ class BranchController extends Controller
                 ->orWhere('users.username', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('users.email', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('users.address', 'like', '%' . $request->get('search') . '%')
-                ->whereNotIn('ID_user', $branchess)
+                ->whereNotIn('ID_user', $branchessDrivers)
                 ->first();
             if ($activeU) {
-                if (in_array($activeU->ID_User, $branchess)) {
+                if (in_array($activeU->ID_User, $branchessDrivers)) {
                     $noUser = true;
                     $searchName = $request->get('search');
                 } else {
-                    $userProfile = User::where('ID_User', $activeU->ID_User)->whereNotIn('ID_user', $branchess)->first();
+                    $userProfile = User::where('ID_User', $activeU->ID_User)->whereNotIn('ID_user', $branchessDrivers)->first();
                     $activeU = $activeU->ID_User;
                 }
             } else {

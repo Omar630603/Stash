@@ -66,89 +66,92 @@
                             </h5>
                         </div>
                         <div class="modal-body">
-                            <div>
-                                <form method="POST" id="addUserForm" class="row g-3"
-                                    action="{{ route('branch.addUser')}}">
-                                    @csrf
-                                    <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly"
-                                        class="container">
-                                        <label for="name"><strong>Fill this data only for a new
-                                                customer</strong></label>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-user-plus" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="name">
-                                                        <label for="name">Customer's Full Name</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-user-circle-o" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="username">
-                                                        <label for="username">Customer's Username</label>
-                                                    </div>
+                            <form method="POST" id="addUserForm" action="{{ route('branch.addUser')}}"
+                                style="background: #fceabe; padding: 10px; border-radius: 10px">
+                                @csrf
+                                <div>
+                                    <label><strong>Fill this data only for a new
+                                            customer</strong></label>
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text " id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-user-plus m-0" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="text" class="form-control" name="name">
+                                                    <label for="name">Customer's Full Name</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-envelope" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="email" class="form-control" name="email">
-                                                        <label for="email">Customer's Email</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-phone-square" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="phone">
-                                                        <label for="phone">Customer's Phone</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-location-arrow" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" name="address">
-                                                        <label for="address">Customer's Address</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">
-                                                        <i class="icons fa fa-key" aria-hidden="true"></i>
-                                                    </span>
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" name="password">
-                                                        <label for="password">Customer's Password</label>
-                                                    </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-user-circle-o" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="text" class="form-control" name="username">
+                                                    <label for="username">Customer's Username</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-envelope" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="email" class="form-control" name="email">
+                                                    <label for="email">Customer's Email</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-phone-square" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="text" class="form-control" name="phone">
+                                                    <label for="phone">Customer's Phone</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-location-arrow" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="text" class="form-control" name="address">
+                                                    <label for="address">Customer's Address</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1"
+                                                    style="width: 20%; justify-content: center">
+                                                    <i class="icons fa fa-key" aria-hidden="true"></i>
+                                                </span>
+                                                <div class="form-floating" style="width: 80%">
+                                                    <input type="password" class="form-control" name="password">
+                                                    <label for="password">Customer's Password</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -829,7 +832,7 @@
                                         <img src="{{ asset('storage/' . $userProfile->user_img) }}"
                                             alt="user{{ $userProfile->name }}" class="rounded-circle" width="150"
                                             style="border: white 2px solid;">
-                                        <div class="mt-2">
+                                        <div class="mt-3">
                                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                                 <a href="" onclick="$('#imageInput').click(); return false;"
                                                     class="btn btn-outline-dark">Change Picture</a>
@@ -879,28 +882,24 @@
                                                 <i class="fa fa-times icons" aria-hidden="true"></i></a>
                                         </div>
                                         <div class="row" style="margin-top: 30px">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <label for="name"><strong>Name</strong></label>
                                                 <input name="name" type="text" class="form-control"
                                                     value="{{ $userProfile->name }}" placeholder="Enter Your Full Name">
                                             </div>
-                                        </div>
-                                        <div class="row" style="margin-top: 5px">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <label for="username"><strong>Username</strong></label>
                                                 <input name="username" type="text" class="form-control"
                                                     value="{{ $userProfile->username }}" placeholder="Enter Model">
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top: 5px">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <label for="email"><strong>Email</strong></label>
-                                                <input name="email" type="text" class="form-control"
+                                                <input name="email" type="email" class="form-control"
                                                     value="{{ $userProfile->email }}" placeholder="Enter Email">
                                             </div>
-                                        </div>
-                                        <div class="row" style="margin-top: 5px">
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-6">
                                                 <label for="phone"><strong>Phone</strong></label>
                                                 <input name="phone" type="text" class="form-control"
                                                     value="{{ $userProfile->phone }}" placeholder="Enter Your Phone">

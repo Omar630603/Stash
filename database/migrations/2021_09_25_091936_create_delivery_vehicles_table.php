@@ -17,7 +17,9 @@ class CreateDeliveryVehiclesTable extends Migration
             $table->id('ID_DeliveryVehicle');
             $table->unsignedBigInteger('ID_Branch');
             $table->foreign('ID_Branch')->references('ID_Branch')->on('branches')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('vehicle_name');
+            $table->unsignedBigInteger('ID_User');
+            $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('vehicle_name')->unique();
             $table->string('vehicle_phone');
             $table->string('model');
             $table->string('plateNumber')->unique();

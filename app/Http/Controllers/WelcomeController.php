@@ -12,6 +12,11 @@ class WelcomeController extends Controller
         $categories = Category::all();
         return view('welcome', ['categories' => $categories]);
     }
+    public function redirectLogin()
+    {
+        $message = "You have to login first";
+        return redirect()->route('login')->with('success', $message);;
+    }
     public function services()
     {
         return view('services');
@@ -23,5 +28,9 @@ class WelcomeController extends Controller
     public function aboutUs()
     {
         return view('aboutUs');
+    }
+    public function rent()
+    {
+        return view('user.home');
     }
 }

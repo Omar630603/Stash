@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'BranchAccess' => \App\Http\Middleware\BranchAccess::class,
         'UserAccess' => \App\Http\Middleware\UserAccess::class,
+        'DriverAccess' => \App\Http\Middleware\DriverAccess::class,
     ];
 }

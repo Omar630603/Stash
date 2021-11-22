@@ -56,7 +56,7 @@
 
             <div class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="addVehicle"
                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header" style="justify-content: center">
                             <h5 class="modal-title" id="addVehicleTitle">
@@ -64,33 +64,109 @@
                             </h5>
                         </div>
                         <div class="modal-body">
-                            <div class="headerAddS">
-                                <form method="POST" id="addDriverForm" class="row g-3"
-                                    action="{{ route('branch.addDriver')}}">
-                                    @csrf
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name">
+                            <form method="POST" id="addDriverForm" action="{{ route('branch.addDriver')}}"
+                                style="background: #fceabe; padding: 10px; border-radius: 10px">
+                                @csrf
+                                <div class="m-3">
+                                    <strong>Here you can list a vehicle that will have access to its assigned schedules
+                                        using the name and the plate number as the username and password</strong>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6  mb-3" data-toggle="tooltip"
+                                        title="This will be used as the name and the username">
+                                        <div class="input-group">
+                                            <span class="input-group-text " id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fa fa-user-plus m-0" aria-hidden="true"></i>
+                                            </span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="text" class="form-control" name="name">
+                                                <label for="name">Driver's Name</label>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone">
+                                    <div class="col-sm-6  mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fa fa-envelope" aria-hidden="true"></i>
+                                            </span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="email" class="form-control" name="email">
+                                                <label for="email">Driver's Email</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="model" class="form-label">Model</label>
-                                        <input type="text" class="form-control" id="model" name="model">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fa fa-phone-square" aria-hidden="true"></i>
+                                            </span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="text" class="form-control" name="phone">
+                                                <label for="phone">Driver's Phone</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="plateNumber" class="form-label">Plate Number</label>
-                                        <input type="text" class="form-control" id="plateNumber" name="plateNumber">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fa fa-location-arrow" aria-hidden="true"></i>
+                                            </span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="text" class="form-control" name="address">
+                                                <label for="address">Driver's Address</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label for="pricePerK" class="form-label">Price / K</label>
-                                        <input type="text" class="form-control" id="pricePerK" name="pricePerK">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4 mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fa fa-truck" aria-hidden="true"></i></span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="text" class="form-control" id="model" name="model">
+                                                <label for="model" class="form-label">Vehicle's Model</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <input hidden type="text" value="{{$branch->ID_Branch}}" name="ID_Branch">
-                                </form>
-                            </div>
+                                    <div class="col-sm-4 mb-3" data-toggle="tooltip"
+                                        title="This will be used as the password">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fas fa-address-card"></i></span>
+                                            <div class="form-floating" style="width: 80%">
+                                                <input type="text" class="form-control" id="plateNumber"
+                                                    name="plateNumber">
+                                                <label for="plateNumber" class="form-label">Vehicle's Plate
+                                                    Number</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1"
+                                                style="width: 20%; justify-content: center">
+                                                <i class="icons fas fa-money-bill-alt"></i></span>
+                                            <div class="form-floating" style="width: 80%">
+
+                                                <input type="number" min="0" class="form-control" id="pricePerK"
+                                                    name="pricePerK">
+                                                <label for="pricePerK" class="form-label">Driver's Price / K</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input hidden type="text" value="{{$branch->ID_Branch}}" name="ID_Branch">
+                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-outline-secondary"
@@ -391,7 +467,7 @@
                                     <img width="100px" src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
                                         alt="user{{ $vehicleDriver->vehicle_name }}" class="img-fluid rounded-circle"
                                         style="border: white 5px solid;">
-                                    <div style="margin-top: 5px">
+                                    <div style="margin-top: 22px">
                                         <h4 style="color: white;text-transform: uppercase">
                                             <strong>{{ $vehicleDriver->vehicle_name }}</strong>
                                         </h4>
@@ -418,8 +494,13 @@
                                     <div class="col-sm-9 text-secondary">
                                         {{ $vehicleDriver->vehicle_name }}
                                     </div>
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-2"><strong>Email</strong></h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{ $vehicleDriver->email }}
+                                    </div>
                                 </div>
-                                <hr>
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <h6 class="mb-2"><strong>Model</strong></h6>
@@ -434,16 +515,22 @@
                                         {{ $vehicleDriver->plateNumber }}
                                     </div>
                                     <div class="col-sm-3">
+                                        <h6 class="mb-2"><strong>Price / K</strong></h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        {{ $vehicleDriver->pricePerK }}
+                                    </div>
+                                    <div class="col-sm-3">
                                         <h6 class="mb-2"><strong>Phone</strong></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
                                         {{ $vehicleDriver->vehicle_phone }}
                                     </div>
                                     <div class="col-sm-3">
-                                        <h6 class="mb-2"><strong>Price / K</strong></h6>
+                                        <h6 class="mb-2"><strong>Address</strong></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        {{ $vehicleDriver->pricePerK }}
+                                        {{ $vehicleDriver->address }}
                                     </div>
                                 </div>
                                 <hr>
@@ -459,7 +546,7 @@
                                     <img src="{{ asset('storage/' . $vehicleDriver->vehicle_img) }}"
                                         alt="user{{ $vehicleDriver->vehicle_name }}" class="rounded-circle" width="150"
                                         style="border: white 2px solid;">
-                                    <div class="mt-2">
+                                    <div class="mt-3">
                                         <div style="display: flex; flex-direction: column; gap: 10px;">
                                             <a href="" onclick="$('#imageInput').click(); return false;"
                                                 class="btn btn-outline-dark">Change Picture</a>
@@ -509,42 +596,51 @@
                                             <i class="fa fa-times icons" aria-hidden="true"></i></a>
                                     </div>
                                     <div class="row" style="margin-top: 30px">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
                                             <label for="name"><strong>Name</strong></label>
                                             <input name="name" type="text" class="form-control"
                                                 value="{{ $vehicleDriver->vehicle_name }}"
-                                                placeholder="Enter Your Full Name">
+                                                placeholder="Enter The Driver Name">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="email"><strong>Email</strong></label>
+                                            <input name="email" type="email" class="form-control"
+                                                value="{{ $vehicleDriver->email }}"
+                                                placeholder="Enter The Driver Email">
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top: 5px">
-                                        <div class="col-sm-12">
-                                            <label for="model"><strong>Model</strong></label>
-                                            <input name="model" type="text" class="form-control"
-                                                value="{{ $vehicleDriver->model }}" placeholder="Enter Model">
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-top: 5px">
-                                        <div class="col-sm-12">
-                                            <label for="plateNumber"><strong>Plate Number</strong></label>
-                                            <input name="plateNumber" type="text" class="form-control"
-                                                value="{{ $vehicleDriver->plateNumber }}"
-                                                placeholder="Enter Plate Number">
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-top: 5px">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-6">
                                             <label for="phone"><strong>Phone</strong></label>
                                             <input name="phone" type="text" class="form-control"
                                                 value="{{ $vehicleDriver->vehicle_phone }}"
-                                                placeholder="Enter Your Phone">
+                                                placeholder="Enter The Driver Phone">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="address"><strong>Address</strong></label>
+                                            <input name="address" type="text" class="form-control"
+                                                value="{{ $vehicleDriver->address }}"
+                                                placeholder="Enter The Driver Address">
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top: 5px">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-4">
+                                            <label for="model"><strong>Model</strong></label>
+                                            <input name="model" type="text" class="form-control"
+                                                value="{{ $vehicleDriver->model }}"
+                                                placeholder="Enter The Driver Vehicle Model">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="plateNumber"><strong>Plate Number</strong></label>
+                                            <input name="plateNumber" type="text" class="form-control"
+                                                value="{{ $vehicleDriver->plateNumber }}"
+                                                placeholder="Enter The Driver Plate Number">
+                                        </div>
+                                        <div class="col-sm-4">
                                             <label for="pricePerK"><strong>Price / K</strong></label>
-                                            <input name="pricePerK" type="text" class="form-control"
+                                            <input name="pricePerK" type="number" class="form-control"
                                                 value="{{ $vehicleDriver->pricePerK }}"
-                                                placeholder="Enter Your Address">
+                                                placeholder="Enter Price Per Kilometer For The Driver">
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top: 5px">

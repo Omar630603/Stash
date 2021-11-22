@@ -377,6 +377,9 @@
         $('.checkPaymentTransaction').click(function() {
             $('.checkPaymentTransaction').not(this).prop('checked', false);
         });
+        $('.checkDeleteType').click(function() {
+            $('.checkDeleteType').not(this).prop('checked', false);
+        });
         
     });
 </script>
