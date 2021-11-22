@@ -165,6 +165,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius: 10px;">
                         <form method="post" action="{{ route('customer.editBioData', $customer) }}"

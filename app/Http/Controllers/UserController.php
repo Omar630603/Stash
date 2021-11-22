@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Branch;
+use App\Models\Category;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +18,16 @@ class UserController extends Controller
         $customer = Auth::user();
         return view('user.home', ['customer' => $customer]);
     }
+    //User Categories
+    public function showCategories()
+    {
+        $categories = Category::all();
+        $branch = Branch::all();
+        $units = Unit::all();
+        return view('user.categories', ['categories' => $categories, 'units' => $units, 'branch' => $branch]);
+    }
+
+
     public function editCustomer(Request $request, User $customer)
     {
         $request->validate([

@@ -5,17 +5,12 @@
     <div class="welcomeHeader">
         <div class="headerParagraph">
             <h1>STASH</h1>
-            <p>Self-storage can be broadly defined as a service that allows individuals or businesses to rent secure and
-                convenient storage units when they need extra space to store their goods.Self-storage isn’t just for
-                individuals and families storing their home contents. Our units can also be used for business needs.
-                Stash
-                offers your business the ultimate in secure and flexible unit sizes. Whatever the storage needs are, we
-                have
-                your business covered. At Stash we have a wide range of room sizes from small to large to suit
-                customers’
-                requirements. Like the unit sizes, we are very flexible and it’s possible can increase and decrease the
-                storage as often as liked and we only charge for the size of the occupied unit.
+            <div>
+            <p>
+            The place where your junk or treasures could be stored. </br>
+            Your have the item, we have a place.
             </p>
+            </div>
         </div>
         <div class="headerImage">
             <img class="img-fluid shake" width="200px" src="{{ asset('storage/images/Logo.png') }}">
@@ -38,7 +33,7 @@
                         <p class="mt-auto card-text" style="margin-bottom: 10px"><strong>Dimensions:
                             </strong>{{ $category->dimensions }}</p>
                     </div>
-                    <a href="#" class="mt-auto btn btn-rent">Rent</a>
+                    <a href="{{ route('login') }}" class="mt-auto btn btn-rent">Rent</a>
                 </div>
             </div>
             @endforeach
