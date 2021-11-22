@@ -485,10 +485,10 @@ class BranchController extends Controller
     public function branchOrders(Request $request)
     {
         $branch = Branch::where('ID_User', 'like', '%' . Auth::user()->ID_User . '%')->first();
-        $branchess = Branch::pluck('ID_user')->all();
-        $drivers = DeliveryVehicle::pluck('ID_user')->all();
+        $branchess = Branch::pluck('ID_User')->all();
+        $drivers = DeliveryVehicle::pluck('ID_User')->all();
         $branchessDrivers = array_merge($branchess, $drivers);
-        $users = User::whereNotIn('ID_user', $branchessDrivers)->get();
+        $users = User::whereNotIn('ID_User', $branchessDrivers)->get();
         $categories = Category::all();
         $vehicles = DeliveryVehicle::where('ID_Branch', 'like', '%' . $branch->ID_Branch . '%')->get();
         $active = false;

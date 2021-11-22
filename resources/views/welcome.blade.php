@@ -38,7 +38,12 @@
                         <p class="mt-auto card-text" style="margin-bottom: 10px"><strong>Dimensions:
                             </strong>{{ $category->dimensions }}</p>
                     </div>
-                    <a href="#" class="mt-auto btn btn-rent">Rent</a>
+                    @auth
+                    <a href="{{ route('chooseCity', ['unit'=> $category->ID_Category] ) }}"
+                        class="mt-auto btn btn-rent">Rent</a>
+                    @else
+                    <a href="{{ route('loginFirst') }}" class="mt-auto btn btn-rent">Rent</a>
+                    @endauth
                 </div>
             </div>
             @endforeach

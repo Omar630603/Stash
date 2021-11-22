@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,5 +61,10 @@ class UserController extends Controller
         $customer->save();
         $message = 'Your Default Image Returend Successfully';
         return redirect()->back()->with('success', $message);
+    }
+    public function chooseCity()
+    {
+        $cities = Branch::select('city')->groupby('city')->get();
+        return view('user.makeOrder.chooseCity', ['cities' => $cities]);
     }
 }

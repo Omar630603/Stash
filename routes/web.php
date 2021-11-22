@@ -25,12 +25,14 @@ Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.s
 Route::get('/contactUs', [WelcomeController::class, 'contactUs'])->name('welcome.contactus');
 Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.aboutus');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/loginFirst', [WelcomeController::class, 'redirectLogin'])->name('loginFirst');
 
 //UserAccess//Home
 Route::get('/customer/home', [UserController::class, 'index'])->name('customer.home')->middleware('UserAccess');
 Route::post('/customer/editBioData/{customer}', [UserController::class, 'editCustomer'])->name('customer.editBioData')->middleware('UserAccess');
 Route::put('/customer/editImage/{customer}', [UserController::class, 'editCustomerImage'])->name('customer.editImage')->middleware('UserAccess');
 Route::post('/customer/defaultImage/{customer}', [UserController::class, 'editCustomerImageDefult'])->name('customer.defaultImage')->middleware('UserAccess');
+Route::get('/chooseCity', [UserController::class, 'chooseCity'])->name('chooseCity')->middleware('UserAccess');;
 
 //BranchAccess//Home
 Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');

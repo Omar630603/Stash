@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Branch;
+use App\Models\DeliveryVehicle;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -19,13 +21,15 @@ class UserAccess
     public function handle(Request $request, Closure $next)
     {
         $user = User::all();
+        $branchess = Branch::pluck('ID_user')->all();
+        $drivers = DeliveryVehicle::pluck('ID_user')->all();
+        $branchessDrivers = array_merge($branchess, $drivers);
         $isUser = False;
         if (Auth::check()) {
-            for ($i = 0; $i < count($user); $i++) {
-                if (auth()->user()->ID_User == $user[$i]->ID_User) {
-                    $isUser = True;
-                    break;
-                }
+            $user = User::where('ID_User', auth()->user()->ID_User)
+                ->whereNotIn('ID_user', $branchessDrivers)->first();
+            if ($user) {
+                $isUser = True;
             }
             if ($isUser) {
                 return $next($request);
