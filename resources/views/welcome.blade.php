@@ -1,6 +1,39 @@
 @extends('layouts.welcome')
 
 @section('content')
+<div class="container">
+    <div>
+        @if ($message = Session::get('fail'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @elseif ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert"
+            style=" text-align: center; border-radius: 10px">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>
+                <p style="margin: 0">{{ $message }}</p>
+            </strong>
+        </div>
+        @endif
+    </div>
+</div>
+<div class="container">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px">
+        <strong>Whoops!</strong> There were some problems with your input.<br>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+</div>
 <div class="container-fluid">
     <div class="row welcomeHeader">
         <div class="col-sm-8 headerParagraph">

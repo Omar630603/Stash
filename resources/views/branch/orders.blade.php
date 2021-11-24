@@ -419,7 +419,7 @@
                                                         value="{{$idUnit}}">
                                                         <label class="form-check-label" for="flexCheckDefault">
                                                             {{$category->category_name}}
-                                                            (There is {{$ind}} available units)
+                                                            (There are {{$ind}} available units)
                                                             <br>
                                                             <small>This Category is has no units </small>
                                                         </label>
@@ -431,7 +431,7 @@
                                                             value="{{$category->pricePerDay}}">
                                                         <label class="form-check-label" for="flexCheckDefault">
                                                             {{$category->category_name}}
-                                                            (There is {{$ind}} available units)
+                                                            (There are {{$ind}} available units)
                                                             <br>
                                                             <small>Unit {{$unitName}} is ready to use <br>
                                                                 Price/Day: {{$category->pricePerDay}}
@@ -562,7 +562,7 @@
                                                         {{$vehicleNo++}}- (
                                                         {{$vehicle->plateNumber}} )
                                                         -
-                                                        @ {{$vehicle->name}}
+                                                        @ {{$vehicle->vehicle_name}}
                                                         - {{$vehicle->model}}
                                                         - Price {{$vehicle->pricePerK}}
                                                     </option>
