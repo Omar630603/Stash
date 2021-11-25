@@ -213,18 +213,17 @@ class UserController extends Controller
         $userOrder->ordered++;
         $userOrder->save();
         $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
         $transaction->transactions_description = 'Entry Transaction For Unit (' . $unit->unit_name . ')';
         $transaction->transactions_totalPrice = $order->order_totalPrice;
         $transaction->transaction_madeBy = 0;
         if ($request->get('transaction') == 1) {
-            $transaction->ID_Order = $order->ID_Order;
             $transaction->ID_Bank = $request->get('ID_Bank');
             $transaction->transactions_status = 1;
             $image_name = $request->file('proof')->store('transactions_images', 'public');
             $transaction->proof = $image_name;
             $transaction->save();
         } else if ($request->get('transaction') == 2) {
-            $transaction->ID_Order = $order->ID_Order;
             $transaction->transactions_status = 0;
             $transaction->proof = 'Waiting for Payment';
             $transaction->save();

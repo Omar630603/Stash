@@ -235,7 +235,7 @@
                                     <div class="float-right">
                                         <input id="userLocation"
                                             onclick="$('#pickedUpFrom').val('{{Auth::user()->address}}')"
-                                            name="transaction" class="form-check-input" type="checkbox">
+                                            class="form-check-input" type="checkbox">
                                         <label class="form-check-label" for="flexCheckDefault"> <small>Use your
                                                 location</small>
                                         </label>
