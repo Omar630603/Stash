@@ -35,54 +35,88 @@
     @endif
 </div>
 <div class="container">
-    <div class="chooseCityContainer">
+    <div style="margin: 0px 20px">
+        <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
+            <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
+                <li class="breadcrumb-item"><a href="/">Unit: {{$unit->category_name}}</a>
+                </li>
+                <li class="breadcrumb-item"><a href="{{ route('chooseCity', ['unit'=> $unit->ID_Category] ) }}">Choose
+                        City</a>
+                </li>
+                <li class="breadcrumb-item">
+                    City: {{$branch->city}}
+                </li>
+                <li class="breadcrumb-item"><a
+                        href="{{ route('chooseLocation', ['unit'=> $unit->ID_Category, 'city' => $branch->city] ) }}">Choose
+                        Location</a>
+                </li>
+                <li class="breadcrumb-item">
+                    Location: Branch Name: {{$branch->branch_name}} - Branch Address: {{$branch->branch_address}}
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="chooseCityContainer row">
         @if (count($unitsAvaliable)>0)
-        <div style="width: 50%; display: flex; justify-content: center; height: 350px; width: 350;">
-            <h1>{{$unit->category_name}}</h1>
+        <div class="col-md-5" style="display: flex; justify-content: center; height: 350px; width: 350;">
             <img class="img-fluid" src="{{ asset('storage/' . $unit->category_img) }}" alt="">
         </div>
-        <div style="width: 50%;" class="m-0">
-            <p class="m-0">Your choosed unit {{$unit->category_name}} unit.</p>
-            <small>Check the Unit that you choosed to confirm or you can change the unit available</small>
-            <div class="form-check mt-2">
-                @foreach ($categories as $category)
-                @php
-                $ind = 0;
-                $idUnit = 0;
-                @endphp
-                <div>
-                    @foreach ($unitsAvaliable as $unit)
-                    @if ($unit->ID_Category == $category->ID_Category)
+        <div class="col-md-5">
+            <p class="m-0">You choosed unit {{$unit->category_name}} unit.</p>
+            <small>
+                @if ($availableInBranch)
+                Great! There are {{$unit->category_name}} units in this branch<br>
+                Check the Unit that you choosed to confirm.
+                @else
+                Hmmm, There are no {{$unit->category_name}} units in this branch <br>
+                Try another branch or choose a different unit in this branch.
+                @endif
+            </small>
+            <form action="{{ route('makeOrderDetails') }}" method="GET" enctype="multipart/form-data">
+                @csrf
+                <div class="form-check mt-2">
+                    @foreach ($categories as $category)
                     @php
-                    $ind++;
-                    $idUnit = $unit->ID_Unit;
+                    $ind = 0;
+                    $idUnit = 0;
                     @endphp
-                    @endif
-                    @endforeach
-                    @if ($ind <= 0) <input disabled name="Idunit" class="check form-check-input" type="checkbox"
-                        value="{{$idUnit}}">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            {{$category->category_name}}
-                            (There is {{$ind}} available units)
-                            <br>
-                            <small>This branch has no units of {{$category->category_name}} Category that are
-                                available</small>
-                        </label>
-                        @else
-                        <input id="unitPrice" name="Idunit" class="check form-check-input" type="checkbox"
-                            value="{{$idUnit}}">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            {{$category->category_name}}
-                            (There is {{$ind}} available units)
-                            <br>
-                            <small>Dimensions: {{ $category->dimensions }} <br>
-                                Price/Day: {{$category->pricePerDay}}
-                            </small>
-                        </label>
+                    <div>
+                        @foreach ($unitsAvaliable as $unit)
+                        @if ($unit->ID_Category == $category->ID_Category)
+                        @php
+                        $ind++;
+                        $idUnit = $unit->ID_Unit;
+                        @endphp
                         @endif
+                        @endforeach
+                        @if ($ind <= 0) <input disabled name="Idunit" class="check form-check-input" type="checkbox"
+                            value="{{$idUnit}}">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                {{$category->category_name}}
+                                (There are {{$ind}} available units)
+                                <br>
+                                <small>This branch has no units of {{$category->category_name}} Category that are
+                                    available</small>
+                            </label>
+                            @else
+                            <input id="unitPrice" name="Idunit" class="check form-check-input" type="checkbox"
+                                value="{{$idUnit}}">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                {{$category->category_name}}
+                                (There are {{$ind}} available units)
+                                <br>
+                                <small>Dimensions: {{ $category->dimensions }} <br>
+                                    Price/Day: {{$category->pricePerDay}}
+                                </small>
+                            </label>
+                            @endif
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
-            </div>
+                <div>
+                    <button type="submit" class="btn btn-outline-primary float-right">Next</button>
+                </div>
+            </form>
         </div>
         @else
         <div class="headerS" style="width: 100%;"">

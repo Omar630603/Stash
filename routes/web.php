@@ -35,6 +35,8 @@ Route::post('/customer/defaultImage/{customer}', [UserController::class, 'editCu
 Route::get('/chooseCity', [UserController::class, 'chooseCity'])->name('chooseCity')->middleware('UserAccess');
 Route::get('/chooseLocation', [UserController::class, 'chooseLocation'])->name('chooseLocation')->middleware('UserAccess');
 Route::get('/showUnits', [UserController::class, 'showUnits'])->name('showUnits')->middleware('UserAccess');
+Route::get('/OrderDetails', [UserController::class, 'makeOrderDetails'])->name('makeOrderDetails')->middleware('UserAccess');
+Route::post('/customer/addOrder', [UserController::class, 'addOrder'])->name('customer.addOrder')->middleware('UserAccess');
 
 
 //UserAccess//Categories

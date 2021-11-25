@@ -1,21 +1,17 @@
 describe("Create a new branch from the previous test register", () => {
     it("Make branch", () => {
         cy.create("App\\Models\\Branch", {
-            ID_User: 1,
-            branch: "Malang Main",
+            ID_User: 4,
+            branch_name: "Malang Main",
             city: "Malang",
-            location: "Malang, Suhat",
+            branch_address: "Malang, Suhat",
         });
         cy.visit("/login");
-        cy.get("#login")
-            .type("fakeUsername")
-            .should("have.value", "fakeUsername");
-        cy.get("#password")
-            .type("fakePassword")
-            .should("have.value", "fakePassword");
+        cy.get("#login").type("Ali123").should("have.value", "Ali123");
+        cy.get("#password").type("123456789").should("have.value", "123456789");
 
         cy.get("#login-btn").click();
-        cy.visit("/home").contains("fakeUsername");
-        cy.visit("/home").contains("Branch Employee");
+        cy.visit("/branch/home").contains("Ali123");
+        cy.visit("/branch/home").contains("Branch Employee");
     });
 });

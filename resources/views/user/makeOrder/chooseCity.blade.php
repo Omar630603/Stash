@@ -38,7 +38,6 @@
     <div style="margin: 0px 20px">
         <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item"><a href="/">Unit: {{$unit->category_name}}</a>
                 </li>
                 <li class="breadcrumb-item"><a href="{{ route('chooseCity', ['unit'=> $unit->ID_Category] ) }}">Choose
@@ -48,6 +47,7 @@
         </nav>
     </div>
     <div class="chooseCityContainer row">
+        @if (count($cities)>0)
         <div class="col-md-5" style="display: flex; justify-content: center; max-width: 500px;">
             <img class="img-fluid" src="{{ asset('storage/images/chooseCity.png') }}" alt="">
         </div>
@@ -67,17 +67,21 @@
                     </select>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-outline-primary">Next</button>
+                    <button type="submit" class="btn btn-outline-primary float-right">Next</button>
                 </div>
             </form>
         </div>
+        @else
+        <div class="headerS" style="width: 100%;"">
+            <h3>
+                So sorry, there are no cities registered in the database<br>
+                <small>Maybe you can try later</small>
+            </h3>
+        </div>
+        @endif
     </div>
 </div>
 <script>
-    $(".select2").select2({
-        theme: "bootstrap-5",
-        selectionCssClass: "select2--small", // For Select2 v4.1
-        dropdownCssClass: "select2--small",
-    });
-</script>
-@endsection
+    $(" .select2").select2({ theme: "bootstrap-5" , selectionCssClass: "select2--small" , // For Select2 v4.1
+            dropdownCssClass: "select2--small" , }); </script>
+            @endsection
