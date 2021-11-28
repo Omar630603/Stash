@@ -114,11 +114,10 @@
   "": {
     "name": null,
     "domain": null,
-    "action": "App\\Http\\Controllers\\WelcomeController@welcome",
-    "uri": "/",
+    "action": "App\\Http\\Controllers\\Auth\\ConfirmPasswordController@confirm",
+    "uri": "password/confirm",
     "method": [
-      "GET",
-      "HEAD"
+      "POST"
     ]
   },
   "login": {
@@ -198,6 +197,46 @@
       "HEAD"
     ]
   },
+  "welcome.home": {
+    "name": "welcome.home",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\WelcomeController@welcome",
+    "uri": "/",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "welcome.services": {
+    "name": "welcome.services",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\WelcomeController@services",
+    "uri": "services",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "welcome.contactus": {
+    "name": "welcome.contactus",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\WelcomeController@contactUs",
+    "uri": "contactUs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "welcome.aboutus": {
+    "name": "welcome.aboutus",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\WelcomeController@aboutUs",
+    "uri": "aboutUs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
   "home": {
     "name": "home",
     "domain": null,
@@ -208,411 +247,543 @@
       "HEAD"
     ]
   },
-  "user.home": {
-    "name": "user.home",
+  "loginFirst": {
+    "name": "loginFirst",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\WelcomeController@redirectLogin",
+    "uri": "loginFirst",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer.home": {
+    "name": "customer.home",
     "domain": null,
     "action": "App\\Http\\Controllers\\UserController@index",
-    "uri": "user/home",
+    "uri": "customer/home",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "user.editBioData": {
-    "name": "user.editBioData",
+  "customer.editBioData": {
+    "name": "customer.editBioData",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@editUser",
-    "uri": "user/editBioData/{user}",
+    "action": "App\\Http\\Controllers\\UserController@editCustomer",
+    "uri": "customer/editBioData/{customer}",
     "method": [
       "POST"
     ]
   },
-  "user.editImage": {
-    "name": "user.editImage",
+  "customer.editImage": {
+    "name": "customer.editImage",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@editUserImage",
-    "uri": "user/editImage/{user}",
+    "action": "App\\Http\\Controllers\\UserController@editCustomerImage",
+    "uri": "customer/editImage/{customer}",
     "method": [
       "PUT"
     ]
   },
-  "user.defaultImage": {
-    "name": "user.defaultImage",
+  "customer.defaultImage": {
+    "name": "customer.defaultImage",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@editUserImageDefult",
-    "uri": "user/defaultImage/{user}",
+    "action": "App\\Http\\Controllers\\UserController@editCustomerImageDefult",
+    "uri": "customer/defaultImage/{customer}",
     "method": [
       "POST"
     ]
   },
-  "user.delivery": {
-    "name": "user.delivery",
+  "chooseCity": {
+    "name": "chooseCity",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@userDelivery",
-    "uri": "user/delivery",
+    "action": "App\\Http\\Controllers\\UserController@chooseCity",
+    "uri": "chooseCity",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "user.orders": {
-    "name": "user.orders",
+  "chooseLocation": {
+    "name": "chooseLocation",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@userOrders",
-    "uri": "user/orders",
+    "action": "App\\Http\\Controllers\\UserController@chooseLocation",
+    "uri": "chooseLocation",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "user.deleteOrder": {
-    "name": "user.deleteOrder",
+  "showUnits": {
+    "name": "showUnits",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@deleteOrder",
-    "uri": "user/driver/deleteOrder/{order}",
+    "action": "App\\Http\\Controllers\\UserController@showUnits",
+    "uri": "showUnits",
     "method": [
-      "DELETE"
+      "GET",
+      "HEAD"
     ]
   },
-  "user.extendOrder": {
-    "name": "user.extendOrder",
+  "makeOrderDetails": {
+    "name": "makeOrderDetails",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@extendOrder",
-    "uri": "user/driver/extendOrder/{order}",
+    "action": "App\\Http\\Controllers\\UserController@makeOrderDetails",
+    "uri": "OrderDetails",
     "method": [
-      "POST"
+      "GET",
+      "HEAD"
     ]
   },
-  "user.defaultImageUser": {
-    "name": "user.defaultImageUser",
-    "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@editUserImageDefultCustomer",
-    "uri": "user/defaultImage/user/{user}",
-    "method": [
-      "POST"
-    ]
-  },
-  "user.addOrder": {
-    "name": "user.addOrder",
+  "customer.addOrder": {
+    "name": "customer.addOrder",
     "domain": null,
     "action": "App\\Http\\Controllers\\UserController@addOrder",
-    "uri": "user/addOrder",
+    "uri": "customer/addOrder",
     "method": [
       "POST"
     ]
   },
-  "user.orderDetailsU": {
-    "name": "user.orderDetailsU",
+  "user.category": {
+    "name": "user.category",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@userOrderDetailsU",
-    "uri": "user/order/detailsU/{unit}",
+    "action": "App\\Http\\Controllers\\UserController@showCategories",
+    "uri": "user/categories",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "user.orderDetails": {
-    "name": "user.orderDetails",
+  "branch.home": {
+    "name": "branch.home",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@userOrderDetails",
-    "uri": "user/order/details/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@index",
+    "uri": "branch/home",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "user.changeOrderStatus": {
-    "name": "user.changeOrderStatus",
+  "branch.editBioData": {
+    "name": "branch.editBioData",
     "domain": null,
-    "action": "App\\Http\\Controllers\\UserController@changeOrderStatus",
-    "uri": "user/driver/changeOrderStatus/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@editBranchEmployee",
+    "uri": "branch/editBioData/{branchEmployee}",
     "method": [
       "POST"
     ]
   },
-  "admin.home": {
-    "name": "admin.home",
+  "branch.editImage": {
+    "name": "branch.editImage",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@index",
-    "uri": "admin/home",
-    "method": [
-      "GET",
-      "HEAD"
-    ]
-  },
-  "admin.editBioData": {
-    "name": "admin.editBioData",
-    "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editAdmin",
-    "uri": "admin/editBioData/{admin}",
-    "method": [
-      "POST"
-    ]
-  },
-  "admin.editImage": {
-    "name": "admin.editImage",
-    "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editAdminImage",
-    "uri": "admin/editImage/{admin}",
+    "action": "App\\Http\\Controllers\\BranchController@editBranchEmployeeImage",
+    "uri": "branch/editImage/{branchEmployee}",
     "method": [
       "PUT"
     ]
   },
-  "admin.defaultImage": {
-    "name": "admin.defaultImage",
+  "branch.defaultImage": {
+    "name": "branch.defaultImage",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editUserImageDefult",
-    "uri": "admin/defaultImage/{admin}",
+    "action": "App\\Http\\Controllers\\BranchController@editBranchEmployeeImageDefult",
+    "uri": "branch/defaultImage/{branchEmployee}",
     "method": [
       "POST"
     ]
   },
-  "admin.editBranch": {
-    "name": "admin.editBranch",
+  "branch.editBranch": {
+    "name": "branch.editBranch",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editBranch",
-    "uri": "admin/editBranch/{branch}",
+    "action": "App\\Http\\Controllers\\BranchController@editBranch",
+    "uri": "branch/editBranch/{branch}",
     "method": [
       "POST"
     ]
   },
-  "admin.category": {
-    "name": "admin.category",
+  "branch.category": {
+    "name": "branch.category",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@showCategories",
-    "uri": "admin/categories",
+    "action": "App\\Http\\Controllers\\BranchController@showCategories",
+    "uri": "branch/categories",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "admin.addUnit": {
-    "name": "admin.addUnit",
+  "branch.addUnit": {
+    "name": "branch.addUnit",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@addUnit",
-    "uri": "admin/categories/addUnit",
+    "action": "App\\Http\\Controllers\\BranchController@addUnit",
+    "uri": "branch/categories/addUnit",
     "method": [
       "POST"
     ]
   },
-  "admin.deleteUnit": {
-    "name": "admin.deleteUnit",
+  "branch.deleteUnit": {
+    "name": "branch.deleteUnit",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@deleteUnit",
-    "uri": "admin/categories/DeleteUnit/{unit}",
+    "action": "App\\Http\\Controllers\\BranchController@deleteUnit",
+    "uri": "branch/categories/DeleteUnit/{unit}",
     "method": [
       "DELETE"
     ]
   },
-  "admin.changePrivateKeyUnit": {
-    "name": "admin.changePrivateKeyUnit",
+  "branch.changePrivateKeyUnit": {
+    "name": "branch.changePrivateKeyUnit",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@changePrivateKeyUnit",
-    "uri": "admin/categories/changePrivateKeyUnit/{unit}",
+    "action": "App\\Http\\Controllers\\BranchController@changePrivateKeyUnit",
+    "uri": "branch/categories/changePrivateKeyUnit/{unit}",
     "method": [
       "POST"
     ]
   },
-  "admin.delivery": {
-    "name": "admin.delivery",
+  "branch.orderDetailsU": {
+    "name": "branch.orderDetailsU",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@adminDelivery",
-    "uri": "admin/delivery",
+    "action": "App\\Http\\Controllers\\BranchController@branchOrderDetailsU",
+    "uri": "branch/order/detailsU/{unit}",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "admin.editBioDataDriver": {
-    "name": "admin.editBioDataDriver",
+  "branch.delivery": {
+    "name": "branch.delivery",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editDriver",
-    "uri": "admin/editBioData/driver/{driver}",
+    "action": "App\\Http\\Controllers\\BranchController@branchDelivery",
+    "uri": "branch/delivery",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "branch.editBioDataDriver": {
+    "name": "branch.editBioDataDriver",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@editDriver",
+    "uri": "branch/editBioData/driver/{driver}",
     "method": [
       "POST"
     ]
   },
-  "admin.editImageDriver": {
-    "name": "admin.editImageDriver",
+  "branch.editImageDriver": {
+    "name": "branch.editImageDriver",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editDriverImage",
-    "uri": "admin/editImage/driver/{driver}",
+    "action": "App\\Http\\Controllers\\BranchController@editDriverImage",
+    "uri": "branch/editImage/driver/{driver}",
     "method": [
       "PUT"
     ]
   },
-  "admin.defaultImageDriver": {
-    "name": "admin.defaultImageDriver",
+  "branch.defaultImageDriver": {
+    "name": "branch.defaultImageDriver",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editDriverImageDefult",
-    "uri": "admin/defaultImage/driver/{driver}",
+    "action": "App\\Http\\Controllers\\BranchController@editDriverImageDefult",
+    "uri": "branch/defaultImage/driver/{driver}",
     "method": [
       "POST"
     ]
   },
-  "admin.addDriver": {
-    "name": "admin.addDriver",
+  "branch.addDriver": {
+    "name": "branch.addDriver",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@addDriver",
-    "uri": "admin/driver/addDriver",
+    "action": "App\\Http\\Controllers\\BranchController@addDriver",
+    "uri": "branch/driver/addDriver",
     "method": [
       "POST"
     ]
   },
-  "admin.deleteDriver": {
-    "name": "admin.deleteDriver",
+  "branch.deleteDriver": {
+    "name": "branch.deleteDriver",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@deleteDriver",
-    "uri": "admin/driver/deleteDriver/{driver}",
+    "action": "App\\Http\\Controllers\\BranchController@deleteDriver",
+    "uri": "branch/driver/deleteDriver/{driver}",
     "method": [
       "DELETE"
     ]
   },
-  "admin.addSchedule": {
-    "name": "admin.addSchedule",
+  "branch.addSchedule": {
+    "name": "branch.addSchedule",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@addSchedule",
-    "uri": "admin/driver/addSchedule",
+    "action": "App\\Http\\Controllers\\BranchController@addSchedule",
+    "uri": "branch/driver/addSchedule",
     "method": [
       "POST"
     ]
   },
-  "admin.changeScheduleStatus": {
-    "name": "admin.changeScheduleStatus",
+  "branch.changeScheduleStatus": {
+    "name": "branch.changeScheduleStatus",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@changeScheduleStatus",
-    "uri": "admin/driver/changeScheduleStatus/{schedule}",
+    "action": "App\\Http\\Controllers\\BranchController@changeScheduleStatus",
+    "uri": "branch/driver/changeScheduleStatus/{schedule}",
     "method": [
       "POST"
     ]
   },
-  "admin.deleteSchedule": {
-    "name": "admin.deleteSchedule",
+  "branch.deleteSchedule": {
+    "name": "branch.deleteSchedule",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@deleteSchedule",
-    "uri": "admin/driver/deleteSchedule/{schedule}",
+    "action": "App\\Http\\Controllers\\BranchController@deleteSchedule",
+    "uri": "branch/driver/deleteSchedule/{schedule}",
     "method": [
       "DELETE"
     ]
   },
-  "admin.editSchedule": {
-    "name": "admin.editSchedule",
+  "branch.editSchedule": {
+    "name": "branch.editSchedule",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editSchedule",
-    "uri": "admin/driver/editSchedule/{schedule}",
+    "action": "App\\Http\\Controllers\\BranchController@editSchedule",
+    "uri": "branch/driver/editSchedule/{schedule}",
     "method": [
       "POST"
     ]
   },
-  "admin.orders": {
-    "name": "admin.orders",
+  "branch.orders": {
+    "name": "branch.orders",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@adminOrders",
-    "uri": "admin/orders",
+    "action": "App\\Http\\Controllers\\BranchController@branchOrders",
+    "uri": "branch/orders",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "admin.deleteOrder": {
-    "name": "admin.deleteOrder",
+  "branch.deleteOrder": {
+    "name": "branch.deleteOrder",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@deleteOrder",
-    "uri": "admin/driver/deleteOrder/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@deleteOrder",
+    "uri": "branch/branchAccess/deleteOrder/{order}",
     "method": [
       "DELETE"
     ]
   },
-  "admin.extendOrder": {
-    "name": "admin.extendOrder",
+  "branch.editBioDataUser": {
+    "name": "branch.editBioDataUser",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@extendOrder",
-    "uri": "admin/driver/extendOrder/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@editUser",
+    "uri": "branch/editBioData/user/{user}",
     "method": [
       "POST"
     ]
   },
-  "admin.editBioDataUser": {
-    "name": "admin.editBioDataUser",
+  "branch.editImageUser": {
+    "name": "branch.editImageUser",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editUser",
-    "uri": "admin/editBioData/user/{user}",
-    "method": [
-      "POST"
-    ]
-  },
-  "admin.editImageUser": {
-    "name": "admin.editImageUser",
-    "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editUserImage",
-    "uri": "admin/editImage/user/{user}",
+    "action": "App\\Http\\Controllers\\BranchController@editUserImage",
+    "uri": "branch/editImage/user/{user}",
     "method": [
       "PUT"
     ]
   },
-  "admin.defaultImageUser": {
-    "name": "admin.defaultImageUser",
+  "branch.defaultImageUser": {
+    "name": "branch.defaultImageUser",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@editUserImageDefultCustomer",
-    "uri": "admin/defaultImage/user/{user}",
+    "action": "App\\Http\\Controllers\\BranchController@editUserImageDefultCustomer",
+    "uri": "branch/defaultImage/user/{user}",
     "method": [
       "POST"
     ]
   },
-  "admin.addUser": {
-    "name": "admin.addUser",
+  "branch.addUser": {
+    "name": "branch.addUser",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@addUser",
-    "uri": "admin/user/addUser",
+    "action": "App\\Http\\Controllers\\BranchController@addUser",
+    "uri": "branch/user/addUser",
     "method": [
       "POST"
     ]
   },
-  "admin.deleteUser": {
-    "name": "admin.deleteUser",
+  "branch.deleteUser": {
+    "name": "branch.deleteUser",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@deleteUser",
-    "uri": "admin/user/deleteUser/{user}",
+    "action": "App\\Http\\Controllers\\BranchController@deleteUser",
+    "uri": "branch/user/deleteUser/{user}",
     "method": [
       "DELETE"
     ]
   },
-  "admin.addOrder": {
-    "name": "admin.addOrder",
+  "branch.addOrder": {
+    "name": "branch.addOrder",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@addOrder",
-    "uri": "admin/user/addOrder",
+    "action": "App\\Http\\Controllers\\BranchController@addOrder",
+    "uri": "branch/user/addOrder",
     "method": [
       "POST"
     ]
   },
-  "admin.orderDetailsU": {
-    "name": "admin.orderDetailsU",
+  "branch.orderDetails": {
+    "name": "branch.orderDetails",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@adminOrderDetailsU",
-    "uri": "admin/order/detailsU/{unit}",
+    "action": "App\\Http\\Controllers\\BranchController@branchOrderDetails",
+    "uri": "branch/order/details/{order}",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "admin.orderDetails": {
-    "name": "admin.orderDetails",
+  "branch.extendOrder": {
+    "name": "branch.extendOrder",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@adminOrderDetails",
-    "uri": "admin/order/details/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@extendOrder",
+    "uri": "branch/branchAccess/extendOrder/{order}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.changeOrderStatus": {
+    "name": "branch.changeOrderStatus",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@changeOrderStatus",
+    "uri": "branch/branchAccess/changeOrderStatus/{order}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.changeOrderDescription": {
+    "name": "branch.changeOrderDescription",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@changeOrderDescription",
+    "uri": "branch/branchAccess/changeOrderDescription/{order}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.changeUnitCapacity": {
+    "name": "branch.changeUnitCapacity",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@changeUnitCapacity",
+    "uri": "branch/unit/order/changeUnitCapacity/{unit}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.changeOrderUnit": {
+    "name": "branch.changeOrderUnit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@changeOrderUnit",
+    "uri": "branch/unit/order/changeOrderUnit/{unit}/{order}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.payTransaction": {
+    "name": "branch.payTransaction",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@payTransaction",
+    "uri": "branch/branchAccess/order/payTransaction/{transaction}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.approveTransaction": {
+    "name": "branch.approveTransaction",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@approveTransaction",
+    "uri": "branch/branchAccess/order/approveTransaction/{transaction}",
     "method": [
       "GET",
       "HEAD"
     ]
   },
-  "admin.changeOrderStatus": {
-    "name": "admin.changeOrderStatus",
+  "branch.disapproveTransaction": {
+    "name": "branch.disapproveTransaction",
     "domain": null,
-    "action": "App\\Http\\Controllers\\AdminController@changeOrderStatus",
-    "uri": "admin/driver/changeOrderStatus/{order}",
+    "action": "App\\Http\\Controllers\\BranchController@disapproveTransaction",
+    "uri": "branch/branchAccess/order/disapproveTransaction/{transaction}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "branch.deleteTransaction": {
+    "name": "branch.deleteTransaction",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@deleteTransaction",
+    "uri": "branch/branchAccess/order/deleteTransaction/{transaction}",
     "method": [
       "POST"
+    ]
+  },
+  "branch.addBank": {
+    "name": "branch.addBank",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@addBank",
+    "uri": "branch/AddBank",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.editBranchBank": {
+    "name": "branch.editBranchBank",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@editBranchBank",
+    "uri": "branch/editBranchBank/{bank}",
+    "method": [
+      "POST"
+    ]
+  },
+  "branch.deleteBank": {
+    "name": "branch.deleteBank",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@deleteBank",
+    "uri": "branch/deleteBank/{bank}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "branch.transactions": {
+    "name": "branch.transactions",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BranchController@branchTransactions",
+    "uri": "branch/Transactions",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "driver.home": {
+    "name": "driver.home",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DeliveryVehicleController@index",
+    "uri": "driver/home",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "driver.editBioDataDriver": {
+    "name": "driver.editBioDataDriver",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DeliveryVehicleController@editDriver",
+    "uri": "driver/editBioData/driver/{driver}",
+    "method": [
+      "POST"
+    ]
+  },
+  "driver.editImageDriver": {
+    "name": "driver.editImageDriver",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DeliveryVehicleController@editDriverImage",
+    "uri": "driver/editImage/driver/{driver}",
+    "method": [
+      "PUT"
+    ]
+  },
+  "driver.defaultImageDriver": {
+    "name": "driver.defaultImageDriver",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DeliveryVehicleController@editDriverImageDefult",
+    "uri": "driver/defaultImage/driver/{driver}",
+    "method": [
+      "POST"
+    ]
+  },
+  "driver.deleteDriver": {
+    "name": "driver.deleteDriver",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DeliveryVehicleController@deleteDriver",
+    "uri": "driver/driver/deleteDriver/{driver}",
+    "method": [
+      "DELETE"
     ]
   }
 }

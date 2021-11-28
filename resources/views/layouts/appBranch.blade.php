@@ -12,7 +12,10 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" defer></script>
+        <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,16 +23,17 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-        <link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.1.1/dist/select2-bootstrap-5-theme.min.css" />
 
         <!-- Styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.1.1/dist/select2-bootstrap-5-theme.min.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/appBranch.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
@@ -44,7 +48,7 @@
         </div>
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="padding: 0">
-                <div class="container">
+                <div class="container-fluid">
                     <a class="navbar-brand" style="padding-top: 0; font-size: 0" href="{{ url('/') }}">
                         <img align="center" width="90" src="{{ asset('storage/images/Logo with Name H.png') }}" alt="">
                         {{-- {{ config('app.name', 'Laravel') }} --}}
@@ -55,7 +59,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse pl-2 pr-2 pb-1" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
 
@@ -70,18 +74,23 @@
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <ul class="navbar-nav ml-auto gap-1">
                             <!-- Authentication Links -->
                             @guest
                             @if (Route::has('login'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link btn btn-sm btn-dark signupsingin-btn" href="{{ route('login') }}">
+                                    <p>{{ __('Login') }}</p><i class="fas fa-sign-in-alt"></i>
+                                </a>
                             </li>
                             @endif
 
                             @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <a class="nav-link btn btn-sm btn-dark signupsingin-btn" href="{{ route('register') }}">
+                                    <p>{{ __('Register') }}</p>
+                                    <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                                </a>
                             </li>
                             @endif
                             @else

@@ -16,7 +16,8 @@ class DeliveryVehicle extends Model
      * @var string[]
      */
     protected $fillable = [
-        'ID_Admin',
+        'ID_Branch',
+        'ID_User',
         'vehicle_name',
         'vehicle_phone',
         'model',

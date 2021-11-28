@@ -22,5 +22,6 @@ class Transactions extends Model
         'transactions_totalPrice',
         'transactions_status',
         'proof',
+        'transaction_madeBy',
     ];
 }

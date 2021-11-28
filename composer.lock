@@ -511,6 +511,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/0690bde05318336c7221785f2a932467f98b64ca",
                 "reference": "0690bde05318336c7221785f2a932467f98b64ca",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GrahamCampbell/Result-Type.git",
+                "reference": "296c015dc30ec4322168c5ad3ee5cc11dae827ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GrahamCampbell/Result-Type/zipball/296c015dc30ec4322168c5ad3ee5cc11dae827ac",
+                "reference": "296c015dc30ec4322168c5ad3ee5cc11dae827ac",
                 "shasum": ""
             },
             "require": {
@@ -548,6 +558,7 @@
             "support": {
                 "issues": "https://github.com/GrahamCampbell/Result-Type/issues",
                 "source": "https://github.com/GrahamCampbell/Result-Type/tree/v1.0.4"
+                "source": "https://github.com/GrahamCampbell/Result-Type/tree/v1.0.3"
             },
             "funding": [
                 {
@@ -560,6 +571,7 @@
                 }
             ],
             "time": "2021-11-21T21:41:47+00:00"
+            "time": "2021-10-17T19:48:54+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -896,6 +908,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/36dfae9d9ef7f88e8f9489c484a0a0609592bc21",
                 "reference": "36dfae9d9ef7f88e8f9489c484a0a0609592bc21",
+            "version": "v8.73.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "f60e5ceccac453864edbf001b665450886cda8fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f60e5ceccac453864edbf001b665450886cda8fc",
+                "reference": "f60e5ceccac453864edbf001b665450886cda8fc",
                 "shasum": ""
             },
             "require": {
@@ -1055,6 +1077,7 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2021-11-20T19:20:02+00:00"
+            "time": "2021-11-19T14:10:17+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -1259,6 +1282,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/ui/zipball/08ea313a35dfc89ff0cd9916ca0bcef9715d0ed6",
                 "reference": "08ea313a35dfc89ff0cd9916ca0bcef9715d0ed6",
+            "version": "v3.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "28f3d190fe270b6dcd6fdab4a77a392e693ceca5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/28f3d190fe270b6dcd6fdab4a77a392e693ceca5",
+                "reference": "28f3d190fe270b6dcd6fdab4a77a392e693ceca5",
                 "shasum": ""
             },
             "require": {
@@ -1304,6 +1337,9 @@
                 "source": "https://github.com/laravel/ui/tree/v3.3.3"
             },
             "time": "2021-11-21T22:20:05+00:00"
+                "source": "https://github.com/laravel/ui/tree/v3.3.2"
+            },
+            "time": "2021-11-05T08:25:44+00:00"
         },
         {
             "name": "league/commonmark",
@@ -1512,6 +1548,16 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/aa70e813a6ad3d1558fc927863d47309b4c23e69",
                 "reference": "aa70e813a6ad3d1558fc927863d47309b4c23e69",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/mime-type-detection.git",
+                "reference": "b38b25d7b372e9fddb00335400467b223349fd7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/b38b25d7b372e9fddb00335400467b223349fd7e",
+                "reference": "b38b25d7b372e9fddb00335400467b223349fd7e",
                 "shasum": ""
             },
             "require": {
@@ -1543,6 +1589,7 @@
             "support": {
                 "issues": "https://github.com/thephpleague/mime-type-detection/issues",
                 "source": "https://github.com/thephpleague/mime-type-detection/tree/1.9.0"
+                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.8.0"
             },
             "funding": [
                 {
@@ -1555,6 +1602,7 @@
                 }
             ],
             "time": "2021-11-21T11:48:40+00:00"
+            "time": "2021-09-25T08:23:19+00:00"
         },
         {
             "name": "monolog/monolog",

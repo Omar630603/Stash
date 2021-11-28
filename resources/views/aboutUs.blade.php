@@ -143,5 +143,7 @@
             </div>
         </div>
     </div>
+<div class="container-fluid">
+    <h1>This is about us page</h1>
 </div>
 @endsection

@@ -31,12 +31,14 @@ table tbody tr:last-child {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #eee;
 }
-
+tbody tr {
+    background-color: #dddd;
+}
 tbody tr:hover {
     color: #3f1652;
-    background-color: #ffbf8e;
+    background-color: #fccaa4;
     cursor: pointer;
 }
 
@@ -103,33 +105,22 @@ tbody tr:hover {
     transition: 0.2s all ease;
     font-size: 15px;
 }
-.icons {
-    background-color: #66377f;
-    border-radius: 100px;
-    padding: 7px;
-    color: #fff;
-    font-size: 12px;
-    vertical-align: middle;
-    width: 40px;
-    text-align: center;
-    content: attr(data-label);
-}
 .headerOrder {
     background-color: #66377f;
     color: #e7e7e7;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
 }
 .containerV {
-    width: 30%;
+    width: 25%;
 }
 #deliveryContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     background-color: #fceabe;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     min-height: 300px;
 }
 .line {
@@ -166,16 +157,26 @@ tbody tr:hover {
     }
     .headerO {
         flex-wrap: wrap;
+        flex-direction: column;
+        gap: 10px;
     }
     .widthHeader {
-        width: 100%;
+        width: 100% !important;
+    }
+    .bookmark {
+        writing-mode: horizontal-tb !important;
+        text-align: left !important;
+        transform: rotate(0deg) !important;
+    }
+    #sidebarCollapse {
+        margin: -10px 0 !important;
     }
 }
 .headerO {
     padding: 0;
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 img {
     max-width: 100%;
@@ -185,7 +186,7 @@ img {
     background: #f8f8f8 none repeat scroll 0 0;
     float: left;
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .srch_bar {
@@ -205,6 +206,9 @@ img {
     width: 100%;
     padding: 2px 0 4px 6px;
     background: none;
+}
+.srch_bar input:focus {
+    outline: none;
 }
 .srch_bar .input-group-addon button {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
@@ -254,7 +258,7 @@ img {
     background-color: #ffbf8e;
     padding: 10px;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 .headerVehiclesSchedules h1 {
@@ -266,7 +270,7 @@ img {
     text-align: left;
     background-color: #66377f;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 10px;
 }
 .headerS h3 {
@@ -280,6 +284,49 @@ img {
     padding: 20px;
     background-color: #f8f8f8;
     width: 90%;
-    margin: 15px;
-    border-radius: 20px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+#sidebarCollapse {
+    margin-top: 10px;
+    margin-right: -10px;
+    transition: 0.5s;
+    background-color: #3f1652;
+    border: 0;
+    transform: rotate(45deg);
+    position: relative;
+    right: 12px;
+}
+#sidebarCollapse i {
+    transition: 0.5s;
+    transform: rotate(-45deg);
+}
+#sidebarCollapse:hover {
+    border: 5px solid;
+    right: 0;
+    margin: 5px 5px 0 5px;
+    border-image: linear-gradient(
+            0deg,
+            rgba(63, 22, 82, 1) 10%,
+            rgba(157, 52, 136, 1) 40%,
+            rgba(248, 159, 91, 1) 80%
+        )
+        10;
+    transform: rotate(90deg);
+    border-radius: 10px;
+}
+#sidebarCollapse i:hover {
+    transform: rotate(180deg);
+}
+.bookmark {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-align: end;
+    text-orientation: sideways;
+    display: none;
+}
+.tableWrapper {
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
 }

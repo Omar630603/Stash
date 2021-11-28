@@ -21,11 +21,13 @@ class DatabaseSeeder extends Seeder
         $users = [
             ['name' => 'Omar Al-Maktary', 'email' => 'omar@stash.com', 'username'=> 'OmarBranch', 'password'=> Hash::make('123456789'), 'phone' => '+620821345679', 'address' => 'Malang'],
             ['name' => 'Alif Ananda', 'email' => 'Alif@stash.com', 'username'=> 'AlifBranch', 'password'=> Hash::make('123456789'), 'phone' => '+620895647238', 'address' => 'Jakarta'],
+            ['name' => 'Bggio Deroger', 'email' => 'baggio@stash.com', 'username'=> 'BaggioBranch', 'password'=> Hash::make('123456789'), 'phone' => '+62881234578', 'address' => 'Malang'],
         ];
         User::insert($users);
         $branches = [
             ['ID_User' => 1, 'branch_name' => 'Malang Main', 'city'=> 'Malang', 'branch_address'=> 'Malang, Suhat'],
             ['ID_User' => 2, 'branch_name' => 'Jakarta Main', 'city'=> 'Jakarta', 'branch_address'=> 'Jakarta'],
+            ['ID_User' => 3, 'branch_name' => 'Malang Main', 'city'=> 'Malang', 'branch_address'=> 'Malang'],
         ];
         Branch::insert($branches);
         $categories = [
@@ -37,8 +39,8 @@ class DatabaseSeeder extends Seeder
         $banks = [
             ['ID_Branch' => 1, 'bank_name' => 'BCA', 'accountNo'=> '09582142301'],
             ['ID_Branch' => 1, 'bank_name' => 'BNI', 'accountNo'=> '08221485655'],
-            ['ID_Branch' => 2, 'bank_name' => 'BCA', 'accountNo'=> '09582142301'],
-            ['ID_Branch' => 2, 'bank_name' => 'BNI', 'accountNo'=> '08221485655'],
+            ['ID_Branch' => 2, 'bank_name' => 'BCA', 'accountNo'=> '09512554125'],
+            ['ID_Branch' => 2, 'bank_name' => 'BNI', 'accountNo'=> '08565856655'],
         ];
         Bank::insert($banks);
     }
