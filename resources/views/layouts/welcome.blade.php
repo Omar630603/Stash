@@ -70,6 +70,7 @@
                                 <li><a href="/">Home</a></li>
                                 <li><a href="{{ route('welcome.services') }}">Services</a></li>
                                 <li><a href="{{ route('welcome.aboutus') }}">About Us</a></li>
+                                <li><a href="#">ContactS Us</a></li>
                                 <li><a href="{{ route('welcome.contactus') }}">ContactS Us</a></li>
                             </ul>
                         </nav>
@@ -143,6 +144,8 @@
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
                                     <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
                                     </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a></li>
+                                    <li><a style="color: #fff8e6" href="#">Contact Us</a></li>
                                     <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
                                     </li>
                                     <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
