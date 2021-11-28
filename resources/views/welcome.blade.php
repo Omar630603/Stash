@@ -108,11 +108,13 @@
                 <img src=" {{ asset('storage/'. $category->category_img) }}" class="card-img-top" alt="...">
                 <div class="card-body d-flex flex-column">
                     <h5 class="mt-auto card-title" style="text-align: center;">{{ $category->category_name }}</h5>
+                    <h6 class="mt-auto card-title" style="text-align: center;">{{ $category->category_description }}
+                    </h6>
                     <div>
-                        <p class="mt-auto card-text"><strong>Description: </strong>{{ $category->category_description }}
-                        </p>
-                        <p class="mt-auto card-text" style="margin-bottom: 10px"><strong>Dimensions:
+                        <p class="m-0 card-text" style="margin-bottom: 10px"><strong>Dimensions:
                             </strong>{{ $category->dimensions }}</p>
+                        <p class="mb-2 card-text" style="margin-bottom: 10px"><strong>Price:
+                            </strong>Rp.{{ $category->pricePerDay }} / Day</p>
                     </div>
                     @auth
                     <a href="{{ route('chooseCity', ['unit'=> $category->ID_Category] ) }}"
