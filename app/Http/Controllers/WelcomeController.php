@@ -16,4 +16,8 @@ class WelcomeController extends Controller
     {
         return view('services');
     }
+    public function aboutUs()
+    {
+        return view('aboutUs');
+    }
 }
