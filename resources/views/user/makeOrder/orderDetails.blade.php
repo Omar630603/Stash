@@ -264,7 +264,7 @@
                             <div class="col-md-4">
                                 <label for="delivered" class="form-label">(est.) Delivered Date</label>
                                 <input readonly type="datetime-local" class="form-control" id="delivered"
-                                    name="delivered">
+                                    name="delivered" value="2021-11-31T09:06">
                             </div>
                             <div class="col-md-4">
                                 <label for="totalPrice" class="form-label">Deliver Price</label>
@@ -351,14 +351,36 @@
         } else {
             dateDif = 1;
             deliveryCheck.textContent =  'Delivery Period: '+dateDif+' day.';
+            console.log(formatDate(pickedUp));
+            console.log($('#pickedUp').val())
             $('#delivered').val(formatDate(pickedUp));
         }
     }
     function formatDate(date) {
         var hours = date.getHours();
         var minutes = date.getMinutes();
+        var days = date.getDate()+1;
+        var months = date.getMonth()+1;
+        var year = date.getFullYear();
+        daysInMonth = new Date(year, months, 0).getDate();
+        if (hours < 10) {
+            hours = '0'+ hours
+        }
+        if (minutes < 10) {
+            minutes = '0'+ minutes
+        }
+        if (daysInMonth = 30) {
+                days = 1;
+                months++;
+        }
+        if (days < 10) {
+            days = '0'+ days 
+        }
+        if (months < 10) {
+            months = '0'+ months
+        }
         var strTime = hours + ':' + minutes;
-        return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDate()+1) + "T" + strTime;
+        return year + "-" + months + "-" + days + "T" + strTime;
     }
     function sendprice(price) {
         var vehicleArr = price.split("|");
