@@ -78,33 +78,6 @@ tbody tr:hover {
         flex-direction: column;
     }
 }
-.delete-hover:hover {
-    color: rgb(231, 68, 68);
-}
-.use-hover:hover {
-    color: rgb(132, 255, 179);
-}
-.noUse-hover:hover {
-    color: rgb(252, 64, 111);
-}
-.refresh-hover:hover {
-    color: rgb(240, 177, 130);
-}
-.delete-hover:hover,
-.use-hover:hover,
-.noUse-hover:hover,
-.refresh-hover:hover {
-    font-size: 16px;
-}
-.delete-hover,
-.use-hover,
-.noUse-hover,
-.refresh-hover {
-    -webkit-transition: 0.2s all ease;
-    -o-transition: 0.2s all ease;
-    transition: 0.2s all ease;
-    font-size: 15px;
-}
 .headerOrder {
     background-color: #66377f;
     color: #e7e7e7;

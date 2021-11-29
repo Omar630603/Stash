@@ -155,7 +155,6 @@
                                         <li class="fb"><a href="#"><span class="icon-facebook"></span></a></li>
                                         <li class="tw"><a href="#"><span class="icon-twitter"></span></a></li>
                                         <li class="pin"><a href="#"><span class="icon-pinterest"></span></a></li>
-                                        <li class="dr"><a href="#"><span class="icon-dribbble"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="copyright">

@@ -59,8 +59,7 @@
         </nav>
     </div>
     <div class="chooseCityContainer">
-        <form method="POST" id="addOrderForm" class="" action="{{ route('customer.addOrder')}}"
-            enctype="multipart/form-data">
+        <form method="POST" id="addOrderForm" action="{{ route('customer.addOrder')}}" enctype="multipart/form-data">
             @csrf
             <input hidden type="number" name="ID_User" value="{{Auth::user()->ID_User}}">
             <input hidden type="number" name="Idunit" value="{{$unit->ID_Unit}}">
@@ -81,7 +80,7 @@
                     </label>
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3 mt-2">
                 <div class="col-sm-6">
                     <div style="display: flex; gap: 4px">
                         <label style="white-space: nowrap" for="Period"><strong>Period</strong>
@@ -123,59 +122,61 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3 mt-2">
                 <div class="col-sm-6">
-                    <div>
-                        @if (count($vehicles)<0) <label for="status"><strong>Delivery</strong>
-                            <p class="m-0">
-                                This branch don't have integrated delivery services yet
-                            </p>
-                            <small>
-                                (You can try another branch)
-                            </small>
-                            </label>
-                            @else
-                            <label for="status"><strong>Delivery</strong>
-                                <p class="m-0">
-                                    Do you want to deliver your items using our delivery system?
-                                </p>
-                                <small>
-                                    (You can add this later if you wish)
-                                </small>
-                            </label>
-                            @endif
-                    </div>
+                    @if (count($vehicles)>0)
+                    <label for="status"><strong>Delivery</strong>
+                        <p class="m-0">
+                            Do you want to deliver your items using our delivery system?
+                        </p>
+                        <small>
+                            (You can add this later if you wish)
+                        </small>
+                    </label>
+                    @else
+                    <label for="status"><strong>Delivery</strong>
+                        <p class="m-0">
+                            This branch don't have integrated delivery services yet
+                        </p>
+                        <small>
+                            (You can try another branch)
+                        </small>
+                    </label>
+                    @endif
+
+                    @if (count($vehicles)>0)
                     <div class="form-check" style="margin-bottom: 10px">
-                        @if (count($vehicles)<0) <div>
-                            <input readonly onclick="$('#addDeliverySchedule').show('fast');" name="delivery"
+                        <div>
+                            <input onclick="$('#addDeliverySchedule').show('fast');" name="delivery"
                                 class="checkDeleivery form-check-input" type="checkbox" value="1">
                             <label class="form-check-label" for="flexCheckDefault"> Yes
                             </label>
-                    </div>
-                    <div>
-                        <input readonly onclick="$('#addDeliverySchedule').hide('fast');" checked name="delivery"
-                            class="checkDeleivery form-check-input" type="checkbox" value="0">
-                        <label class="form-check-label" for="flexCheckDefault"> No
-                        </label>
+                        </div>
+                        <div>
+                            <input onclick="$('#addDeliverySchedule').hide('fast');" checked name="delivery"
+                                class="checkDeleivery form-check-input" type="checkbox" value="0">
+                            <label class="form-check-label" for="flexCheckDefault"> No
+                            </label>
+                        </div>
                     </div>
                     @else
-                    <div>
-                        <input onclick="$('#addDeliverySchedule').show('fast');" name="delivery"
-                            class="checkDeleivery form-check-input" type="checkbox" value="1">
-                        <label class="form-check-label" for="flexCheckDefault"> Yes
-                        </label>
-                    </div>
-                    <div>
-                        <input onclick="$('#addDeliverySchedule').hide('fast');" checked name="delivery"
-                            class="checkDeleivery form-check-input" type="checkbox" value="0">
-                        <label class="form-check-label" for="flexCheckDefault"> No
-                        </label>
+                    <div class="form-check" style="margin-bottom: 10px">
+                        <div>
+                            <input disabled onclick="$('#addDeliverySchedule').show('fast');" name="delivery"
+                                class="checkDeleivery form-check-input" type="checkbox" value="1">
+                            <label class="form-check-label" for="flexCheckDefault"> Yes
+                            </label>
+                        </div>
+                        <div>
+                            <input disabled onclick="$('#addDeliverySchedule').hide('fast');" checked name="delivery"
+                                class="checkDeleivery form-check-input" type="checkbox" value="0">
+                            <label class="form-check-label" for="flexCheckDefault"> No
+                            </label>
+                        </div>
                     </div>
                     @endif
                 </div>
-            </div>
-            <div class="col-sm-6">
-                <div>
+                <div class="col-sm-6">
                     <label for="capacity"><strong>Order Payment</strong>
                         <p class="m-0">
                             (Do you want to include the payment?
@@ -183,34 +184,74 @@
                         <small>(You can pay for the total
                             price later)</small>
                     </label>
-                </div>
-                <div>
-                    <div class="form-check" style="margin-bottom: 10px">
-                        <div>
-                            <input onclick="$('#addPayment').show('fast');" name="transaction"
-                                class="checkPayment form-check-input" type="checkbox" value="1">
-                            <label class="form-check-label" for="flexCheckDefault"> Include
-                                Payment <small>(Payment details for the entry transaction with price: <small
-                                        id="finallPrice"></small>)
-                                </small>
-                            </label>
-                        </div>
-                        <div>
-                            <input onclick="$('#addPayment').hide('fast');" checked name="transaction"
-                                class="checkPayment form-check-input" type="checkbox" value="2">
-                            <label class="form-check-label" for="flexCheckDefault"> Exclude
-                                Payment
-                            </label>
+                    <div>
+                        <div class="form-check" style="margin-bottom: 10px">
+                            <div>
+                                <input onclick="$('#addPayment').show('fast');" name="transaction"
+                                    class="checkPayment form-check-input" type="checkbox" value="1">
+                                <label class="form-check-label" for="flexCheckDefault"> Include
+                                    Payment <small>(Payment details for the entry transaction with price: <small
+                                            id="finallPrice"></small>)
+                                    </small>
+                                </label>
+                            </div>
+                            <div>
+                                <input onclick="$('#addPayment').hide('fast');" checked name="transaction"
+                                    class="checkPayment form-check-input" type="checkbox" value="2">
+                                <label class="form-check-label" for="flexCheckDefault"> Exclude
+                                    Payment
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3 mt-2 pt-2" style="display: none; border-top: 2px solid #ccc" id="addPayment">
                 <div class="col-sm-12">
-                    <div class="container-fluid" style="display: none" id="addDeliverySchedule">
-                        <div class="headerOrder" style="display: flex; justify-content: space-evenly; flex-wrap: wrap">
+                    <label for="payment"><strong>Payment Details</strong>
+                </div>
+                <div class="col-sm-12">
+                    <div class="container-fluid">
+                        <div class="headerOrder" style="display: flex;justify-content: space-between">
+                            <div class="form-group" style="margin: 5px 0; width: 45%;">
+                                <label>Choose a bank account then send the total amount shown above</label>
+                                <select name="ID_Bank" style="width: 100%" class="select2">
+                                    <option value="0">Select Bank</option>
+                                    @php
+                                    $bankNo = 1;
+                                    @endphp
+                                    @foreach ($banks as $bank)
+                                    <option value="{{$bank->ID_Bank}}">
+                                        {{$bankNo++}}- (
+                                        {{$bank->bank_name}} )
+                                        -
+                                        @ {{$bank->accountNo}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div style="margin: 5px 0; width: 45%;">
+                                <label>Upload the proof of the trasaction here</label>
+                                <a style="width: 100%;" onclick="$('#proofInputImage').click(); return false;"
+                                    class="btn btn-sm btn-outline-dark">Add Payment Proof</a>
+                                <input id="proofInputImage" style="display: none;" type="file" name="proof">
+                                <input style="display: none; margin-top: 5px; text-align: center; width: 100%" readonly
+                                    style="display: none" id="proofPhoto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3 mt-2 pt-2" style="display: none; border-top: 2px solid #ccc" id="addDeliverySchedule">
+                <div class="col-sm-12">
+                    <label for="payment"><strong>Delivery Details</strong>
+                </div>
+                <div class="col-sm-12">
+                    <div class="container-fluid">
+                        <div class="headerOrder" style="display: flex; justify-content: space-between; flex-wrap: wrap">
                             <div class="col-md-4">
-                                <label for="phone" class="form-label">Vehicle <br><small>(Choose a vehicle that works in
+                                <label for="phone" class="form-label">Vehicle <br><small>(Choose a vehicle that
+                                        works in
                                         {{$branch->branch_name}} branch)</small></label>
                                 <div class="form-group">
                                     <select onchange="sendprice($(this).val())" style="width: 100%" class="select2">
@@ -248,13 +289,15 @@
                                     class="form-control" id="pickedUpFrom" name="pickedUpFrom">
                             </div>
                             <div class="col-md-4">
-                                <label for="deliveredTo" class="form-label">Deliver To <br><small>(This is the branch
+                                <label for="deliveredTo" class="form-label">Deliver To <br><small>(This is the
+                                        branch
                                         address)</small></label>
                                 <input readonly type="text" class="form-control" id="deliveredTo" name="deliveredTo"
                                     value="{{$branch->branch_address}}">
                             </div>
                             <div class="col-md-4">
-                                <label for="pickedUp" class="form-label">Pick Up Date <small>(Choose a date to pickup
+                                <label for="pickedUp" class="form-label">Pick Up Date <small>(Choose a date to
+                                        pickup
                                         your
                                         items)</small></label>
                                 <input onchange="chackDeliveryDates()" type="datetime-local" class="form-control"
@@ -283,41 +326,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col-sm-12">
-                    <div class="container-fluid" style="display: none" id="addPayment">
-                        <div class="headerOrder" style="display: flex;justify-content: space-between">
-                            <div class="form-group" style="margin: 5px 0; width: 45%;">
-                                <select name="ID_Bank" style="width: 100%" class="select2">
-                                    <option value="0">Select Bank</option>
-                                    @php
-                                    $bankNo = 1;
-                                    @endphp
-                                    @foreach ($banks as $bank)
-                                    <option value="{{$bank->ID_Bank}}">
-                                        {{$bankNo++}}- (
-                                        {{$bank->bank_name}} )
-                                        -
-                                        @ {{$bank->accountNo}}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div style="margin: 5px 0; width: 45%;">
-                                <a style="width: 100%;" onclick="$('#proofInputImage').click(); return false;"
-                                    class="btn btn-sm btn-outline-dark">Add Payment Proof</a>
-                                <input id="proofInputImage" style="display: none;" type="file" name="proof">
-                                <input style="display: none; margin-top: 5px; text-align: center; width: 100%" readonly
-                                    style="display: none" id="proofPhoto">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
+            <div class="row mb-1 mt-2">
                 <div class="col-md-12">
                     <button type="submit" style="width: 100%" class="btn btn-sm btn-outline-dark">Order
-                        {{$unit->unit_name}}</button>
+                        {{$category->category_name}} Unit</button>
                 </div>
             </div>
         </form>

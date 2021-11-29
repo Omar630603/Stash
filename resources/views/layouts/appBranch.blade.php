@@ -67,7 +67,7 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="{{route('branch.home')}}">Home</a></li>
+                                <li><a href="{{route('branch.home')}}">Branch</a></li>
                                 <li><a href="{{route('branch.category')}}">Categories</a></li>
                                 <li><a href="{{route('branch.orders')}}">Orders</a></li>
                                 <li><a href="{{route('branch.delivery')}}">Delivery</a></li>
@@ -141,10 +141,12 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-                                    <li><a style="color: #fff8e6" href="{{route('branch.category')}}">Categories</a>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
                                     </li>
-                                    <li><a style="color: #fff8e6" href="{{route('branch.orders')}}">Orders</a></li>
-                                    <li><a style="color: #fff8e6" href="{{route('branch.delivery')}}">Delivery</a></li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
+                                    </li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>

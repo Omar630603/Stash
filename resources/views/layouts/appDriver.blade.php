@@ -67,8 +67,7 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="{{route('home')}}">Home</a></li>
-
+                                <li><a href="{{route('home')}}">Profile</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -139,7 +138,12 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
+                                    </li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>
@@ -148,7 +152,6 @@
                                         <li class="fb"><a href="#"><span class="icon-facebook"></span></a></li>
                                         <li class="tw"><a href="#"><span class="icon-twitter"></span></a></li>
                                         <li class="pin"><a href="#"><span class="icon-pinterest"></span></a></li>
-                                        <li class="dr"><a href="#"><span class="icon-dribbble"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="copyright">

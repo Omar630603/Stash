@@ -21,3 +21,97 @@
     font-size: 15px;
     margin-left: 10px;
 }
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.c-details span {
+    font-weight: 300;
+    font-size: 13px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 39px;
+}
+
+.badge span {
+    height: 25px;
+    width: 120px;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 1px #ccc;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+}
+.text1 {
+    font-size: 12px;
+    font-weight: 600;
+}
+.text2 {
+    color: #a5aec0;
+}
+.led-red {
+    width: 12px;
+    height: 12px;
+    background-color: #e3342f;
+    border-radius: 50%;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 1px #ccc;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+.led-green {
+    width: 12px;
+    height: 12px;
+    background-color: #38c172;
+    border-radius: 50%;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 1px #ccc;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+.led-blue {
+    width: 12px;
+    height: 12px;
+    background-color: #3490dc;
+    border-radius: 50%;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 1px #ccc;
+    box-shadow: 0px 0px 10px #ccc;
+}
+.btn-gradient {
+    width: 100%;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    background-size: 300% 100%;
+    border-radius: 5px;
+    transition: all 0.4s ease-in-out;
+    outline: none;
+    background-image: linear-gradient(
+        to right,
+        #f89f5b,
+        #e53d71,
+        #9d3488,
+        #66377f,
+        #3f1652
+    );
+    box-shadow: 0 4px 15px 0 #3f16523f;
+}

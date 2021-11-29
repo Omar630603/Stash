@@ -67,11 +67,9 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="{{  route('welcome.home')  }}">Home</a></li>
                                 <li><a href="{{  route('home')  }}">Profile</a></li>
+                                <li><a href="{{  route('user.orders')  }}">Orders</a></li>
                                 <li><a href="{{  route('user.category')  }}">Container</a></li>
-                                <li><a href="">Orders</a></li>
-
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->
@@ -130,8 +128,10 @@
             </nav>
 
             <main class="py-4" style="background: rgb(63,22,82);
-        background: linear-gradient(0deg, rgba(63,22,82,1) 10%, rgba(157,52,136,1) 40%, rgba(248,159,91,1) 80%);">
-                @yield('content')
+            background: linear-gradient(0deg, rgba(63,22,82,1) 10%, rgba(157,52,136,1) 40%, rgba(248,159,91,1) 80%);">
+                <div style="min-height: 400px">
+                    @yield('content')
+                </div>
                 <footer class="footer-16371">
                     <div class="container">
                         <div class="row justify-content-center">
@@ -142,7 +142,12 @@
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>
-
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.services') }}">Services</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.aboutus') }}">About Us</a>
+                                    </li>
+                                    <li><a style="color: #fff8e6" href="{{ route('welcome.contactus') }}">Contact Us</a>
+                                    </li>
                                 </ul>
                                 <div class="social mb-2">
                                     <h3 style="color: #fff8e6">Stay in touch</h3>
@@ -151,7 +156,6 @@
                                         <li class="fb"><a href="#"><span class="icon-facebook"></span></a></li>
                                         <li class="tw"><a href="#"><span class="icon-twitter"></span></a></li>
                                         <li class="pin"><a href="#"><span class="icon-pinterest"></span></a></li>
-                                        <li class="dr"><a href="#"><span class="icon-dribbble"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="copyright">

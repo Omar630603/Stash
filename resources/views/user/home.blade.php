@@ -40,9 +40,10 @@
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Your Profile :
-                        {{ Auth::user()->username }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Profile</a></li>
+                <li class="breadcrumb-item">Your Profile :
+                    {{ Auth::user()->username }}
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">Profile Information</li>
             </ol>
         </nav>
@@ -165,7 +166,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius: 10px;">
                         <form method="post" action="{{ route('customer.editBioData', $customer) }}"

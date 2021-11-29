@@ -251,6 +251,20 @@ class UserController extends Controller
             $transaction->save();
         }
         $message = 'Order has been made successfuly';
-        return redirect()->route('welcome.home')->with('success', $message);
+        $branch = Branch::where('ID_Branch', $unit->ID_Branch)->first();
+        return view('user.makeOrder.successOrder', [
+            'unit' => $unit, 'order' => $order,
+            'branch' => $branch
+        ])->with('success', $message);
+    }
+    public function orders()
+    {
+        $orders = Order::select('*')
+            ->join('units', 'units.ID_Unit', '=', 'orders.ID_Unit')
+            ->join('branches', 'units.ID_Branch', '=', 'branches.ID_Branch')
+            ->join('categories', 'units.ID_Category', '=', 'categories.ID_Category')
+            ->where('orders.ID_User', Auth::user()->ID_User)
+            ->orderBy('orders.created_at', 'desc')->get();
+        return view('user.orders', ['orders' => $orders]);
     }
 }

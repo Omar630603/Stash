@@ -1086,167 +1086,174 @@
                                             $orderCheck = $endsAt->diff($today);
                                             @endphp
                                             @if ($orderCheck->invert)
+                                            @if ($orderCheck->days>$interval->days )
                                             <div class="btn-sm btn-primary">
-                                                <h6 class="mb-0">Active: {{ $orderCheck->days }} @if ($orderCheck->days
-                                                    <= 1) Day @else Days @endif Left<i data-toggle="tooltip"
-                                                        title="Order Date Details"
-                                                        onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
-                                                        class="fas fa-arrow-down float-right"></i>
-                                                </h6>
-                                                <p class="mb-0" style="display: none; width: max-content"
-                                                    id="orderDateDetailsPositive{{$order->ID_Order}}">
-                                                    @if($interval->days ==
-                                                    0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$order->startsFrom}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$order->endsAt}}
-                                                    <small>The same day</small>
-                                                    @elseif($interval->m == 0 && $interval->y == 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->d}}@if ($interval->d == 1)
-                                                        Day
-                                                        @else
-                                                        Days
-                                                        @endif</small>
-                                                    @elseif($interval->y == 0 && $interval->m > 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->m}} months, {{$interval->d}} days</small>
-                                                    @elseif($interval->y > 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->y}} years, {{$interval->m}} months,
-                                                        {{$interval->d}}
-                                                        days</small>
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            @else
-                                            <div class="btn-sm btn-danger">
-                                                <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
-                                                    @if($orderCheck->days<= 1) Day @else Days @endif <i
-                                                        data-toggle="tooltip" title="Order Date Details"
-                                                        onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
-                                                        class="fas fa-arrow-down float-right"></i>
+                                                @else <div class="btn-sm btn-success"> @endif
+                                                    <h6 class="mb-0">@if ($orderCheck->days>$interval->days )
+                                                        Will start in {{$orderCheck->days - $interval->days }}
+                                                        @if($orderCheck->days -
+                                                        $interval->days <= 1) Day @else Days @endif @else Active:
+                                                            {{$orderCheck->days}}
+                                                            @if($orderCheck->days <= 1) Day @else Days @endif Left
+                                                                @endif<i data-toggle="tooltip"
+                                                                title="Order Date Details"
+                                                                onclick="$('#orderDateDetailsPositive{{$order->ID_Order}}').toggle('fast')"
+                                                                class="fas fa-arrow-down float-right"></i>
+                                                    </h6>
+                                                    <p class="mb-0" style="display: none; width: max-content"
+                                                        id="orderDateDetailsPositive{{$order->ID_Order}}">
+                                                        @if($interval->days ==
+                                                        0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$order->startsFrom}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$order->endsAt}}
+                                                        <small>The same day</small>
+                                                        @elseif($interval->m == 0 && $interval->y == 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->d}}@if ($interval->d == 1)
+                                                            Day
+                                                            @else
+                                                            Days
+                                                            @endif</small>
+                                                        @elseif($interval->y == 0 && $interval->m > 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                        @elseif($interval->y > 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->y}} years, {{$interval->m}} months,
+                                                            {{$interval->d}}
+                                                            days</small>
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                @else
+                                                <div class="btn-sm btn-danger">
+                                                    <h6 class="mb-0">Expaired: Exceeded {{ $orderCheck->days+1 }}
+                                                        @if($orderCheck->days<= 1) Day @else Days @endif <i
+                                                            data-toggle="tooltip" title="Order Date Details"
+                                                            onclick="$('#orderDateDetailsNegative{{$order->ID_Order}}').toggle('fast')"
+                                                            class="fas fa-arrow-down float-right"></i>
 
-                                                </h6>
-                                                <p class="mb-0" style="display: none; width: max-content"
-                                                    id="orderDateDetailsNegative{{$order->ID_Order}}">
-                                                    @if($interval->days == 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$order->startsFrom}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$order->endsAt}}
-                                                    <small>The same day</small>
-                                                    @elseif($interval->m == 0 && $interval->y == 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->d}} @if ($interval->d == 1)
-                                                        Day
-                                                        @else
-                                                        Days
-                                                        @endif </small>
-                                                    @elseif($interval->y == 0 && $interval->m > 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->m}} months, {{$interval->d}} days</small>
-                                                    @elseif($interval->y > 0)
-                                                    <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
-                                                        <small id="fromIcon{{$order->ID_Order}}"
-                                                            style="display: none">From:</small>
-                                                    </i>
-                                                    {{$startsFrom->format('Y-m-d')}}
-                                                    <br>
-                                                    <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
-                                                        class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
-                                                        <small id="untilIcon{{$order->ID_Order}}"
-                                                            style="display: none">Until:</small>
-                                                    </i>
-                                                    {{$endsAt->format('Y-m-d')}}
-                                                    <small>{{$interval->y}} years, {{$interval->m}} months,
-                                                        {{$interval->d}}
-                                                        days</small>
-                                                    @endif
-                                                </p>
+                                                    </h6>
+                                                    <p class="mb-0" style="display: none; width: max-content"
+                                                        id="orderDateDetailsNegative{{$order->ID_Order}}">
+                                                        @if($interval->days == 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$order->startsFrom}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$order->endsAt}}
+                                                        <small>The same day</small>
+                                                        @elseif($interval->m == 0 && $interval->y == 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->d}} @if ($interval->d == 1)
+                                                            Day
+                                                            @else
+                                                            Days
+                                                            @endif </small>
+                                                        @elseif($interval->y == 0 && $interval->m > 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->m}} months, {{$interval->d}} days</small>
+                                                        @elseif($interval->y > 0)
+                                                        <i onmouseover="$('#fromIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-down fromIcon" aria-hidden="true">
+                                                            <small id="fromIcon{{$order->ID_Order}}"
+                                                                style="display: none">From:</small>
+                                                        </i>
+                                                        {{$startsFrom->format('Y-m-d')}}
+                                                        <br>
+                                                        <i onmouseover="$('#untilIcon{{$order->ID_Order}}').toggle('fast');"
+                                                            class="fa fa-long-arrow-up fromIcon" aria-hidden="true">
+                                                            <small id="untilIcon{{$order->ID_Order}}"
+                                                                style="display: none">Until:</small>
+                                                        </i>
+                                                        {{$endsAt->format('Y-m-d')}}
+                                                        <small>{{$interval->y}} years, {{$interval->m}} months,
+                                                            {{$interval->d}}
+                                                            days</small>
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                @endif
                                             </div>
-                                            @endif
-                                        </div>
                                     </td>
                                     <td data-label="Has Delivery" class="column">
                                         @if ($order->order_deliveries <= 0) <p class="btn-sm btn-secondary">No
