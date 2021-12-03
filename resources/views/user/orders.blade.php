@@ -149,7 +149,8 @@
                                             capacity</span></span>
                                 </div>
                                 <div class="mt-3">
-                                    <button class="btn-gradient">Details</button>
+                                    <a href="{{ route('user.orderDetails', ['order'=>$order->ID_Order]) }}"
+                                        class="btn btn-gradient">Details</a>
                                 </div>
                             </div>
                         </div>

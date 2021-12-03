@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\BranchAccess;
 use App\Models\Bank;
 use App\Models\Branch;
 use App\Models\User;
@@ -266,5 +267,110 @@ class UserController extends Controller
             ->where('orders.ID_User', Auth::user()->ID_User)
             ->orderBy('orders.created_at', 'desc')->get();
         return view('user.orders', ['orders' => $orders]);
+    }
+    public function viewOrderDetails($order)
+    {
+        $order = Order::where('ID_order', $order)->first();
+        if (Auth::user()->ID_User == $order->ID_User) {
+            $unit = Unit::where('ID_Unit', $order->ID_Unit)
+                ->join('categories', 'categories.ID_Category', '=', 'units.ID_Category')->first();
+            $branch = Branch::where('ID_Branch', $unit->ID_Branch)->first();
+            $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
+                ->where('delivery_vehicles.ID_Branch', $branch->ID_Branch)
+                ->where('delivery_schedules.ID_Order', $order->ID_Order)
+                ->orderBy('delivery_schedules.created_at', 'desc')->get();
+            $transactions = Transactions::where('ID_Order', $order->ID_Order)
+                ->orderBy('transactions.created_at', 'desc')->get();
+            $banks = Bank::where('ID_Branch', $branch->ID_Branch)->get();
+
+            return view('user.orderDetails', [
+                'order' => $order,
+                'unit' => $unit,
+                'branch' => $branch,
+                'schedules' => $schedules,
+                'transactions' => $transactions,
+                'banks' => $banks
+            ]);
+        } else {
+            return redirect()->route('user.orders');
+        }
+    }
+    public function extendOrder(Request $request, Order $order)
+    {
+        $request->validate([
+            'expandPrice' => 'required',
+            'extendEndsAt' => 'required',
+        ]);
+        $order->order_totalPrice += $request->get('expandPrice');
+        $order->expandPrice += $request->get('expandPrice');
+        $order->endsAt = $request->get('extendEndsAt');
+        $transaction = new Transactions;
+        $transaction->transaction_madeBy = 0;
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $transaction->ID_Order = $order->ID_Order;
+        $transaction->transactions_totalPrice = $request->get('expandPrice');
+        $transaction->transactions_description = 'Extension Fees For Unit (' . $unit->unit_name . ')';
+        if ($request->get('transaction') == 1) {
+            if ($request->get('ID_Bank') == 0) {
+                $message = 'Select Bank';
+                return redirect()->back()->with('fail', $message);
+            } else {
+                $transaction->ID_Bank = $request->get('ID_Bank');
+            }
+            $transaction->transactions_status = 1;
+            if ($request->file('proof')) {
+                $image_name = $request->file('proof')->store('transactions_images', 'public');
+                $transaction->proof = $image_name;
+            } else {
+                $message = 'Add Proof';
+                return redirect()->back()->with('fail', $message);
+            }
+        } else {
+            $transaction->transactions_status = 0;
+            $transaction->proof = 'Waiting for Payment';
+        }
+        $transaction->save();
+        $order->save();
+        $message = 'Order has been extended successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function changeOrderDescription(Request $request, Order $order)
+    {
+        $request->validate([
+            'order_description' => 'required',
+        ]);
+        $order->order_description = $request->get('order_description');
+        $order->save();
+        $message = 'Order description has been changed successfuly';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteOrder(Order $order)
+    {
+        $user = User::where('ID_User', $order->ID_User)->first();
+        $user->ordered--;
+        $user->save();
+        $schedules = DeliverySchedule::where('ID_Order', $order->ID_Order)->get();
+        foreach ($schedules as $key) {
+            $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $key->ID_DeliveryVehicle)->first();
+            $driver->vehicle_deliveries--;
+            $driver->save();
+            $key->delete();
+        }
+        $transactions = Transactions::where('ID_Order', $order->ID_Order)->get();
+        foreach ($transactions as $key) {
+            if ($key->proof != 'Waiting for Payment') {
+                Storage::delete('public/' . $key->proof);
+            }
+            $key->delete();
+        }
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $unit->unit_status = false;
+        $unit->capacity = 0;
+        $unit->save();
+        $branchAccess = new BranchController;
+        $branchAccess->changePrivateKeyUnit($unit);
+        $order->delete();
+        $message = 'Order Has been Deleted';
+        return redirect()->route('user.orders')->with('success', $message);
     }
 }

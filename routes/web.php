@@ -43,7 +43,10 @@ Route::get('/OrderDetails', [UserController::class, 'makeOrderDetails'])->name('
 Route::post('/customer/addOrder', [UserController::class, 'addOrder'])->name('customer.addOrder')->middleware('UserAccess');
 //UserAccess//Orders
 Route::get('/user/orders', [UserController::class, 'orders'])->name('user.orders')->middleware('UserAccess');
-
+Route::get('/user/orders/viewOrderDetails/{order}', [UserController::class, 'viewOrderDetails'])->name('user.orderDetails')->middleware('UserAccess');
+Route::post('/user/orders/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('UserAccess');
+Route::post('/user/orders/changeOrderDescription/{order}', [UserController::class, 'changeOrderDescription'])->name('user.changeOrderDescription')->middleware('UserAccess');
+Route::delete('/user/orders/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
 
 //UserAccess//Categories
 Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category')->middleware('UserAccess');

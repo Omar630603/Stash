@@ -91,7 +91,8 @@
                             </p>
                         </div>
                     </div>
-                    <a data-toggle="tooltip" title="View Order Details" class="btn btn-dark">Details</a>
+                    <a href="{{ route('user.orderDetails', ['order'=>$order->ID_Order]) }}" data-toggle="tooltip"
+                        title="View Order Details" class="btn btn-dark">Details</a>
                 </div>
             </div>
         </div>
