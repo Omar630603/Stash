@@ -230,7 +230,7 @@
                     <div class="card mb-3" style="border-radius: 10px;">
                         <div class="card-body">
                             <div class="float-right"
-                                style="cursor: pointer; display: flex; align-items: center; margin-bottom: -100px">
+                                style="cursor: pointer; display: flex; align-items: stretch; margin-bottom: -100px; flex-direction: row-reverse; justify-content: space-between">
                                 <a class="float-right" style="text-decoration: none;cursor: pointer" onclick="$('#edit_loction').toggle('fast'); $('#branch-name-text').toggle('fast'); $('#branch-name').toggle('fast');
                                 $('#branch-city-text').toggle('fast'); $('#branch-city').toggle('fast');
                                 $('#branch-location-text').toggle('fast'); $('#branch-location').toggle('fast');
