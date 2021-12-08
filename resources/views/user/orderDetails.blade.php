@@ -39,6 +39,7 @@
         <nav aria-label="breadcrumb" class="main-breadcrumb" style="border-radius: 10px">
             <ol class="breadcrumb" style="background-color: #fff8e6; border-radius: 10px">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Profile</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('user.orders') }}">Orders</a></li>
                 <li class="breadcrumb-item">Your Order : {{ $unit->category_name }} Unit</li>
                 <li class="breadcrumb-item">Unit Name : {{ $unit->unit_name }}</li>
             </ol>

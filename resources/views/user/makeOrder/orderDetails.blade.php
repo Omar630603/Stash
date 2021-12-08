@@ -371,7 +371,11 @@
     function formatDate(date) {
         var hours = date.getHours();
         var minutes = date.getMinutes();
-        var days = date.getDate()+1;
+        if (date.getDate()==31) {
+            var days = 1
+        } else {
+            var days = date.getDate()+1;
+        }
         var months = date.getMonth()+1;
         var year = date.getFullYear();
         daysInMonth = new Date(year, months, 0).getDate();
@@ -381,7 +385,7 @@
         if (minutes < 10) {
             minutes = '0'+ minutes
         }
-        if (daysInMonth = 30) {
+        if (daysInMonth == 30) {
                 days = 1;
                 months++;
         }
@@ -390,6 +394,13 @@
         }
         if (months < 10) {
             months = '0'+ months
+        }
+        if (months == 13) {
+            months = 12;
+        }
+        if (date.getDate()==31 && months == 12) {
+            months ='01';
+            year++;
         }
         var strTime = hours + ':' + minutes;
         return year + "-" + months + "-" + days + "T" + strTime;
