@@ -26,9 +26,6 @@ class CreateUsersTable extends Migration
             $table->integer('ordered')->default(0);
             $table->rememberToken();
             $table->timestamps();
-            
-            
-            
         });
     }
 

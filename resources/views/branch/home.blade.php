@@ -229,21 +229,50 @@
                 <div class="col-md-8">
                     <div class="card mb-3" style="border-radius: 10px;">
                         <div class="card-body">
-                            <div class="float-right" style="cursor: pointer;">
-                                <a style="text-decoration: none;cursor: pointer" onclick="$('#edit_loction').toggle('fast'); $('#branch-name-text').toggle('fast'); $('#branch-name').toggle('fast');
+                            <div class="float-right"
+                                style="cursor: pointer; display: flex; align-items: center; margin-bottom: -100px">
+                                <a class="float-right" style="text-decoration: none;cursor: pointer" onclick="$('#edit_loction').toggle('fast'); $('#branch-name-text').toggle('fast'); $('#branch-name').toggle('fast');
                                 $('#branch-city-text').toggle('fast'); $('#branch-city').toggle('fast');
                                 $('#branch-location-text').toggle('fast'); $('#branch-location').toggle('fast');
                                 $('#btn-edit-branch').toggle('fast');
                                  return false;"><i class="fa fa-pencil-square-o icons" data-toggle="tooltip"
                                         title="Edit Branch" aria-hidden="true"></i></a>
+                                <div class="item" style="cursor: pointer;">
+                                    <img style="padding: 5px; border-radius: 50%" width="100px" class="img-fluid"
+                                        src="{{ asset('storage/' . $branch->branch_img) }}" alt="">
+                                    <div class="middle">
+                                        <div class="text">
+                                            <a data-toggle="tooltip" title="Change the branch image"
+                                                onclick="$('#branchImageInput').click(); return false;"><i
+                                                    class="far fa-edit"></i></a>
+                                            <a data-toggle="tooltip" title="Restore branch default image"
+                                                onclick="$('#restoreBranchImage').submit(); return false;">
+                                                <i class="fas fa-sync"></i></a>
+                                            <form id="branchImageForm" method="post" style="display: none;"
+                                                action="{{ route('branch.editImageBranch', $branch) }}"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <input id="branchImageInput" style="border: none"
+                                                    onchange="$('#branchImageForm').submit();" type="file" name="image">
+                                            </form>
+                                            <form style="display: none" method="POST"
+                                                action="{{ route('branch.defaultImageBranch', $branch) }}"
+                                                id="restoreBranchImage">
+                                                @csrf
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                             <div>
                                 <p>{{ $branch->branch_name }} Branch Information</p>
                             </div>
                             <form method="post" action="{{ route('branch.editBranch', $branch) }}"
                                 enctype="multipart/form-data">
                                 @csrf
-                                <div class="row" style="margin-top: 35px">
+                                <div class="row" style="margin-top: 35px;">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0"><strong>Branch name</strong></h6>
                                     </div>

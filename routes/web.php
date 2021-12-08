@@ -57,7 +57,8 @@ Route::post('/branch/editBioData/{branchEmployee}', [BranchController::class, 'e
 Route::put('/branch/editImage/{branchEmployee}', [BranchController::class, 'editBranchEmployeeImage'])->name('branch.editImage')->middleware('BranchAccess');
 Route::post('/branch/defaultImage/{branchEmployee}', [BranchController::class, 'editBranchEmployeeImageDefult'])->name('branch.defaultImage')->middleware('BranchAccess');
 Route::post('/branch/editBranch/{branch}', [BranchController::class, 'editBranch'])->name('branch.editBranch')->middleware('BranchAccess');
-
+Route::put('/branch/editImageBranch/{branch}', [BranchController::class, 'editBranchImage'])->name('branch.editImageBranch')->middleware('BranchAccess');
+Route::post('/branch/defaultImageBranch/{branch}', [BranchController::class, 'editBranchImageDefult'])->name('branch.defaultImageBranch')->middleware('BranchAccess');
 //BranchAccess//Categories
 Route::get('/branch/categories', [BranchController::class, 'showCategories'])->name('branch.category')->middleware('BranchAccess');
 Route::post('/branch/categories/addUnit', [BranchController::class, 'addUnit'])->name('branch.addUnit')->middleware('BranchAccess');

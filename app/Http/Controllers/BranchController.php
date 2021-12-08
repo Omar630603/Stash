@@ -62,7 +62,7 @@ class BranchController extends Controller
         }
         $branchEmployee->user_img = $image_name;
         $branchEmployee->save();
-        $message = 'Branch Image has changed Successfully';
+        $message = 'Branch Employee Image has changed Successfully';
         return redirect()->back()->with('success', $message);
     }
     public function editBranchEmployeeImageDefult(User $branchEmployee)
@@ -72,7 +72,7 @@ class BranchController extends Controller
         }
         $branchEmployee->user_img = 'User_images/userDefault.png';
         $branchEmployee->save();
-        $message = 'Branch Default Image Returend Successfully';
+        $message = 'Branch Employee Default Image Returend Successfully';
         return redirect()->back()->with('success', $message);
     }
     public function editBranch(Request $request, Branch $branch)
@@ -89,7 +89,34 @@ class BranchController extends Controller
         $message = 'Branch Data has been edited';
         return redirect()->back()->with('success', $message);
     }
-
+    public function editBranchImage(Request $request, Branch $branch)
+    {
+        if ($branch->branch_img == "Branch_images/branchDefault.png") {
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('Branch_images', 'public');
+            }
+            $branch->branch_img = $image_name;
+        } else {
+            Storage::delete('public/' . $branch->branch_img);
+            if ($request->file('image')) {
+                $image_name = $request->file('image')->store('Branch_images', 'public');
+            }
+        }
+        $branch->branch_img = $image_name;
+        $branch->save();
+        $message = 'Branch Image has changed Successfully';
+        return redirect()->back()->with('success', $message);
+    }
+    public function editBranchImageDefult(Branch $branch)
+    {
+        if ($branch->branch_img != "Branch_images/branchDefault.png") {
+            Storage::delete('public/' . $branch->branch_img);
+        }
+        $branch->branch_img = 'Branch_images/branchDefault.png';
+        $branch->save();
+        $message = 'Branch Default Image Returend Successfully';
+        return redirect()->back()->with('success', $message);
+    }
     //Branch Category Page
     public function showCategories()
     {

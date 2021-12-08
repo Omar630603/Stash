@@ -20,6 +20,7 @@ class CreateBranchesTable extends Migration
             $table->string('branch_name');
             $table->string('city');
             $table->string('branch_address');
+            $table->string('branch_img')->default('Branch_images/branchDefault.png');
             $table->timestamps();
         });
     }
