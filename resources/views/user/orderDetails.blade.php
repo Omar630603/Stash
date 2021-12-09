@@ -997,10 +997,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card p-3 mb-2" style="background-color: #3F1652; color: #F89F5B">
-                                <div data-toggle="modal" data-target="#makeDelivery"
-                                    class="d-flex justify-content-center" style="cursor: pointer;">
-                                    <h6 class="m-0" data-toggle="tooltip"
-                                        title="Click me! to add deliveries for your unit">
+                                <div class="d-flex justify-content-center">
+                                    <h6 class="m-0">
                                         Transaction</h6>
                                 </div>
                             </div>
