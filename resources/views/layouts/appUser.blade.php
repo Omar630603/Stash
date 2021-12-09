@@ -69,7 +69,6 @@
                             <ul class="navbar-nav m-auto">
                                 <li><a href="{{  route('home')  }}">Profile</a></li>
                                 <li><a href="{{  route('user.orders')  }}">Orders</a></li>
-                                <li><a href="{{  route('user.category')  }}">Container</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->

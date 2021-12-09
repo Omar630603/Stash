@@ -263,7 +263,7 @@
                                         <option value="{{$vehicle->ID_DeliveryVehicle}}|{{$vehicle->pricePerK}}">
                                             {{$vehicleNo++}}-
                                             @ Name: {{$vehicle->vehicle_name}}
-                                            - Modal: {{$vehicle->model}}
+                                            - Model: {{$vehicle->model}}
                                             - Price: {{$vehicle->pricePerK}}
                                         </option>
                                         @endforeach

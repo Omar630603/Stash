@@ -115,3 +115,25 @@
     );
     box-shadow: 0 4px 15px 0 #3f16523f;
 }
+.dots {
+    height: 5px; /*to control the overall height*/
+    margin: 50px;
+    background-image: repeating-linear-gradient(
+        to right,
+        transparent,
+        transparent 5px,
+        rgb(236, 236, 236) 50px,
+        rgb(255, 255, 255) 40px
+    ); /*then 5px of blue */
+    background-size: 200% 100%;
+    animation: change 10s linear infinite;
+}
+
+@keyframes change {
+    from {
+        background-position: right;
+    }
+    to {
+        background-position: left;
+    }
+}

@@ -5,7 +5,6 @@ use App\Http\Controllers\DeliveryVehicleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
-use App\Models\DeliveryVehicle;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -47,9 +46,8 @@ Route::get('/user/orders/viewOrderDetails/{order}', [UserController::class, 'vie
 Route::post('/user/orders/extendOrder/{order}', [UserController::class, 'extendOrder'])->name('user.extendOrder')->middleware('UserAccess');
 Route::post('/user/orders/changeOrderDescription/{order}', [UserController::class, 'changeOrderDescription'])->name('user.changeOrderDescription')->middleware('UserAccess');
 Route::delete('/user/orders/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
-
-//UserAccess//Categories
-Route::get('/user/categories', [UserController::class, 'showCategories'])->name('user.category')->middleware('UserAccess');
+Route::post('/user/orders/addSchedule', [UserController::class, 'addSchedule'])->name('user.addSchedule')->middleware('UserAccess');
+Route::delete('/user/orders/deleteSchedule/{schedule}', [UserController::class, 'deleteSchedule'])->name('user.deleteSchedule')->middleware('UserAccess');
 
 //BranchAccess//Home
 Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');

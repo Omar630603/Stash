@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\BranchAccess;
 use App\Models\Bank;
 use App\Models\Branch;
 use App\Models\User;
@@ -25,15 +24,6 @@ class UserController extends Controller
         $customer = Auth::user();
         return view('user.home', ['customer' => $customer]);
     }
-    //User Categories
-    public function showCategories()
-    {
-        $categories = Category::all();
-        $branches = Branch::all();
-        $units = Unit::all();
-        return view('user.categories', ['categories' => $categories, 'units' => $units, 'branches' => $branches]);
-    }
-
 
     public function editCustomer(Request $request, User $customer)
     {
@@ -274,7 +264,8 @@ class UserController extends Controller
         if (Auth::user()->ID_User == $order->ID_User) {
             $unit = Unit::where('ID_Unit', $order->ID_Unit)
                 ->join('categories', 'categories.ID_Category', '=', 'units.ID_Category')->first();
-            $branch = Branch::where('ID_Branch', $unit->ID_Branch)->first();
+            $branch = Branch::where('ID_Branch', $unit->ID_Branch)
+                ->join('users', 'users.ID_User', '=', 'branches.ID_User')->first();
             $schedules = DeliverySchedule::Join('delivery_vehicles', 'delivery_schedules.ID_DeliveryVehicle', '=', 'delivery_vehicles.ID_DeliveryVehicle')
                 ->where('delivery_vehicles.ID_Branch', $branch->ID_Branch)
                 ->where('delivery_schedules.ID_Order', $order->ID_Order)
@@ -282,6 +273,7 @@ class UserController extends Controller
             $transactions = Transactions::where('ID_Order', $order->ID_Order)
                 ->orderBy('transactions.created_at', 'desc')->get();
             $banks = Bank::where('ID_Branch', $branch->ID_Branch)->get();
+            $vehicles = DeliveryVehicle::where('ID_Branch', $unit->ID_Branch)->get();
 
             return view('user.orderDetails', [
                 'order' => $order,
@@ -289,7 +281,8 @@ class UserController extends Controller
                 'branch' => $branch,
                 'schedules' => $schedules,
                 'transactions' => $transactions,
-                'banks' => $banks
+                'banks' => $banks,
+                'vehicles' => $vehicles,
             ]);
         } else {
             return redirect()->route('user.orders');
@@ -372,5 +365,97 @@ class UserController extends Controller
         $order->delete();
         $message = 'Order Has been Deleted';
         return redirect()->route('user.orders')->with('success', $message);
+    }
+    public function addSchedule(Request $request)
+    {
+        $request->validate([
+            'pickedUpFrom' => 'required',
+            'deliveredTo' => 'required',
+            'ID_DeliveryVehicle' => 'required',
+            'description_type' => 'required',
+            'pickedUp' => 'required',
+            'delivered' => 'required',
+        ]);
+        $schedule = new DeliverySchedule();
+        if (!$request->get('ID_Order')) {
+            $message = 'Add Order';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->ID_Order = $request->get('ID_Order');
+        if (!$request->get('ID_DeliveryVehicle')) {
+            $message = 'Add Vehicle';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->ID_DeliveryVehicle = $request->get('ID_DeliveryVehicle');
+        $schedule->schedule_status = $request->get('status');
+        $schedule->schedule_description = $request->get('description_type') . ': ' . $request->get('description_note');
+        if (!$request->get('pickedUpFrom') || !$request->get('deliveredTo')) {
+            $message = 'Add Trip Detials';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->pickedUpFrom = $request->get('pickedUpFrom');
+        $schedule->deliveredTo = $request->get('deliveredTo');
+        if (!$request->get('pickedUp') || !$request->get('delivered')) {
+            $message = 'Add Trip Date Detials';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->pickedUp = $request->get('pickedUp');
+        $schedule->delivered = $request->get('delivered');
+        if (!$request->get('totalPrice')) {
+            $message = 'Add Price';
+            return redirect()->back()->with('fail', $message);
+        }
+        $schedule->schedule_totalPrice = $request->get('totalPrice');
+        $schedule->save();
+
+        $order = Order::where('ID_Order', $request->get('ID_Order'))->first();
+        $order->order_totalPrice += $request->get('totalPrice');
+        $order->order_deliveries++;
+        $order->save();
+
+        $transaction = new Transactions;
+        $transaction->ID_Order = $order->ID_Order;
+        $transaction->transaction_madeBy = 0;
+        $unit = Unit::where('ID_Unit', $order->ID_Unit)->first();
+        $transaction->transactions_description = 'Delivery: ' . $request->get('description_type') . '. For Unit (' . $unit->unit_name . ')';
+        $transaction->transactions_totalPrice = $request->get('totalPrice');
+        if ($request->get('transaction') == 1) {
+            if ($request->get('ID_Bank') == 0) {
+                $message = 'Select Bank';
+                return redirect()->back()->with('fail', $message);
+            } else {
+                $transaction->ID_Bank = $request->get('ID_Bank');
+            }
+            $transaction->transactions_status = 1;
+            if ($request->file('proof')) {
+                $image_name = $request->file('proof')->store('transactions_images', 'public');
+                $transaction->proof = $image_name;
+            } else {
+                $message = 'Add Proof';
+                return redirect()->back()->with('fail', $message);
+            }
+            $transaction->save();
+        } else {
+            $transaction->transactions_status = 0;
+            $transaction->proof = 'Waiting for Payment';
+            $transaction->save();
+        }
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $request->get('ID_DeliveryVehicle'))->first();
+        $driver->vehicle_deliveries++;
+        $driver->save();
+        $message = 'New Schedule Has been Added';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteSchedule(DeliverySchedule $schedule)
+    {
+        $driver = DeliveryVehicle::where('ID_DeliveryVehicle', $schedule->ID_DeliveryVehicle)->first();
+        $driver->vehicle_deliveries--;
+        $driver->save();
+        $order = Order::where('ID_Order', $schedule->ID_Order)->first();
+        $order->order_deliveries--;
+        $order->save();
+        $schedule->delete();
+        $message = 'Schedule Has been Deleted';
+        return redirect()->back()->with('success', $message);
     }
 }
