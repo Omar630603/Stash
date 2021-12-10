@@ -458,4 +458,49 @@ class UserController extends Controller
         $message = 'Schedule Has been Deleted';
         return redirect()->back()->with('success', $message);
     }
+    public function payTransaction(Request $request, Transactions $transaction)
+    {
+        if ($request->get('ID_Bank') == 0) {
+            $message = 'Select Bank';
+            return redirect()->back()->with('fail', $message);
+        } else {
+            $transaction->ID_Bank = $request->get('ID_Bank');
+        }
+        $transaction->transactions_status = 1;
+        if ($request->file('proof')) {
+            $image_name = $request->file('proof')->store('transactions_images', 'public');
+            $transaction->proof = $image_name;
+        } else {
+            $message = 'Add Proof';
+            return redirect()->back()->with('fail', $message);
+        }
+        $transaction->save();
+        $message = 'Transaction ' . $transaction->transactions_description . '  Has been Paied';
+        return redirect()->back()->with('success', $message);
+    }
+    public function deleteTransaction(Request $request, Transactions $transaction)
+    {
+        $request->validate([
+            'deleteTransactionType' => 'required',
+        ]);
+        $order = Order::where('ID_Order', $transaction->ID_Order)->first();
+        if ($request->get('deleteTransactionType') == 1) {
+            Storage::delete('public/' . $transaction->proof);
+            $order->order_totalPrice -= $transaction->transactions_totalPrice;
+            $transaction->transactions_status = 4;
+            $order->save();
+            $transaction->save();
+            $message = 'Transaction ' . $transaction->transactions_description . '  Has been Deleted';
+        } elseif ($request->get('deleteTransactionType') == 2) {
+            $transaction->ID_Bank = null;
+            $transaction->transactions_status = 0;
+            $order->order_totalPrice += $transaction->transactions_totalPrice;
+            $order->save();
+            Storage::delete('public/' . $transaction->proof);
+            $transaction->proof = 'Waiting for Payment';
+            $transaction->save();
+            $message = 'Transaction ' . $transaction->transactions_description . '  Has Returen to Unpaid status';
+        }
+        return redirect()->back()->with('success', $message);
+    }
 }

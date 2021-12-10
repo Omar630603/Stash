@@ -48,7 +48,8 @@ Route::post('/user/orders/changeOrderDescription/{order}', [UserController::clas
 Route::delete('/user/orders/deleteOrder/{order}', [UserController::class, 'deleteOrder'])->name('user.deleteOrder')->middleware('UserAccess');
 Route::post('/user/orders/addSchedule', [UserController::class, 'addSchedule'])->name('user.addSchedule')->middleware('UserAccess');
 Route::delete('/user/orders/deleteSchedule/{schedule}', [UserController::class, 'deleteSchedule'])->name('user.deleteSchedule')->middleware('UserAccess');
-
+Route::post('/user/orders/order/payTransaction/{transaction}', [UserController::class, 'payTransaction'])->name('user.payTransaction')->middleware('UserAccess');
+Route::post('/user/orders/order/deleteTransaction/{transaction}', [UserController::class, 'deleteTransaction'])->name('user.deleteTransaction')->middleware('UserAccess');
 //BranchAccess//Home
 Route::get('/branch/home', [BranchController::class, 'index'])->name('branch.home')->middleware('BranchAccess');
 Route::post('/branch/editBioData/{branchEmployee}', [BranchController::class, 'editBranchEmployee'])->name('branch.editBioData')->middleware('BranchAccess');

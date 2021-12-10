@@ -46,6 +46,42 @@
         </nav>
     </div>
     <div class="container">
+        @php
+        $status_unpaid = 0;
+        $status_paid = 0;
+        $status_disapproved = 0;
+        $status_approved = 0;
+        $status_deleted = 0;
+        $amount=0;
+        @endphp
+        @foreach ($transactions as $transaction)
+        @if ($transaction->ID_Order == $order->ID_Order &&
+        $transaction->transactions_status==0)
+        @php
+        $status_unpaid++;$amount++;
+        @endphp
+        @elseif ($transaction->ID_Order == $order->ID_Order &&
+        $transaction->transactions_status==1)
+        @php
+        $status_paid++;$amount++;
+        @endphp
+        @elseif ($transaction->ID_Order == $order->ID_Order &&
+        $transaction->transactions_status==2)
+        @php
+        $status_disapproved++;$amount++;
+        @endphp
+        @elseif ($transaction->ID_Order == $order->ID_Order &&
+        $transaction->transactions_status==3)
+        @php
+        $status_approved++;$amount++;
+        @endphp
+        @elseif ($transaction->ID_Order == $order->ID_Order &&
+        $transaction->transactions_status==4)
+        @php
+        $status_deleted++;$amount++;
+        @endphp
+        @endif
+        @endforeach
         <div class="card" style="border-radius:10px;">
             <div class="card-body">
                 <h6 class="mb-0"><strong>Order Details</strong></h6>
@@ -500,7 +536,7 @@
                                         class="form-control" id="privateKey{{$unit->ID_Unit}}">
                                     <div style="display: flex;gap: 5px; margin-top: 5px">
                                         <input class="form-check-input" style="margin-top: 5px" type="checkbox"
-                                            onclick="showPrivateKey({{$unit->ID_Unit}})">
+                                            onclick="showPrivateKey({{$unit->ID_Unit}}, {{$amount}}, {{$status_unpaid}}, {{$status_paid}}, {{$status_disapproved}}, {{$status_approved}},{{$status_deleted}})">
                                         <p class="form-check-label">Show Key</p>
                                     </div>
                                 </div>
@@ -752,7 +788,7 @@
                                 </div>
                             </div>
                             @if (count($schedules)>0)
-                            <div class="pl-2 pr-2" style="overflow-y:scroll; height:420px;">
+                            <div class="pl-2 pr-2 pb-2" style="overflow-y:scroll; height:420px;">
                                 @foreach ($schedules as $schedule)
                                 <div class="card p-3 mt-2"
                                     style="background-color: #ffffff; box-shadow: 0 0 10px 1px rgba(41, 41, 41, 0.507);">
@@ -1002,6 +1038,290 @@
                                         Transaction</h6>
                                 </div>
                             </div>
+                            @if (count($transactions)>0)
+                            <div class="pl-2 pr-2 pb-2" style="overflow-y:scroll; height:420px;">
+                                @foreach ($transactions as $transaction)
+                                <div class="card p-3 mt-2"
+                                    style="background-color: #ffffff; box-shadow: 0 0 10px 1px rgba(41, 41, 41, 0.507);">
+                                    <div class="justify-content-between">
+                                        @if ($transaction->transactions_status == 0 )
+                                        <p class="btn-sm btn-warning m-0">Unpaid</p>
+                                        @elseif ($transaction->transactions_status == 1 )
+                                        <p class="btn-sm btn-dark m-0">Paid</p>
+                                        @elseif ($transaction->transactions_status == 2 )
+                                        <p class="btn-sm btn-danger m-0">Disapproved</p>
+                                        @elseif ($transaction->transactions_status == 3 )
+                                        <p class="btn-sm btn-success m-0">Approved</p>
+                                        @elseif ($transaction->transactions_status == 4 )
+                                        <p class="btn-sm btn-secondary m-0">Deleted</p>
+                                        @endif
+                                    </div>
+                                    <div class="p-2" style="border-radius: 10px;">
+                                        <i style="color: #1f7e07" data-placement="left" data-toggle="tooltip"
+                                            title="Transaction Bank" class="fas fa-bank"></i>
+                                        @if ($transaction->ID_Bank == Null)No bank (not paid yet)
+                                        @else
+                                        @foreach ($banks as $bank)
+                                        @if ($transaction->ID_Bank == $bank->ID_Bank){{$bank->bank_name}} -
+                                        {{$bank->accountNo}}
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                        <i data-toggle="tooltip" title="Rp.{{$transaction->transactions_totalPrice}}"
+                                            class="float-right fas fa-money-bill-wave" style="color: #3aa537"></i>
+                                        <br>
+                                        <i style="color: #0077e7" data-placement="left" data-toggle="tooltip"
+                                            title="Transaction Date" class="fas fa-calendar" aria-hidden="true"></i>
+                                        {{$transaction->created_at}}
+                                        @if ($transaction->transaction_madeBy)
+                                        <i data-toggle="tooltip" title="Transaction Made By Branch"
+                                            class="noUse-hover float-right far fa-building"></i>
+                                        @else
+                                        <i data-toggle="tooltip" title="Transaction Made By You"
+                                            class="refresh-hover float-right fas fa-user-tag"></i>
+                                        @endif
+                                    </div>
+                                    <div data-label="Description" class="column">
+                                        <p class="btn-sm btn-light mb-1">{{$transaction->transactions_description}}</p>
+                                    </div>
+                                    <div style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end">
+                                        @if ($transaction->transactions_status == 0)
+                                        <a data-toggle="modal"
+                                            data-target="#payTransaction{{$transaction->ID_Transaction}}"
+                                            style="text-decoration: none;cursor: pointer">
+                                            <i data-toggle="tooltip" title="Pay" class="use-hover fas fa-receipt icons"
+                                                aria-hidden="true"></i>
+                                        </a>
+                                        @elseif ($transaction->transactions_status == 1)
+                                        <a target="_blank" rel="noopener noreferrer"
+                                            href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                            title="View Proof" style="text-decoration: none;cursor: pointer">
+                                            <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                        </a>
+                                        @elseif ($transaction->transactions_status == 2)
+                                        <a target="_blank" rel="noopener noreferrer"
+                                            href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                            title="View Proof" style="text-decoration: none;cursor: pointer">
+                                            <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                        </a>
+                                        @elseif ($transaction->transactions_status == 3)
+                                        <a target="_blank" rel="noopener noreferrer"
+                                            href="{{ asset('storage/'.$transaction->proof) }}" data-toggle="tooltip"
+                                            title="View Proof" style="text-decoration: none;cursor: pointer">
+                                            <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
+                                        </a>
+                                        @endif
+                                        @if ($transaction->transactions_status == 4)
+                                        <a data-toggle="modal"
+                                            data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
+                                            style="text-decoration: none;cursor: pointer">
+                                            <i data-toggle="tooltip" title="Return To Unpaid Transaction"
+                                                class="refresh-hover fas fa-sync icons"></i>
+                                        </a>
+                                        @else
+                                        <a data-toggle="modal"
+                                            data-target="#deleteTransaction{{$transaction->ID_Transaction}}"
+                                            style="text-decoration: none;cursor: pointer">
+                                            <i data-toggle="tooltip" title="Delete Transaction"
+                                                class="delete-hover far fa-trash-alt icons"></i>
+                                        </a>
+                                        @endif
+                                        <div class="modal fade" id="payTransaction{{$transaction->ID_Transaction}}"
+                                            tabindex="-1" role="dialog"
+                                            aria-labelledby="payTransaction{{$transaction->transactions_description}}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="justify-content: center">
+                                                        <h5 class="modal-title"
+                                                            id="payTransaction{{$transaction->ID_Transaction}}Title">
+                                                            Pay: {{$transaction->transactions_description}}
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="alert-success"
+                                                            style="padding: 10px; border-radius: 10px">
+                                                            <form
+                                                                action="{{ route('user.payTransaction', $transaction) }}"
+                                                                id="payTransaction{{$transaction->ID_Transaction}}Form"
+                                                                enctype="multipart/form-data" method="POST">
+                                                                @csrf
+                                                                <p>
+                                                                    <center><strong>!! This Will Pay The Order
+                                                                            {{$transaction->transactions_description}}!!</strong>
+                                                                        <br>Choose Payment Bank And Upload The Payment
+                                                                        Proof.
+                                                                        Then Click Pay to Continue
+                                                                        the Process
+                                                                    </center>
+                                                                </p>
+
+                                                                <div class="container headerOrder"
+                                                                    style="text-align: left">
+                                                                    <div class="container">
+                                                                        <div>
+                                                                            <label for="capacity"><strong>Pay Order
+                                                                                    {{$transaction->transactions_description}}
+                                                                                    <small>(This will add the
+                                                                                        payment details for
+                                                                                        the
+                                                                                        extension transaction with
+                                                                                        price:
+                                                                                        {{$transaction->transactions_totalPrice}})</small>
+                                                                                </strong></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="container" style="padding: 10px 15px"
+                                                                    id="addPaymentforTransaction{{$transaction->ID_Transaction}}">
+                                                                    <div class="headerOrder row">
+                                                                        <div class="form-group" style="margin: 10px 0">
+                                                                            <select name="ID_Bank" style="width: 100%"
+                                                                                class="select2">
+                                                                                <option value="0">Select Bank
+                                                                                </option>
+                                                                                @php
+                                                                                $bankNo = 1;
+                                                                                @endphp
+                                                                                @foreach ($banks as $bank)
+                                                                                <option value="{{$bank->ID_Bank}}">
+                                                                                    {{$bankNo++}}- (
+                                                                                    {{$bank->bank_name}} )
+                                                                                    -
+                                                                                    @ {{$bank->accountNo}}
+                                                                                </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div style="margin: 10px 0">
+                                                                            <a style="width: 100%;"
+                                                                                onclick="$('#proofInputImageTransaction{{$transaction->ID_Transaction}}').click(); return false;"
+                                                                                class="btn btn-sm btn-outline-success">Add
+                                                                                Payment Proof</a>
+                                                                            <input
+                                                                                onchange="showPaymentProof({{$transaction->ID_Transaction}})"
+                                                                                id="proofInputImageTransaction{{$transaction->ID_Transaction}}"
+                                                                                style="display: none;" type="file"
+                                                                                name="proof">
+                                                                            <input
+                                                                                style="display: none; margin-top: 5px; text-align: center; width: 100%"
+                                                                                disabled style="display: none"
+                                                                                id="proofPhotoTransaction{{$transaction->ID_Transaction}}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button
+                                                            onclick="$('#payTransaction{{$transaction->ID_Transaction}}Form').submit();"
+                                                            type="button"
+                                                            class="btn btn-sm btn-outline-success">Pay</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="deleteTransaction{{$transaction->ID_Transaction}}"
+                                            tabindex="-1" role="dialog"
+                                            aria-labelledby="deleteTransaction{{$transaction->transactions_description}}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="justify-content: center">
+                                                        <h5 class="modal-title"
+                                                            id="deleteTransaction{{$transaction->ID_Transaction}}Title">
+                                                            Delete: {{$transaction->transactions_description}}
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="alert-danger"
+                                                            style="padding: 10px; border-radius: 10px">
+                                                            <form
+                                                                action="{{ route('user.deleteTransaction', $transaction) }}"
+                                                                id="deleteTransaction{{$transaction->ID_Transaction}}Form"
+                                                                enctype="multipart/form-data" method="POST">
+                                                                @csrf
+                                                                <p>
+                                                                    <center><strong>!! This Will Delete The Order
+                                                                            {{$transaction->transactions_description}}!!</strong>
+                                                                        <br>Click Delete to Continue
+                                                                        the Process
+                                                                    </center>
+                                                                </p>
+                                                                <div class="form-check" style="margin-bottom: 10px">
+                                                                    @if ($transaction->transactions_status == 0)
+                                                                    <div>
+                                                                        <input checked name="deleteTransactionType"
+                                                                            class="checkDeleteType form-check-input"
+                                                                            type="checkbox" value="1">
+                                                                        <label class="form-check-label"
+                                                                            for="flexCheckDefault">
+                                                                            Delete The Transaction Completely
+                                                                        </label>
+                                                                    </div>
+                                                                    @elseif ($transaction->transactions_status == 4)
+                                                                    <div>
+                                                                        <input checked name="deleteTransactionType"
+                                                                            class="checkDeleteType form-check-input"
+                                                                            type="checkbox" value="2">
+                                                                        <label class="form-check-label"
+                                                                            for="flexCheckDefault">
+                                                                            Return The Transaction To Unpaid Status
+                                                                        </label>
+                                                                    </div>
+                                                                    @else
+                                                                    <div>
+                                                                        <input name="deleteTransactionType"
+                                                                            class="checkDeleteType form-check-input"
+                                                                            type="checkbox" value="1">
+                                                                        <label class="form-check-label"
+                                                                            for="flexCheckDefault">
+                                                                            Delete The Transaction Completely
+                                                                        </label>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input checked name="deleteTransactionType"
+                                                                            class="checkDeleteType form-check-input"
+                                                                            type="checkbox" value="2">
+                                                                        <label class="form-check-label"
+                                                                            for="flexCheckDefault">
+                                                                            Return The Transaction To Unpaid Status
+                                                                        </label>
+                                                                    </div>
+                                                                    @endif
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button
+                                                            onclick="$('#deleteTransaction{{$transaction->ID_Transaction}}Form').submit();"
+                                                            type="button" class="btn btn-sm btn-outline-danger">
+                                                            @if($transaction->transactions_status == 4)
+                                                            Return
+                                                            @else
+                                                            Delete
+                                                            @endIf</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @else
+                                <div class="card p-3 mt-1" style="background-color: #f0f0f0">
+                                    <div class="d-flex justify-content-between" style="flex-direction: column">
+                                        <h6 class="m-0">You don't have transactions on this order yet</h6>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1011,7 +1331,13 @@
 </div>
 <div>
     <script>
-        + function($) {
+        function showPaymentProof(id) {
+        var proofInputImageTransaction = document.getElementById('proofInputImageTransaction'+id);
+        var proofPhotoTransaction = document.getElementById('proofPhotoTransaction'+id);
+        proofPhotoTransaction.style.display = '';
+        proofPhotoTransaction.value = 'File Name:' + proofInputImageTransaction.files[0].name;
+    }
+    + function($) {
     'use strict';
     var proofInputImage = document.getElementById('proofInputImage');
     var proofPhoto = document.getElementById('proofPhoto');
@@ -1038,6 +1364,9 @@
         });
         $('.checkPaymentDelivey').click(function() {
             $('.checkPaymentDelivey').not(this).prop('checked', false);
+        });
+        $('.checkDeleteType').click(function() {
+            $('.checkDeleteType').not(this).prop('checked', false);
         });
     });
     $(".select2").select2({
@@ -1132,12 +1461,31 @@
             $('#addToUnitOption').prop('checked', false);
         }
     }
-    function showPrivateKey(id) {
+    function showPrivateKey(id, amount, status_unpaid, status_paid, status_disapproved, status_approved, status_deleted) {
       var x = document.getElementById("privateKey"+id);
-      if (x.type === "password") {
-        x.type = "text";
+      if (status_approved == amount) {
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
       } else {
-        x.type = "password";
+        var newLine = "\r\n"
+        var msg = "You have some transaction that are not approved yet."
+            msg += newLine;
+            msg += "Total Transactions for this unit = "+amount;
+            msg += newLine;
+            msg += "Total Paid Transactions for this unit = "+status_paid;
+            msg+= newLine;
+            msg += "Total Unpaid Transactions for this unit = "+status_unpaid;
+            msg+= newLine;
+            msg += "Total Disapproved Transactions for this unit = "+status_disapproved;
+            msg+= newLine;
+            msg += "Total Approved Transactions for this unit = "+status_approved;
+            msg+= newLine;
+            msg += "Total Deleted Transactions for this unit = "+status_deleted;
+            msg+= newLine;
+            alert(msg);
       }
     }
     </script>
