@@ -47,6 +47,12 @@
             </ol>
         </nav>
     </div>
+    <div class="chooseCityContainer" style="min-height: 0; padding: 5px; margin: 5px 20px">
+        <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                aria-valuemax="100" style="width: 100%">100%</div>
+        </div>
+    </div>
     <div class="chooseCityContainer" style="align-items: center">
         <center>
             <h1>Congratulations</h1>

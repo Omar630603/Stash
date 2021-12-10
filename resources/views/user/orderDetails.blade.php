@@ -535,7 +535,8 @@
                                     <input disabled style="width: 50%" type="password" value="{{$unit->privateKey}}"
                                         class="form-control" id="privateKey{{$unit->ID_Unit}}">
                                     <div style="display: flex;gap: 5px; margin-top: 5px">
-                                        <input class="form-check-input" style="margin-top: 5px" type="checkbox"
+                                        <input class="showPassword form-check-input" style="margin-top: 5px"
+                                            type="checkbox"
                                             onclick="showPrivateKey({{$unit->ID_Unit}}, {{$amount}}, {{$status_unpaid}}, {{$status_paid}}, {{$status_disapproved}}, {{$status_approved}},{{$status_deleted}})">
                                         <p class="form-check-label">Show Key</p>
                                     </div>
@@ -1463,7 +1464,7 @@
     }
     function showPrivateKey(id, amount, status_unpaid, status_paid, status_disapproved, status_approved, status_deleted) {
       var x = document.getElementById("privateKey"+id);
-      if (status_approved == amount) {
+      if (status_approved == amount && status_approved > 0) {
         if (x.type === "password") {
             x.type = "text";
         } else {
@@ -1475,17 +1476,28 @@
             msg += newLine;
             msg += "Total Transactions for this unit = "+amount;
             msg += newLine;
-            msg += "Total Paid Transactions for this unit = "+status_paid;
-            msg+= newLine;
-            msg += "Total Unpaid Transactions for this unit = "+status_unpaid;
-            msg+= newLine;
-            msg += "Total Disapproved Transactions for this unit = "+status_disapproved;
-            msg+= newLine;
-            msg += "Total Approved Transactions for this unit = "+status_approved;
-            msg+= newLine;
-            msg += "Total Deleted Transactions for this unit = "+status_deleted;
-            msg+= newLine;
+            if (status_paid>0) {
+                msg += "Total Paid Transactions for this unit = "+status_paid;
+                msg+= newLine; 
+            }
+            if (status_unpaid>0) {
+                msg += "Total Unpaid Transactions for this unit = "+status_unpaid;
+                msg+= newLine;
+            }
+            if (status_disapproved>0) {
+                msg += "Total Disapproved Transactions for this unit = "+status_disapproved;
+                msg+= newLine;
+            }
+            if (status_approved>0) {
+                msg += "Total Approved Transactions for this unit = "+status_approved;
+                msg+= newLine;
+            }
+            if (status_deleted>0) {
+                msg += "Total Deleted Transactions for this unit = "+status_deleted;
+                msg+= newLine;
+            }
             alert(msg);
+            $('.showPassword').prop('checked', false);
       }
     }
     </script>

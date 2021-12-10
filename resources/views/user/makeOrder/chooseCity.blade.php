@@ -46,6 +46,12 @@
             </ol>
         </nav>
     </div>
+    <div class="chooseCityContainer" style="min-height: 0; padding: 5px; margin: 5px 20px">
+        <div class="progress">
+            <div class="progress-bar color-progress" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                aria-valuemax="100" style="width: 10%">10%</div>
+        </div>
+    </div>
     <div class="chooseCityContainer row">
         @if (count($cities)>0)
         <div class="col-md-5" style="display: flex; justify-content: center; max-width: 500px;">
