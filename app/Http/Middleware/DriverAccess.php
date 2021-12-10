@@ -33,7 +33,7 @@ class DriverAccess
                 return redirect('home')->with('error', "You don't have branch access.");
             }
         } else {
-            return redirect()->back();
+            return redirect()->route('login');
         }
     }
 }

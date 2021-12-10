@@ -37,7 +37,7 @@ class UserAccess
                 return redirect('home')->with('error', "You don't have user access.");
             }
         } else {
-            return redirect()->back();
+            return redirect()->route('login');
         }
     }
 }
