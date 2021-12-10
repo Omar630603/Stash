@@ -1,0 +1,46 @@
+.dots {
+    height: 5px; /*to control the overall height*/
+    margin: 50px;
+    background-image: repeating-linear-gradient(
+        to right,
+        transparent,
+        transparent 5px,
+        rgb(236, 236, 236) 50px,
+        rgb(255, 255, 255) 40px
+    ); /*then 5px of blue */
+    background-size: 200% 100%;
+    animation: change 10s linear infinite;
+}
+
+@keyframes change {
+    from {
+        background-position: right;
+    }
+    to {
+        background-position: left;
+    }
+}
+.color-progress {
+    background: rgb(63, 22, 82);
+    background: linear-gradient(
+        90deg,
+        rgba(63, 22, 82, 1) 0%,
+        rgba(102, 55, 127, 1) 25%,
+        rgba(157, 52, 136, 1) 50%,
+        rgba(199, 57, 123, 1) 75%,
+        rgba(248, 159, 91, 1) 100%
+    );
+    background-size: 150% 150%;
+    animation: gradient 2s ease infinite;
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

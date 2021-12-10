@@ -109,5 +109,6 @@ Route::post('/driver/editBioData/driver/{driver}', [DeliveryVehicleController::c
 Route::put('/driver/editImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImage'])->name('driver.editImageDriver')->middleware('DriverAccess');
 Route::post('/driver/defaultImage/driver/{driver}', [DeliveryVehicleController::class, 'editDriverImageDefult'])->name('driver.defaultImageDriver')->middleware('DriverAccess');
 Route::delete('/driver/driver/deleteDriver/{driver}', [DeliveryVehicleController::class, 'deleteDriver'])->name('driver.deleteDriver')->middleware('DriverAccess');
+Route::post('/driver/order/changeStatus/{schedule}', [DeliveryVehicleController::class, 'changeStatus'])->name('driver.changeStatus')->middleware('DriverAccess');
 
 Auth::routes();

@@ -67,7 +67,7 @@
                         <!-- Middle Side Of Navbar -->
                         <nav class="shift" style="padding: 0">
                             <ul class="navbar-nav m-auto">
-                                <li><a href="{{route('home')}}">Profile</a></li>
+                                <li><a href="{{route('home')}}">Dashboard</a></li>
                             </ul>
                         </nav>
                         <!-- Right Side Of Navbar -->

@@ -3,22 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\DeliverySchedule;
 use App\Models\DeliveryVehicle;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class DeliveryVehicleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $vehicleDriver = DeliveryVehicle::where('users.ID_User', Auth::user()->ID_User)
             ->join('users', 'delivery_vehicles.ID_User', '=', 'users.ID_User')
             ->first();
         $branch = Branch::where('ID_Branch', $vehicleDriver->ID_Branch)->first();
-        return view('driver.home', ['vehicleDriver' => $vehicleDriver, 'branch' => $branch]);
+        if ($request->get('status') != null) {
+            $schedules = DeliverySchedule::select('*')
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_schedules.ID_DeliveryVehicle', $vehicleDriver->ID_DeliveryVehicle)
+                ->where('delivery_schedules.schedule_status', $request->get('status'))
+                ->orderBy('delivery_schedules.created_at', 'desc')->get();
+            if ($request->get('status') == 0) {
+                $type = 'Waiting';
+            } else if ($request->get('status') == 1) {
+                $type = 'On-Going';
+            } else if ($request->get('status') == 2) {
+                $type = 'Done';
+            } else if ($request->get('status') == 3) {
+                $schedules = DeliverySchedule::select('*')
+                    ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                    ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                    ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                    ->where('delivery_schedules.ID_DeliveryVehicle', $vehicleDriver->ID_DeliveryVehicle)
+                    ->whereDate('delivery_schedules.pickedUp', Carbon::today())
+                    ->orderBy('delivery_schedules.created_at', 'desc')->get();
+                $type = 'Today';
+            }
+        } else {
+            $schedules = DeliverySchedule::select('*')
+                ->Join('orders', 'delivery_schedules.ID_Order', '=', 'orders.ID_Order')
+                ->Join('users', 'orders.ID_User', '=', 'users.ID_User')
+                ->Join('units', 'orders.ID_Unit', '=', 'units.ID_Unit')
+                ->where('delivery_schedules.ID_DeliveryVehicle', $vehicleDriver->ID_DeliveryVehicle)
+                ->orderBy('delivery_schedules.created_at', 'desc')->get();
+            $type = 'All';
+        }
+        return view('driver.home', [
+            'vehicleDriver' => $vehicleDriver,
+            'branch' => $branch,
+            'schedules' => $schedules,
+            'type' => $type
+        ]);
     }
     public function editDriver(Request $request, DeliveryVehicle $driver)
     {
@@ -95,5 +136,15 @@ class DeliveryVehicleController extends Controller
         $user->delete();
         $driver->delete();
         return redirect()->route('branch.delivery');
+    }
+    public function changeStatus(DeliverySchedule $schedule, Request $request)
+    {
+        $request->validate([
+            'status' => 'required',
+        ]);
+        $schedule->schedule_status = $request->get('status');
+        $schedule->save();
+        $message = 'Status has Changed';
+        return redirect()->back()->with('success', $message);
     }
 }
