@@ -1045,9 +1045,10 @@
                                     style="background-color: #ffffff; box-shadow: 0 0 10px 1px rgba(41, 41, 41, 0.507);">
                                     <div class="justify-content-between">
                                         @if ($transaction->transactions_status == 0 )
-                                        <p class="btn-sm btn-warning m-0">Unpaid</p>
+                                        <p class="btn-sm btn-warning m-0">Unpaid-Pay the required amount
+                                        </p>
                                         @elseif ($transaction->transactions_status == 1 )
-                                        <p class="btn-sm btn-dark m-0">Paid</p>
+                                        <p class="btn-sm btn-dark m-0">Paid-Waiting for confirmation</p>
                                         @elseif ($transaction->transactions_status == 2 )
                                         <p class="btn-sm btn-danger m-0">Disapproved</p>
                                         @elseif ($transaction->transactions_status == 3 )
