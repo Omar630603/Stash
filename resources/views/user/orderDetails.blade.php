@@ -802,10 +802,9 @@
                                                 <i data-toggle="tooltip" title="Rp.{{$schedule->schedule_totalPrice}}"
                                                     class=" fas fa-money-bill-wave" style="color: #3aa537"></i>
                                                 @if ($schedule->schedule_status == 0 || $schedule->schedule_status == 2)
-                                                <i onclick="confirm('You can only delete waiting or done schedules. When delete, it will not be recovered. You will have to pay again in case you want to make a schedule again.')"
-                                                    data-toggle="tooltip" title="Delete Delivery" class="fas fa-trash"
+                                                <i data-toggle="tooltip" title="Delete Delivery" class="fas fa-trash"
                                                     style="color: #a53737"
-                                                    onclick="$('#deleteSchedule{{$schedule->ID_DeliverySchedule}}form').submit();"></i>
+                                                    onclick="return confirmation({{$schedule->ID_DeliverySchedule}})"></i>
                                                 <form hidden action="{{ route('user.deleteSchedule', $schedule) }}"
                                                     id="deleteSchedule{{$schedule->ID_DeliverySchedule}}form"
                                                     enctype="multipart/form-data" method="POST">
@@ -1499,6 +1498,16 @@
             alert(msg);
             $('.showPassword').prop('checked', false);
       }
+    }
+    function confirmation(id) {
+    var answer = confirm('You can only delete waiting or done schedules. When delete, it will not be recovered. You will have to pay again in case you want to make a schedule again.');
+    if (answer){
+        $('#deleteSchedule'+id+'form').submit();
+        return true;
+    }
+    else{
+    return false;
+    }
     }
     </script>
     @endsection
