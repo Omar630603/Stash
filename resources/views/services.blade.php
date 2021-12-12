@@ -3,9 +3,6 @@
 @section('content')
 <div class="container-fluid">
     <div class="about-services">
-        <div class="header-about-services">
-            <h2>Safety, Security & Privacy</h2>
-        </div>
         <div class="units">
             <h3>Units</h3>
             <h4>In Stash, we offer our customers with different range of unit sizes to suit their needs.</h4>

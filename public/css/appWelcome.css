@@ -127,18 +127,16 @@
 }
 .about-services {
     margin: 20px 60px;
-    background-color: #3f1652c2;
-    border-radius: 20px;
-    padding: 20px 10px;
     color: rgb(252, 252, 252);
-}
-.header-about-services {
-    text-align: center;
-    padding: 10px;
 }
 .units {
     padding: 30px;
-    background-color: rgba(157, 52, 136, 0.4);
+    background: linear-gradient(
+        80deg,
+        #3f1652 0%,
+        rgba(102, 55, 127, 0.8) 50%,
+        rgb(157, 52, 136, 0.8) 100%
+    );
     border-radius: 20px;
     padding-bottom: 50px;
 }
@@ -218,7 +216,12 @@
 .delivery {
     margin-top: 15px;
     padding: 30px;
-    background-color: #66377fb7;
+    background: linear-gradient(
+        340deg,
+        #3f1652 0%,
+        rgba(102, 55, 127, 0.8) 90%,
+        rgba(157, 52, 136, 0.8) 100%
+    );
     border-radius: 20px;
     padding-bottom: 50px;
 }
@@ -284,4 +287,64 @@
     100% {
         right: -100px;
     }
+}
+.about-us {
+    margin: 20px 60px;
+    background-color: #e53d72c4;
+    background: linear-gradient(
+        340deg,
+        rgba(63, 22, 82, 0.8) 0%,
+        rgba(102, 55, 127, 0.8) 25%,
+        rgba(157, 52, 136, 0.8) 50%,
+        rgba(199, 57, 123, 0.8) 75%,
+        rgba(248, 159, 91, 0.8) 100%
+    );
+    border-radius: 20px;
+    padding: 20px 20px;
+    color: rgb(252, 252, 252);
+}
+.about-us-inside {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.about-us-inside-info {
+    color: #fff;
+    width: 700px;
+}
+.about-us-inside-image {
+    width: fit-content;
+}
+.flipcolor {
+    background-color: #e53d72c4;
+    background: linear-gradient(
+        -340deg,
+        rgba(63, 22, 82, 0.8) 0%,
+        rgba(102, 55, 127, 0.8) 25%,
+        rgba(157, 52, 136, 0.8) 50%,
+        rgba(199, 57, 123, 0.8) 75%,
+        rgba(248, 159, 91, 0.8) 100%
+    );
+}
+.about-us-developers {
+    margin: 20px 60px;
+    background-color: #e53d72c4;
+    background: linear-gradient(
+        340deg,
+        rgba(63, 22, 82, 0.8) 0%,
+        rgba(102, 55, 127, 0.8) 25%,
+        rgba(157, 52, 136, 0.8) 50%,
+        rgba(199, 57, 123, 0.8) 75%,
+        rgba(248, 159, 91, 0.8) 100%
+    );
+    border-radius: 20px;
+    padding: 20px 20px;
+    color: rgb(252, 252, 252);
+}
+.develover-Card {
+    background-color: #3f1652 !important;
+    border-radius: 10px !important;
+}
+.text-muted {
+    color: #f89f5b !important;
 }
