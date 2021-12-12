@@ -345,6 +345,17 @@
     background-color: #3f1652 !important;
     border-radius: 10px !important;
 }
-.text-muted {
+.text-mutedCard {
     color: #f89f5b !important;
+}
+.contactUs {
+    padding: 30px;
+    background: linear-gradient(
+        80deg,
+        #3f1652 0%,
+        rgba(102, 55, 127, 0.8) 50%,
+        rgb(157, 52, 136, 0.8) 100%
+    );
+    border-radius: 20px;
+    padding-bottom: 50px;
 }

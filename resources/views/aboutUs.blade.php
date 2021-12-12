@@ -46,7 +46,7 @@
                 <div class="bg-white rounded shadow-sm py-5 px-4 develover-Card">
                     <img src="{{ asset('storage/images/omar.jpeg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Omar Al-Maktary</h5><span class="small text-uppercase text-muted">Programer &
+                    <h5 class="mb-0">Omar Al-Maktary</h5><span class="small text-uppercase text-mutedCard">Programer &
                         Engineer</span>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="https://web.facebook.com/profile.php?id=100013517199373"
@@ -66,7 +66,8 @@
                 <div class="bg-white rounded shadow-sm py-5 px-4 develover-Card">
                     <img src="{{ asset('storage/images/alif.jpeg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">M. Alif Ananda</h5><span class="small text-uppercase text-muted">Management</span>
+                    <h5 class="mb-0">M. Alif Ananda</h5><span
+                        class="small text-uppercase text-mutedCard">Management</span>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="https://web.facebook.com/groups/3676406335772078"
                                 class="social-link"><i class="fa fa-facebook-f"></i></a></li>
@@ -83,9 +84,9 @@
             <!-- Team item-->
             <div class="col-xl-4 col-sm-6 mb-5">
                 <div class="bg-white rounded shadow-sm py-5 px-4 develover-Card">
-                    <img src="{{ asset('storage/images/baggiio.jpeg') }}" alt="" width="130"
+                    <img src="{{ asset('storage/images/baggio.jpeg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">De Roger Baggio B.</h5><span class="small text-uppercase text-muted">Data
+                    <h5 class="mb-0">De Roger Baggio B.</h5><span class="small text-uppercase text-mutedCard">Data
                         analyst
                     </span>
                     <ul class="social mb-0 list-inline mt-3">
@@ -107,7 +108,7 @@
                     <img src="{{ asset('storage/images/rizki.jpeg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
                     <h5 class="mb-0">Rizki Irfan Maulana</h5><span
-                        class="small text-uppercase text-muted">Designer</span>
+                        class="small text-uppercase text-mutedCard">Designer</span>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="https://web.facebook.com/profile.php?id=100008786583027"
                                 class="social-link"><i class="fa fa-facebook-f"></i></a></li>
@@ -126,7 +127,8 @@
                 <div class="bg-white rounded shadow-sm py-5 px-4 develover-Card">
                     <img src="{{ asset('storage/images/radit.jpg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Radithya Iqbal Prasaja</h5><span class="small text-uppercase text-muted">Programer
+                    <h5 class="mb-0">Radithya Iqbal Prasaja</h5><span
+                        class="small text-uppercase text-mutedCard">Programer
                     </span>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="https://web.facebook.com/profile.php?id=100010450022316"
@@ -146,7 +148,7 @@
                 <div class="bg-white rounded shadow-sm py-5 px-4 develover-Card">
                     <img src="{{ asset('storage/images/lely.jpeg') }}" alt="" width="130"
                         class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
-                    <h5 class="mb-0">Lelyta Salsabila</h5><span class="small text-uppercase text-muted">Data
+                    <h5 class="mb-0">Lelyta Salsabila</h5><span class="small text-uppercase text-mutedCard">Data
                         analyst</span>
                     <ul class="social mb-0 list-inline mt-3">
                         <li class="list-inline-item"><a href="https://web.facebook.com/lelyta.salsabila"

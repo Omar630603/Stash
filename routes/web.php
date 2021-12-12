@@ -28,6 +28,7 @@ Route::get('/services', [WelcomeController::class, 'services'])->name('welcome.s
 Route::get('/contactUs', [WelcomeController::class, 'contactUs'])->name('welcome.contactus');
 Route::get('/aboutUs', [WelcomeController::class, 'aboutUs'])->name('welcome.aboutus');
 Route::get('/loginFirst', [WelcomeController::class, 'redirectLogin'])->name('loginFirst');
+Route::post('/sendMessage', [WelcomeController::class, 'sendMessage'])->name('welcome.sendMessage');
 
 //UserAccess//Home
 Route::get('/customer/home', [UserController::class, 'index'])->name('customer.home')->middleware('UserAccess');

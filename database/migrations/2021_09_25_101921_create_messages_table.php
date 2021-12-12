@@ -15,10 +15,11 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id('ID_Message');
-            $table->unsignedBigInteger('ID_User');
-            $table->foreign('ID_User')->references('ID_User')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('name');
+            $table->string('email');
+            $table->string('subject');
             $table->string('message');
-            $table->string('message_img')->nullable();
+            $table->boolean('is_user')->default(0);
             $table->timestamps();
         });
     }

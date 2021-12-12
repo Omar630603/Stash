@@ -16,8 +16,10 @@ class Message extends Model
      * @var string[]
      */
     protected $fillable = [
-        'ID_User',
+        'name',
+        'email',
+        'subject',
         'message',
-        'message_img',
+        'is_user',
     ];
 }
