@@ -40,8 +40,8 @@
             <div class="row" style="align-items: center">
                 <h1 class="col-sm-4" style="font-size: 60px">STASH</h1>
                 <p class="col-sm-8" style="font-size: 15px">
-                    The place where your junk or treasures could be stored. </br>
-                    You have the item, we have the place.
+                    The place where your junk or treasures could be stored. <br>
+                    You have the items, we have the place.
                 </p>
             </div>
             <hr>
@@ -58,8 +58,7 @@
                                 <img class="d-block w-100" src="{{ asset('storage/images/welcome1.jpg') }}"
                                     alt="First slide">
                                 <div class="carousel-caption">
-                                    <h1>Welcome!</h1>
-                                    <p>To Stash</p>
+                                    <h1>Welcome To!</h1>
                                 </div>
                             </div>
                             <div class="carousel-item">
@@ -94,6 +93,14 @@
             </div>
         </div>
         <div class="col-sm-3 headerImage m-0">
+            <div class="welcomingGreetings">
+                @auth
+                <h1>Hi, {{Auth::user()->username}}!</h1>
+                @else
+                <h1>Hi, There!</h1>
+                @endauth
+                <h1 id="greetings"></h1>
+            </div>
             <img class="img-fluid shake" width="200px" src="{{ asset('storage/images/Logo.png') }}">
             <img class="img-fluid" width="400px" src="{{ asset('storage/images/Logo with Name H.png') }}">
         </div>
@@ -120,7 +127,8 @@
                     <a href="{{ route('chooseCity', ['unit'=> $category->ID_Category] ) }}"
                         class="mt-auto btn btn-rent">Rent</a>
                     @else
-                    <a href="{{ route('loginFirst') }}" class="mt-auto btn btn-rent">Rent</a>
+                    <a href="{{ route('loginFirst', ['unit'=> $category->ID_Category]) }}"
+                        class="mt-auto btn btn-rent">Rent</a>
                     @endauth
                 </div>
             </div>
@@ -128,4 +136,17 @@
         </div>
     </div>
 </div>
+<script>
+    var myDate = new Date();
+    var hrs = myDate.getHours();
+    var greet;
+    if (hrs < 12)
+        greet = 'Good Morning';
+    else if (hrs >= 12 && hrs <= 17)
+        greet = 'Good Afternoon';
+    else if (hrs >= 17 && hrs <= 24)
+        greet = 'Good Evening';
+    document.getElementById('greetings').innerHTML +=
+        '<b>' + greet + '!</b> Welcome to';
+</script>
 @endsection

@@ -61,7 +61,6 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $input = $request->all();
-
         $this->validate($request, [
             'login' => 'required',
             'password' => 'required',
@@ -69,7 +68,11 @@ class LoginController extends Controller
         $errors = new MessageBag;
         $this->username = $this->findUsername();
         if (Auth::attempt(array($this->username => $input['login'], 'password' => $input['password']))) {
-            return Redirect::route('home');
+            if ($request->get('unit')) {
+                return Redirect::route('chooseCity', ['unit' => $request->get('unit')]);
+            } else {
+                return Redirect::route('home');
+            }
         } else {
             $errors = new MessageBag(['WrongCredentials' => ['These credentials do not match our records.']]);
             return Redirect::back()->withErrors($errors);

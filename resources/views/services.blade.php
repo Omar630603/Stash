@@ -2,127 +2,83 @@
 
 @section('content')
 <div class="container-fluid">
-<div class="headerParagraph" >
-<h1 style="text-align:center">Our Services</h1>
-
-</div>
-
-<style>
-   body
-   * {
-      box-sizing: border-box;
-   }
-   .card {
-      color: white;
-      float: left;
-      width: calc(50% - 40px);
-      padding: 10px;
-      border-radius: 10px;
-      margin: 10px;
-      height: 200px;
-   }
-
-
-   .card p {
-      font-size: 18px;
-   }
-   .cardContainer:after {
-      content: "";
-      display: table;
-      clear: both;
-   }
-   @media screen and (max-width: 600px) {
-      .card {
-         width: 100%;
-      }
-   }
-
-   img:hover {
-  /* Start the shake animation and make the animation last for 0.5 seconds */
-  animation: shake 0.5s;
-
-  /* When the animation is finished, start again */
-  animation-iteration-count: infinite;
-}
-
-@keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
-}
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 70%;
-}
-
-</style>
-
-<div class="services">
-<div class="headerParagraph">
-<h2>Locker - Small Size</h2>
-<div class="cardContainer" >
-<div class="card" >
-<img src="/img/locker.png" width="100" height="200" class="center">
-</div>
-
-<div class="card" width="400">
-    <p style="color:black">
-    They are usually intended for use in public places, 
-    and intended for the short- or long-term private use 
-    of individuals for storing clothing or other personal items. 
-    With 3 x 3 space Users may rent a locker for a single use or for 
-    a period of time for repeated use. 
-    </p>
-</div>
-
-</div>
-
-</div><br>
-<div class="headerParagraph">
-<h2>Garage - Medium Size</h2>
-<div class="cardContainer" >
-<div class="card" style="color:black">
-<img src="/img/garage.png" width="100" height="200" class="center">
-</div>
-
-<div class="card">
-<p style="color:black">
-with 6 x 6 space, it can protects a vehicle from precipitation, and, if it is 
-equipped with a locking garage door, it also protects the vehicle(s) from theft and vandalism. 
-Most garages also serve multifunction duty as workshops for a variety of projects, 
-including painting, woodworking, and assembly. 
-    </p>
-</div>
-</div>
-</div><br>
-
-<div class="headerParagraph">
-<h2>Warehouse - Large Size</h2>
-<div class="cardContainer" >
-<div class="card" style="color:black">
-<img src="/img/warehouse.png" width="100" height="170" class="center">
-</div>
-
-<div class="card">
-<p style="color:black">
-The functions of warehousing include stocking, maintaining, and controlling your work in 
-process inventory. With 9 x 9 space, it Developing a dependable warehouse process for your products is 
-crucial for business growth. 
-Warehousing actions include: Setting your warehouse up properly and with relevant equipment.
-    </p>
-</div>
-</div>
-</div>
+    <div class="about-services">
+        <div class="header-about-services">
+            <h2>Safety, Security & Privacy</h2>
+        </div>
+        <div class="units">
+            <h3>Units</h3>
+            <h4>In Stash, we offer our customers with different range of unit sizes to suit their needs.</h4>
+            <div class="units-inside">
+                <div class="div-info">
+                    <p class="m-0">You can store your items in one of our units.</p>
+                    <p class="m-0">The units are located in various branches around the country.</p>
+                    <p class="m-0">You can simply choose a city and then a branch located in that city and then fill in
+                        the
+                        details required
+                        for the unit that you want and voilà you got yourself a storage unit.</p>
+                    <p class="m-0">Click on Rent below to start using our services.</p>
+                </div>
+                <div class="images">
+                    <img class="large-image" src="{{ asset('storage/images/largeUnit.png') }}" alt="" class="img-fluid">
+                    <img class="medium-image" src="{{ asset('storage/images/mediumUnit.png') }}" alt=""
+                        class="img-fluid">
+                    <img class="small-image" src="{{ asset('storage/images/smallUnit.png') }}" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+        <div class="delivery">
+            <div style="text-align: right">
+                <h3>Delivery System</h3>
+                <h4>We offer you a fast and reliable delivery system for your unit order.</h4>
+            </div>
+            <div class="delivery-inside">
+                <div class="delivery-div-info">
+                    <p class="m-0">When making an order you can also ask for delivery of your items.</p>
+                    <p class="m-0">The branch that you chose has staff dedicated to delivering your items.</p>
+                    <p class="m-0">The Items delivery can be done from and to the branch of your unit.</p>
+                    <p class="m-0">Go to your order details to make new deliveries.</p>
+                </div>
+                <div class="deliveryImages">
+                    <img class="deliveryImageUser" src="{{ asset('storage/images/user.png') }}" alt=""
+                        class="img-fluid">
+                    <img class="deliveryImage" src="{{ asset('storage/images/van.png') }}" alt="" class="img-fluid">
+                    <img class="deliveryImageF" src="{{ asset('storage/images/vanf.png') }}" alt="" class="img-fluid">
+                    <img class="deliveryImageUnit" src="{{ asset('storage/images/unit.png') }}" alt=""
+                        class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="services">
+        <h1>Services</h1>
+        <h2>We offer the following services</h2>
+        <div class="servicesCategories">
+            @foreach ($categories as $category)
+            <div class="card"
+                style="width: 20rem; border-radius: 20px; color: #fff; background-color: #E53D71; padding: 10px 10px">
+                <img src=" {{ asset('storage/'. $category->category_img) }}" class="card-img-top" alt="...">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="mt-auto card-title" style="text-align: center;">{{ $category->category_name }}</h5>
+                    <h6 class="mt-auto card-title" style="text-align: center;">{{ $category->category_description }}
+                    </h6>
+                    <div>
+                        <p class="m-0 card-text" style="margin-bottom: 10px"><strong>Dimensions:
+                            </strong>{{ $category->dimensions }}</p>
+                        <p class="mb-2 card-text" style="margin-bottom: 10px"><strong>Price:
+                            </strong>Rp.{{ $category->pricePerDay }} / Day</p>
+                    </div>
+                    @auth
+                    <a href="{{ route('chooseCity', ['unit'=> $category->ID_Category] ) }}"
+                        class="mt-auto btn btn-rent">Rent</a>
+                    @else
+                    <a href="{{ route('loginFirst', ['unit'=> $category->ID_Category]) }}"
+                        class="mt-auto btn btn-rent">Rent</a>
+                    @endauth
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
 </div>
 @endsection

@@ -99,6 +99,9 @@
                                             {{ Auth::user()->username }}
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                            <a href="{{ route('welcome.home') }}" class="dropdown-item">Home <i
+                                                    style="margin-top: 4px" class="fa fa-home float-right"
+                                                    aria-hidden="true"></i></a>
                                             <a href="{{ route('home') }}" class="dropdown-item">Dashboard <i
                                                     style="margin-top: 4px" class="fa fa-dashboard float-right"
                                                     aria-hidden="true"></i></a>

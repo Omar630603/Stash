@@ -23,7 +23,7 @@
                                 style="border-radius: 10px">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>
-                                    <p style="margin: 0">{{ $message }}</p>
+                                    <p style="margin: 0">{{ $show = substr($message, 1); }}</p>
                                 </strong>
                             </div>
                             @elseif ($message = Session::get('success'))
@@ -31,7 +31,7 @@
                                 style=" text-align: center; border-radius: 10px">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>
-                                    <p style="margin: 0">{{ $message }}</p>
+                                    <p style="margin: 0">{{ $show = substr($message, 1); }}</p>
                                 </strong>
                             </div>
                             @endif
@@ -53,7 +53,10 @@
                     </div>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-
+                        @if ($message)
+                        <input hidden name="unit" value="{{$message[0]}}">
+                        @else
+                        @endif
                         <div class="form-group row" style="justify-content: center">
                             <div class="col-md-6">
                                 <div class="input-group">
@@ -72,7 +75,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row" style="justify-content: center">
                             <div class="col-md-6">
                                 <div class="input-group">

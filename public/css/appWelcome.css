@@ -13,7 +13,7 @@
     color: #fff;
 }
 .headerParagraph p {
-    font-size: medium;
+    font-size: large;
     color: #fff;
     text-align: justify;
     text-justify: inter-word;
@@ -26,47 +26,41 @@
     align-items: center;
     border-radius: 20px;
     padding: 20px;
-    animation-name: example;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-delay: -1s;
+    background: linear-gradient(
+        300deg,
+        rgba(63, 22, 82, 0.8) 0%,
+        rgba(102, 55, 127, 0.8) 25%,
+        rgba(157, 52, 136, 0.8) 50%,
+        rgba(199, 57, 123, 0.8) 75%,
+        rgba(248, 159, 91, 0.8) 100%
+    );
+    background-size: 150% 150%;
+    animation: gradient 5s linear infinite;
     text-align: center;
 }
 .headerImage .shake {
-    animation: shake 3s;
-    animation-delay: -1s;
-    animation-iteration-count: infinite;
+    animation: shake 5s linear infinite;
 }
 @keyframes shake {
     0% {
-        transform: translate(1px, 1px) rotate(0deg);
-    }
-    30% {
-        transform: translate(3px, 2px) rotate(1deg);
+        width: 100px;
     }
     50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-    }
-    80% {
-        transform: translate(-1px, -1px) rotate(1deg);
+        width: 150px;
     }
     100% {
-        transform: translate(1px, -2px) rotate(-1deg);
+        width: 100px;
     }
 }
-@keyframes example {
+@keyframes gradient {
     0% {
-        background-color: #f89f5b;
-    }
-    25% {
-        background-color: #e53d71;
+        background-position: 0% 50%;
     }
     50% {
-        background-color: #9d3488;
+        background-position: 200% 100%;
     }
     100% {
-        background-color: #66377f;
+        background-position: 0% 50%;
     }
 }
 @media screen and (max-width: 992px) {
@@ -130,4 +124,164 @@
 }
 .carousel-caption {
     top: 5%;
+}
+.about-services {
+    margin: 20px 60px;
+    background-color: #3f1652c2;
+    border-radius: 20px;
+    padding: 20px 10px;
+    color: rgb(252, 252, 252);
+}
+.header-about-services {
+    text-align: center;
+    padding: 10px;
+}
+.units {
+    padding: 30px;
+    background-color: rgba(157, 52, 136, 0.4);
+    border-radius: 20px;
+    padding-bottom: 50px;
+}
+.units-inside {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.div-info {
+    width: 600px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    text-align: justify;
+    border-bottom: 2px solid #ccc;
+}
+.image-units {
+    width: 350px;
+}
+.images {
+    width: auto;
+    margin-left: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.small-image {
+    width: 150px;
+    position: relative;
+    right: 50px;
+    z-index: 1;
+    animation: moveImageSmall 3s linear infinite;
+}
+.medium-image {
+    width: 150px;
+    position: relative;
+    z-index: 2;
+}
+.large-image {
+    width: 150px;
+    position: relative;
+    left: 50px;
+    z-index: 3;
+    animation: moveImageUpLarge 3s linear infinite;
+}
+@keyframes moveImageSmall {
+    0% {
+        bottom: 0px;
+        right: 50px;
+    }
+    50% {
+        bottom: 50px;
+        right: 70px;
+    }
+    100% {
+        bottom: 0px;
+        right: 50px;
+    }
+}
+@keyframes moveImageUpLarge {
+    0% {
+        top: 0px;
+        left: 50px;
+    }
+    50% {
+        top: 50px;
+        left: 70px;
+    }
+    100% {
+        top: 0px;
+        left: 50px;
+    }
+}
+.welcomingGreetings {
+    color: #ffff;
+    font-size: 12px;
+}
+.delivery {
+    margin-top: 15px;
+    padding: 30px;
+    background-color: #66377fb7;
+    border-radius: 20px;
+    padding-bottom: 50px;
+}
+.delivery-inside {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+
+.delivery-div-info {
+    padding-right: 30px;
+    padding-bottom: 10px;
+    text-align: justify;
+    border-bottom: 2px solid #ccc;
+    margin-top: 30px;
+}
+.deliveryImages {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: auto;
+    margin-left: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-bottom: 2px solid #ccc;
+}
+.deliveryImage {
+    width: 180px;
+    position: relative;
+    animation: moveCar 3s linear infinite;
+}
+.deliveryImageF {
+    width: 180px;
+    position: relative;
+    animation: moveCarF 3s linear infinite;
+}
+.deliveryImageUnit {
+    width: 150px;
+}
+.deliveryImageUser {
+    width: 100px;
+}
+@keyframes moveCar {
+    0% {
+        left: 0px;
+    }
+    50% {
+        left: 250px;
+    }
+    100% {
+        left: 0px;
+    }
+}
+@keyframes moveCarF {
+    0% {
+        right: -100px;
+    }
+    50% {
+        right: 180px;
+    }
+    100% {
+        right: -100px;
+    }
 }
