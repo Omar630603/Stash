@@ -1384,7 +1384,7 @@
                                     <td style="text-align: right" data-label="Action" class="column">
                                         <div style="display: flex; justify-content:space-around">
                                             <a href="{{ route('branch.orderDetails', ['order'=>$order]) }}"
-                                                data-toggle="tooltip" title="Detials"
+                                                data-toggle="tooltip" title="Details"
                                                 style="text-decoration: none;cursor: pointer">
                                                 <i class="use-hover fas fa-info-circle icons" aria-hidden="true"></i>
                                             </a>
