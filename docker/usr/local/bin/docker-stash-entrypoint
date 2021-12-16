@@ -47,7 +47,12 @@ fi
 if [[ -z "$DB_PASSWORD" ]]; then
     export DB_PASSWORD=Admin@123
     echo -e "\e[33mENV undefined: DB_PASSWORD,\e[0m use default $DB_PASSWORD"
-fi 
+fi
+
+if [[ -z "$GOOGLE_MAPS_API_KEY" ]]; then
+    export GOOGLE_MAPS_API_KEY=AIzaSyBvQwRiAO8ZgiaTXpf9xvfXz3Rnq17AR3s
+    echo -e "\e[33mENV undefined: GOOGLE_MAPS_API_KEY,\e[0m use default $GOOGLE_MAPS_API_KEY"
+fi
 
 if [[ -z "$APP_KEY" ]]; then
     msg="ENV undefined: APP_KEY"
