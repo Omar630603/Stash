@@ -36,6 +36,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/appBranch.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/mainCSS.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
         <link rel="icon" href="{{ asset('storage/images/logo.png') }}">
     </head>
