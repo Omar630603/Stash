@@ -86,6 +86,7 @@ if [[ "$DB_CONNECTION" = "sqlite" ]]; then
     chown -R www-data:www-data database/
 fi
 php artisan migrate:fresh --seed --force
+php artisan storage:link
 
 if [[ "$role" = "app" ]]; then
 

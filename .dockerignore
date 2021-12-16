@@ -6,7 +6,6 @@ bootstrap/cache/*
 database/*.sqlite
 laradock/
 node_modules/
-storage/app/public/*
 storage/framework/cache/data/*
 storage/framework/sessions/*
 storage/framework/testing/*
