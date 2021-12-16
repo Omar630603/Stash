@@ -35,7 +35,7 @@ if [[ -z "$DB_PORT" ]]; then
 fi 
 
 if [[ -z "$DB_DATABASE" ]]; then
-    export DB_DATABASE=stash
+    export DB_DATABASE=Stash
     echo -e "\e[33mENV undefined: DB_DATABASE,\e[0m use default $DB_DATABASE"
 fi 
 
