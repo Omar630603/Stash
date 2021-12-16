@@ -1,0 +1,8 @@
+version: "3"
+services:
+    web:
+        image: omar60603/stash:latest
+        container_name: web
+        restart: unless-stopped
+        ports:
+            - 80:80
