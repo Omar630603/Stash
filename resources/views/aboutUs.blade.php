@@ -15,7 +15,7 @@
                     is a smartphone.</p>
             </div>
             <div class="about-us-inside-image p-5">
-                <img width="200px" src="{{ asset('storage/images/logo.png') }}" alt="" class="img-fluid">
+                <img width="200px" src="{{ asset('storage/images/Logo.png') }}" alt="" class="img-fluid">
             </div>
         </div>
     </div>
