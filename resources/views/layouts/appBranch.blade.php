@@ -38,7 +38,7 @@
         <link href="{{ asset('css/appBranch.css') }}" rel="stylesheet">
         <link href="{{ asset('css/mainCSS.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
-        <link rel="icon" href="{{ asset('storage/images/logo.png') }}">
+        <link rel="icon" href="{{ asset('storage/images/Logo.png') }}">
     </head>
 
     <body style="background-color: #fff8e6">

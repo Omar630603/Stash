@@ -38,7 +38,7 @@
         <link href="{{ asset('css/appWelcome.css') }}" rel="stylesheet">
         <link href="{{ asset('css/mainCSS.css') }}" rel="stylesheet">
         <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
-        <link rel="icon" href="{{ asset('storage/images/logo.png') }}">
+        <link rel="icon" href="{{ asset('storage/images/Logo.png') }}">
     </head>
 
     <body style="background-color: #fff8e6">
@@ -139,6 +139,22 @@
                                 <div class="footer-site-logo mb-4">
                                     <a href="#"><img align="center" width="200"
                                             src="{{ asset('storage/images/Logo with Name H.png') }}" alt=""></a>
+                                </div>
+                                <div class="d-flex m-2" style="justify-content: center; gap: 10px">
+                                    @if (Route::has('login'))
+                                    <a class="nav-link btn btn-sm btn-dark signupsingin-btn"
+                                        href="{{ route('login') }}">
+                                        <p>{{ __('Login') }}</p><i class="fas fa-sign-in-alt"></i>
+                                    </a>
+                                    @endif
+
+                                    @if (Route::has('register'))
+                                    <a class="nav-link btn btn-sm btn-dark signupsingin-btn"
+                                        href="{{ route('register') }}">
+                                        <p>{{ __('Register') }}</p>
+                                        <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                                    </a>
+                                    @endif
                                 </div>
                                 <ul class="list-unstyled nav-links mb-4">
                                     <li><a style="color: #fff8e6" href="/">Home</a></li>

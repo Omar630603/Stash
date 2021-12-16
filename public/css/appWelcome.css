@@ -12,12 +12,12 @@
 .headerParagraph h1 {
     color: #fff;
 }
-.headerParagraph p {
-    font-size: large;
+.headerParagraph h2 {
     color: #fff;
     text-align: justify;
     text-justify: inter-word;
     margin-bottom: 0;
+    text-align: center;
 }
 .headerImage {
     display: flex;
