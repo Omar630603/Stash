@@ -28,23 +28,6 @@ There are some entry data that can be used to see how it all works, this data ca
 
 This project is the result of a college assignment and made by the following students:
 
-<style>
-	.demo {
-		
-	}
-	.demo th {
-		
-	}
-	.demo td {
-        border-radius: 10px;
-		border:1px solid #66377F;
-		padding:10px;
-		background:#3F1652;
-	}
-    .image{
-        
-    }
-</style>
 <table style="border-collapse:separate;
 		border-spacing:8px;
 		padding:1px;
