@@ -30,17 +30,10 @@ This project is the result of a college assignment and made by the following stu
 
 <style>
 	.demo {
-		border-collapse:separate;
-		border-spacing:8px;
-		padding:1px;
-        border-radius: 5px;
+		
 	}
 	.demo th {
-		border:1px solid #F89F5B;
-        border-radius: 10px;
-		padding:5px;
-		background:#3F1652;
-        text-align: center;
+		
 	}
 	.demo td {
         border-radius: 10px;
@@ -49,11 +42,13 @@ This project is the result of a college assignment and made by the following stu
 		background:#3F1652;
 	}
     .image{
-        border-radius: 100%;
-        border: 3px solid #F89F5B;
+        
     }
 </style>
-<table class="demo">
+<table style="border-collapse:separate;
+		border-spacing:8px;
+		padding:1px;
+        border-radius: 5px;">
 	<caption>TEAM</caption>
 	<thead>
 	<tr>
@@ -78,7 +73,8 @@ This project is the result of a college assignment and made by the following stu
             Project Manger
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/omar.jpeg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/omar.jpeg?raw=true" width="200"></td>
 	</tr>
 	<tr>
 		<td>M. Alif Ananda</td>
@@ -91,7 +87,8 @@ This project is the result of a college assignment and made by the following stu
             Documentation
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/alif.jpeg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/alif.jpeg?raw=true" width="200"></td>
 	</tr>
 	<tr>
 		<td>De Roger Baggio B.</td>
@@ -102,7 +99,8 @@ This project is the result of a college assignment and made by the following stu
             <br>Documentation
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/baggio.jpeg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/baggio.jpeg?raw=true" width="200"></td>
 	</tr>
 	<tr>
 		<td>Rizki Irfan Maulana</td>
@@ -113,7 +111,8 @@ This project is the result of a college assignment and made by the following stu
             Documentation
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/rizki.jpeg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/rizki.jpeg?raw=true" width="200"></td>
 	</tr>
 	<tr>
 		<td>Radithya Iqbal Prasaja</td>
@@ -124,7 +123,8 @@ This project is the result of a college assignment and made by the following stu
             Documentation<br>
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/radit.jpg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/radit.jpg?raw=true" width="200"></td>
 	</tr>
 	<tr>
 		<td>Lelyta Salsabila</td>
@@ -134,7 +134,8 @@ This project is the result of a college assignment and made by the following stu
 		<td>Documentation
         </td>
         <td>
-        <img class="image" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/lely.jpeg?raw=true" width="200"></td>
+        <img style="border-radius: 100%;
+        border: 3px solid #F89F5B;" src="https://github.com/Omar630603/Stash/blob/main/storage/app/public/images/lely.jpeg?raw=true" width="200"></td>
 	</tr>
 	<tbody>
 </table>
