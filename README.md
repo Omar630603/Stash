@@ -4,7 +4,7 @@
 
 ## Stash:
 
-Stash is a web-based project for a self-storage company. The web app is desiged to have three users
+Stash is a web-based project for a self-storage company. The web app is designed to have three users
 
 -   Branches of the company.
 -   Customers.
@@ -43,7 +43,7 @@ This project is the result of a college assignment and made by the following stu
 	</thead>
 	<tbody>
 	<tr>
-		<td>Omar Abdul-Raoof Taha Galleb Al-Maktary</td>
+		<td>Omar Abdul-Raoof Taha Ghaleb Al-Maktary</td>
 		<td><a href="https://github.com/Omar630603">@Omar630603</a>
             <br>1941720237
         </td>
